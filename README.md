@@ -170,11 +170,24 @@ let package = Package(
 
 ### C) Via the command line (simulator or device)
 
-**Where to start from:** same rule as Step 4 — if you're continuing from Step 3 (macOS), run `cd ../..` first to get back to `c-ids.github.io/`. Otherwise, clone fresh:
+**Where to start from:**
+
+- If you just finished **Step 3 (macOS)**, you are currently inside `c-ids.github.io/C-IDS/build`. Go back two levels first:
+  ```bash
+  cd ../..
+  ```
+  You should now be in `c-ids.github.io/`.
+
+- If you're starting fresh in a new terminal instead, clone the repo and move into it:
+  ```bash
+  git clone https://github.com/aligokdam/c-ids.github.io.git
+  cd c-ids.github.io
+  ```
+
+Either way, once you're in the `c-ids.github.io` folder, run:
 
 ```bash
-git clone https://github.com/aligokdam/c-ids.github.io.git
-cd c-ids.github.io/C-IDS
+cd C-IDS
 swift build
 # or targeting an iOS simulator:
 xcodebuild -scheme CIDS -destination "generic/platform=iOS Simulator"
@@ -187,6 +200,17 @@ xcodebuild -scheme CIDS -destination "generic/platform=iOS Simulator"
 ## 6. Verify Your Installation
 
 Once a build succeeds, link the resulting core library into a small test app and feed it a sample traffic log or packet. If the engine prints the expected `rule=...` output for matched signatures, your build is working correctly. You can compare against the live demo's output format here: <https://aligokdam.github.io/c-ids.github.io/>
+
+---
+
+## 7. Try It in the Browser
+
+**// TRY IT IN THE BROWSER**
+### Run the detector, no terminal required
+
+A client-side simulation of the same rule-matching logic shared by the C++ core and its .NET and Swift bindings — paste or generate a traffic sample and see which lines a detection pass would flag, right here in the page.
+
+👉 <https://aligokdam.github.io/c-ids.github.io/#demo>
 
 ---
 
