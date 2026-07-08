@@ -92,40 +92,121 @@
     transition: color .2s ease, background-color .2s ease;
   }
   .lang-btn[aria-pressed="true"] {
-    background: rgba(255,159,28,0.14);
+    background: rgba(255,159,28,0.16);
     color: #FF9F1C;
   }
 
   ::selection { background: rgba(255,159,28,0.35); color: #fff; }
 
+  /* menu panel */
+  #menu-overlay {
+    transition: opacity .3s ease;
+  }
+  #menu-panel {
+    transition: transform .3s ease;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .scanline, .ticker-track, .caret { animation: none !important; }
+    #menu-overlay, #menu-panel { transition: none !important; }
   }
 </style>
 </head>
 
 <body class="font-sans text-ink antialiased">
 
-  <!-- top status bar -->
-  <div class="border-b border-line/80 bg-panel/60 backdrop-blur">
-    <div class="max-w-5xl mx-auto px-6 py-2.5 flex items-center justify-between text-xs font-mono text-muted">
-      <div class="flex items-center gap-2">
-        <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-verify opacity-60"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-verify"></span>
-        </span>
-        <span data-i18n="status_online">SYSTEM ONLINE · LOCAL-FIRST</span>
-      </div>
-      <div class="flex items-center gap-4">
-        <span class="hidden sm:block">v0.1.0-alpha</span>
-        <div class="flex items-center border border-line rounded-md overflow-hidden" role="group" aria-label="Language">
-          <button type="button" data-lang-btn="en" class="lang-btn px-2.5 py-1 text-[11px] tracking-wide" aria-pressed="true">EN</button>
-          <span class="w-px h-4 bg-line"></span>
-          <button type="button" data-lang-btn="tr" class="lang-btn px-2.5 py-1 text-[11px] tracking-wide" aria-pressed="false">TR</button>
-        </div>
-      </div>
+  <!-- top bar (floats over content, no separating panel) -->
+  <div class="fixed top-0 inset-x-0 z-30 px-6 py-5 flex items-center justify-between pointer-events-none">
+    <button type="button" id="menu-toggle"
+            class="pointer-events-auto h-10 w-10 flex items-center justify-center rounded-full bg-panel/70 backdrop-blur border border-line text-ink/90 hover:border-signal/50 hover:text-signal transition-colors"
+            aria-label="Open menu" aria-haspopup="true" aria-expanded="false">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+
+    <div class="pointer-events-auto flex items-center border border-line rounded-full p-0.5 bg-panel/70 backdrop-blur" role="group" aria-label="Language">
+      <button type="button" data-lang-btn="en" class="lang-btn px-3.5 py-1.5 text-xs font-mono tracking-wide rounded-full" aria-pressed="true">EN</button>
+      <button type="button" data-lang-btn="tr" class="lang-btn px-3.5 py-1.5 text-xs font-mono tracking-wide rounded-full" aria-pressed="false">TR</button>
     </div>
   </div>
+
+  <!-- menu overlay + slide-in panel -->
+  <div id="menu-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none z-40"></div>
+
+  <aside id="menu-panel"
+         class="fixed top-0 left-0 h-full w-full sm:w-[400px] bg-panel border-r border-line z-50 -translate-x-full overflow-y-auto"
+         role="dialog" aria-modal="true" aria-label="Menu">
+
+    <!-- screen: main menu -->
+    <div id="menu-screen-main" class="p-6">
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="font-mono font-bold text-2xl" data-i18n="menu_title">Menu</h2>
+        <button type="button" id="menu-close" class="h-9 w-9 flex items-center justify-center rounded-full border border-line text-muted hover:text-ink hover:border-muted transition-colors" aria-label="Close menu">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <button type="button" id="menu-open-guide"
+              class="w-full flex items-center gap-4 text-left bg-panel2 border border-line rounded-lg p-4 hover:border-signal/40 transition-colors">
+        <span class="h-10 w-10 flex-none flex items-center justify-center rounded-md bg-signal/10 border border-signal/30 text-signal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <span>
+          <span class="block font-semibold text-ink" data-i18n="menu_guide_title">User Guide</span>
+          <span class="block text-sm text-muted" data-i18n="menu_guide_sub">How C‑IDS works</span>
+        </span>
+        <svg class="ml-auto flex-none text-muted" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      </button>
+    </div>
+
+    <!-- screen: user guide -->
+    <div id="menu-screen-guide" class="p-6 hidden">
+      <div class="flex items-center justify-between mb-6">
+        <button type="button" id="menu-back" class="inline-flex items-center gap-2 text-signal font-mono text-sm hover:text-orange-400 transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>
+          <span data-i18n="menu_title">Menu</span>
+        </button>
+        <button type="button" id="menu-close-2" class="h-9 w-9 flex items-center justify-center rounded-full border border-line text-muted hover:text-ink hover:border-muted transition-colors" aria-label="Close menu">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <h3 class="font-mono font-bold text-xl mb-2" data-i18n="guide_h1">C‑IDS User Guide</h3>
+      <p class="text-signal font-medium text-sm mb-6" data-i18n="guide_sub">What C‑IDS is and how the pieces fit together.</p>
+
+      <p class="text-muted text-sm leading-relaxed mb-4" data-i18n="guide_p1">
+        C‑IDS is a modular, cross‑platform Intrusion Detection System core. The detection logic lives once, in C++, and every platform talks to it through a stable binary interface instead of keeping its own copy of the logic.
+      </p>
+      <p class="text-muted text-sm leading-relaxed mb-8" data-i18n="guide_p2">
+        There is no server and no telemetry. Every packet is inspected on the device it runs on, and nothing leaves that device.
+      </p>
+
+      <p class="font-mono text-xs tracking-[0.2em] text-muted mb-4" data-i18n="guide_how_title">HOW IT'S STRUCTURED</p>
+      <ol class="space-y-5 text-sm mb-8">
+        <li class="flex gap-3">
+          <span class="font-mono font-bold text-signal">1.</span>
+          <span class="text-muted leading-relaxed" data-i18n="guide_li1"><span class="text-ink font-medium">Core (C++20)</span> — parses traffic and matches it against detection rules behind a stable <code class="text-ink">extern "C"</code> boundary.</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="font-mono font-bold text-signal">2.</span>
+          <span class="text-muted leading-relaxed" data-i18n="guide_li2"><span class="text-ink font-medium">.NET bindings</span> — a type‑safe P/Invoke layer wraps the core for Windows desktop apps, using SafeHandle for lifetime management.</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="font-mono font-bold text-signal">3.</span>
+          <span class="text-muted leading-relaxed" data-i18n="guide_li3"><span class="text-ink font-medium">Swift bindings</span> — a Swift Package connects iOS apps to the core through a C module map and ships as an .xcframework.</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="font-mono font-bold text-signal">4.</span>
+          <span class="text-muted leading-relaxed" data-i18n="guide_li4">Full architecture notes, the ABI contract, and the security policy live in the <code class="text-ink">docs/</code> folder of the repository.</span>
+        </li>
+      </ol>
+
+      <a href="https://github.com/aligokdam/c-ids.github.io" target="_blank" rel="noopener"
+         class="inline-flex items-center gap-2.5 bg-signal text-sm font-semibold px-5 py-3 rounded-md hover:bg-orange-400 transition-colors">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.57.1.79-.25.79-.55 0-.27-.01-1.16-.02-2.11-3.2.7-3.87-1.36-3.87-1.36-.53-1.33-1.29-1.69-1.29-1.69-1.05-.72.08-.7.08-.7 1.17.08 1.78 1.2 1.78 1.2 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 2.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.42.36.78 1.07.78 2.15 0 1.56-.01 2.81-.01 3.19 0 .3.21.66.8.55A10.98 10.98 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
+        <span data-i18n="btn_view_repo">View Repository</span>
+      </a>
+    </div>
+  </aside>
 
   <!-- HERO -->
   <header class="relative overflow-hidden border-b border-line">
@@ -300,8 +381,7 @@
         </a>
       </div>
 
-      <p class="mt-14 font-mono text-xs text-muted/60">C‑IDS · MIT License · Built with C++20</p>
-      <p class="mt-3 font-mono text-xs">
+      <p class="mt-14 font-mono text-xs">
         <a href="https://linktr.ee/aligokdam" target="_blank" rel="noopener" class="text-yellow-400 hover:text-yellow-300 transition-colors">By Ali Gökdam</a>
       </p>
     </div>
@@ -309,7 +389,6 @@
 
   <script>
     const translations = {
-      status_online: { en: "SYSTEM ONLINE · LOCAL-FIRST", tr: "SİSTEM ÇEVRİMİÇİ · YEREL ÖNCELİKLİ" },
       hero_eyebrow: { en: "// INTRUSION DETECTION CORE", tr: "// SALDIRI TESPİT ÇEKİRDEĞİ" },
       hero_desc: {
         en: 'A cross‑platform, modular <span class="text-ink font-medium">Intrusion Detection System</span> core. Written in pure <span class="text-ink font-medium">C++</span>, portable to every platform through <span class="text-ink font-medium">.NET</span> and <span class="text-ink font-medium">Swift</span> bindings.',
@@ -347,6 +426,38 @@
         tr: 'Mimari kararlar, ABI sözleşmesi ve güvenlik politikası dahil tüm detaylar depo içindeki <code class="text-ink">docs/</code> klasöründe.'
       },
       btn_open_github: { en: "Open on GitHub", tr: "GitHub'da Aç" },
+
+      /* menu */
+      menu_title: { en: "Menu", tr: "Menü" },
+      menu_guide_title: { en: "User Guide", tr: "Kullanım Kılavuzu" },
+      menu_guide_sub: { en: "How C‑IDS works", tr: "C‑IDS nasıl çalışır" },
+      guide_h1: { en: "C‑IDS User Guide", tr: "C‑IDS Kullanım Kılavuzu" },
+      guide_sub: { en: "What C‑IDS is and how the pieces fit together.", tr: "C‑IDS'in ne olduğu ve parçaların nasıl bir araya geldiği." },
+      guide_p1: {
+        en: 'C‑IDS is a modular, cross‑platform Intrusion Detection System core. The detection logic lives once, in C++, and every platform talks to it through a stable binary interface instead of keeping its own copy of the logic.',
+        tr: "C‑IDS, modüler ve cross‑platform bir Intrusion Detection System çekirdeğidir. Algılama mantığı tek bir yerde, C++'ta yaşar; her platform kendi mantık kopyasını tutmak yerine stabil bir binary arayüz üzerinden bu çekirdekle konuşur."
+      },
+      guide_p2: {
+        en: "There is no server and no telemetry. Every packet is inspected on the device it runs on, and nothing leaves that device.",
+        tr: "Sunucu yok, telemetri yok. Her paket, çalıştığı cihaz üzerinde incelenir ve hiçbir veri o cihazdan dışarı çıkmaz."
+      },
+      guide_how_title: { en: "HOW IT'S STRUCTURED", tr: "NASIL YAPILANDIRILDI" },
+      guide_li1: {
+        en: '<span class="text-ink font-medium">Core (C++20)</span> — parses traffic and matches it against detection rules behind a stable <code class="text-ink">extern "C"</code> boundary.',
+        tr: '<span class="text-ink font-medium">Çekirdek (C++20)</span> — trafiği ayrıştırır ve stabil bir <code class="text-ink">extern "C"</code> sınırının arkasında algılama kurallarıyla eşleştirir.'
+      },
+      guide_li2: {
+        en: '<span class="text-ink font-medium">.NET bindings</span> — a type‑safe P/Invoke layer wraps the core for Windows desktop apps, using SafeHandle for lifetime management.',
+        tr: '<span class="text-ink font-medium">.NET bağlamaları</span> — Windows masaüstü uygulamaları için çekirdeği saran type‑safe bir P/Invoke katmanı, yaşam döngüsü için SafeHandle kullanır.'
+      },
+      guide_li3: {
+        en: '<span class="text-ink font-medium">Swift bindings</span> — a Swift Package connects iOS apps to the core through a C module map and ships as an .xcframework.',
+        tr: '<span class="text-ink font-medium">Swift bağlamaları</span> — bir C modül haritası üzerinden iOS uygulamalarını çekirdeğe bağlayan ve .xcframework olarak dağıtılan bir Swift Package.'
+      },
+      guide_li4: {
+        en: 'Full architecture notes, the ABI contract, and the security policy live in the <code class="text-ink">docs/</code> folder of the repository.',
+        tr: 'Tüm mimari notlar, ABI sözleşmesi ve güvenlik politikası deponun <code class="text-ink">docs/</code> klasöründe yer alır.'
+      }
     };
 
     function setLanguage(lang) {
@@ -373,6 +484,46 @@
       if (saved === "en" || saved === "tr") initialLang = saved;
     } catch (e) {}
     setLanguage(initialLang);
+
+    /* menu panel logic */
+    const menuToggle = document.getElementById("menu-toggle");
+    const menuOverlay = document.getElementById("menu-overlay");
+    const menuPanel = document.getElementById("menu-panel");
+    const menuScreenMain = document.getElementById("menu-screen-main");
+    const menuScreenGuide = document.getElementById("menu-screen-guide");
+    const menuOpenGuide = document.getElementById("menu-open-guide");
+    const menuBack = document.getElementById("menu-back");
+
+    function openMenu() {
+      menuOverlay.classList.remove("opacity-0", "pointer-events-none");
+      menuPanel.classList.remove("-translate-x-full");
+      menuToggle.setAttribute("aria-expanded", "true");
+    }
+    function closeMenu() {
+      menuOverlay.classList.add("opacity-0", "pointer-events-none");
+      menuPanel.classList.add("-translate-x-full");
+      menuToggle.setAttribute("aria-expanded", "false");
+      setTimeout(() => {
+        menuScreenGuide.classList.add("hidden");
+        menuScreenMain.classList.remove("hidden");
+      }, 300);
+    }
+
+    menuToggle.addEventListener("click", openMenu);
+    document.getElementById("menu-close").addEventListener("click", closeMenu);
+    document.getElementById("menu-close-2").addEventListener("click", closeMenu);
+    menuOverlay.addEventListener("click", closeMenu);
+    menuOpenGuide.addEventListener("click", () => {
+      menuScreenMain.classList.add("hidden");
+      menuScreenGuide.classList.remove("hidden");
+    });
+    menuBack.addEventListener("click", () => {
+      menuScreenGuide.classList.add("hidden");
+      menuScreenMain.classList.remove("hidden");
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeMenu();
+    });
   </script>
 
 </body>
