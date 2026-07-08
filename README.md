@@ -1,68 +1,54 @@
-# C-IDS (Cross-Platform Intrusion Detection System)
+# C-IDS — Installation Guide
 
-C-IDS is a high-performance, modular, and cross-platform Intrusion Detection System (IDS) core. Developed in **C++** for optimal performance, the project provides native bindings for **.NET** and **Swift** to ensure seamless integration across different development ecosystems.
+This guide walks you through downloading the repository and building each component (C++ core, .NET bindings, Swift bindings) from scratch. Every section below is **self-contained** — you can jump straight to the one you need without having run the others first.
 
-## 🚀 About the Project
-
-C-IDS is a flexible security engine designed to analyze network traffic and detect suspicious activities with minimal latency.
-
-- **High Performance:** The core engine is built with C++ for efficient packet analysis.
-- **Modular Architecture:** Easily extendable with new detection algorithms and custom filters.
-- **Broad Compatibility:** Includes native bindings for .NET and Swift.
-- **Cross-Platform:** Optimized for deployment on Windows, macOS, and Linux.
-- **Local-first:** There is no server and no telemetry — every packet is inspected on the device it runs on, and nothing leaves that device.
-
-## 🛠 Technical Stack
-
-- **Core:** C++20 (packet analysis and engine management), built behind a stable `extern "C"` ABI boundary.
-- **Build System:** CMake.
-- **Bindings:**
-  * **.NET / C#** — a type-safe P/Invoke layer (`LibraryImport` source-gen) using `SafeHandle` for lifetime management. Targets .NET 8.
-  * **Swift** — a Swift Package that connects to the core through a C module map and ships as an `.xcframework`. Targets iOS 15+.
+> **Folder convention used throughout this guide**
+> After cloning, you will have a folder named `c-ids.github.io`, and inside it a subfolder named `C-IDS` (this is where all the source code lives). Every command block below starts from a clearly stated location — follow the `cd` lines exactly and you won't hit "no such file or directory" errors, even if you're jumping between sections.
 
 ---
 
-## 📦 İndirme ve Kurulum
+## 1. Get the Repository
 
-Aşağıdaki adımlar, projeyi bilgisayarınıza indirip her bir bileşeni (C++ çekirdek, .NET binding'i, Swift binding'i) derlemeniz için gereken tüm bilgileri içerir.
-
-### 1. Depoyu İndirme
-
-**Git ile klonlama (önerilen):**
+**Option A — Clone with Git (recommended):**
 
 ```bash
 git clone https://github.com/aligokdam/c-ids.github.io.git
-cd c-ids.github.io/C-IDS
 ```
 
-**ZIP olarak indirme:**
+This creates a `c-ids.github.io` folder in your current directory. Don't `cd` into it yet — each section below tells you exactly when and where to `cd`.
 
-1. [Depo sayfasına](https://github.com/aligokdam/c-ids.github.io) gidin.
-2. Yeşil **Code** butonuna tıklayın.
-3. **Download ZIP** seçeneğini seçin ve indirilen dosyayı istediğiniz konuma çıkarın.
+**Option B — Download as ZIP:**
 
-Ayrıca [Releases](https://github.com/aligokdam/c-ids.github.io/releases) sayfasından etiketlenmiş sürümleri (örn. `v1.0.0`) doğrudan indirebilirsiniz.
+1. Go to the [repository page](https://github.com/aligokdam/c-ids.github.io).
+2. Click the green **Code** button.
+3. Choose **Download ZIP** and extract it wherever you like.
 
-### 2. Ön Gereksinimler
+You can also grab a tagged release (e.g. `v1.0.0`) directly from the [Releases page](https://github.com/aligokdam/c-ids.github.io/releases).
 
-| Platform | Bileşen | Gereksinim |
-| --- | --- | --- |
-| 🪟 Windows | C++ Çekirdek | CMake ≥ 3.20, Visual Studio 2022 / MSVC v143 build araçları |
-| 🪟 Windows | .NET Bağlayıcısı | .NET 8 SDK |
-| 🐧 Linux | C++ Çekirdek | CMake ≥ 3.20, GCC ≥ 11 veya Clang ≥ 14 (C++20 desteği), Ninja/Make önerilir |
-| 🍎 macOS | C++ Çekirdek | CMake ≥ 3.20, Xcode Command Line Tools veya Clang ≥ 14 |
-| 📱 iOS | Swift Bağlayıcısı | macOS + Xcode 15+, Swift Package Manager, iOS 15+ dağıtım hedefi |
-| Genel | — | Git |
+---
 
-> Not: Swift/iOS bağlayıcısı yalnızca macOS üzerindeki Xcode araç zinciriyle derlenebilir; Linux veya Windows üzerinde iOS hedefi derlemesi desteklenmez.
+## 2. Prerequisites
 
-### 3. C++ Çekirdeğini Derleme
+| Platform | Component | Requirement |
+|---|---|---|
+| 🪟 Windows | C++ core | CMake ≥ 3.20, Visual Studio 2022 / MSVC v143 build tools |
+| 🪟 Windows | .NET bindings | .NET 8 SDK |
+| 🐧 Linux | C++ core | CMake ≥ 3.20, GCC ≥ 11 or Clang ≥ 14 (for C++20), Ninja or Make recommended |
+| 🍎 macOS | C++ core | CMake ≥ 3.20, Xcode Command Line Tools or Clang ≥ 14 |
+| 📱 iOS | Swift bindings | macOS + Xcode 15+, Swift Package Manager, iOS 15+ deployment target |
+| All | — | Git |
 
-Proje CMake tabanlıdır ve Windows, Linux ile macOS'ta derlenebilir. Aşağıda her platform için ayrı talimatlar bulunur.
+> **Note:** The Swift/iOS bindings can only be built with the Xcode toolchain on macOS. Building the iOS target on Linux or Windows is not supported.
 
-#### 🪟 Windows
+---
 
-Visual Studio 2022 (veya en az MSVC v143 build araçları) ve CMake kurulu olmalıdır.
+## 3. Build the C++ Core
+
+The core is CMake-based and builds the same way on all three desktop platforms — only the generator and package manager differ. Pick your platform below.
+
+### 🪟 Windows
+
+Requires Visual Studio 2022 (or at least the MSVC v143 build tools) and CMake.
 
 ```powershell
 git clone https://github.com/aligokdam/c-ids.github.io.git
@@ -73,16 +59,20 @@ cmake .. -G "Visual Studio 17 2022" -A x64
 cmake --build . --config Release
 ```
 
-Alternatif olarak Visual Studio'nun **"Open a local folder"** özelliğiyle `C-IDS` klasörünü doğrudan açıp CMake entegrasyonunu kullanabilirsiniz. Derleme sonunda `build\Release\` altında bir `.dll` (ve eşlik eden `.lib`) dosyası oluşur.
+Result: a `.dll` (with a matching `.lib`) is produced under `build\Release\`.
 
-> Visual Studio Build Tools yoksa `winget install Microsoft.VisualStudio.2022.BuildTools` veya `winget install Kitware.CMake` ile hızlıca kurabilirsiniz.
+Alternatively, use Visual Studio's **"Open a local folder"** feature and point it at the `C-IDS` folder — Visual Studio will pick up the CMake project automatically.
 
-#### 🐧 Linux
+> Missing Visual Studio Build Tools or CMake? Install them quickly with:
+> `winget install Microsoft.VisualStudio.2022.BuildTools`
+> `winget install Kitware.CMake`
 
-GCC ≥ 11 veya Clang ≥ 14 (C++20 desteği için), CMake ve Ninja/Make önerilir.
+### 🐧 Linux
+
+Requires GCC ≥ 11 or Clang ≥ 14 (for C++20 support), CMake, and preferably Ninja.
 
 ```bash
-# Debian/Ubuntu için gerekli paketler
+# Debian/Ubuntu example
 sudo apt update
 sudo apt install build-essential cmake ninja-build git
 
@@ -93,9 +83,9 @@ cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 ```
 
-Derleme sonunda `build/` altında bir `.so` paylaşımlı kütüphane dosyası oluşur. Sisteminizde kullanılabilir hale getirmek için isterseniz `sudo cmake --install .` çalıştırabilir veya kütüphaneyi doğrudan uygulamanızın çalıştırılabilir dosyasıyla aynı dizine kopyalayabilirsiniz.
+Result: a shared library (`.so`) is produced under `build/`. Optionally install it system-wide with `sudo cmake --install .`, or simply copy it next to your application's executable.
 
-#### 🍎 macOS
+### 🍎 macOS
 
 ```bash
 brew install cmake ninja
@@ -106,85 +96,102 @@ cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 ```
 
-Bu, `build/` altında bir `.dylib` üretir; bu dosya doğrudan macOS uygulamalarında, iOS için ise aşağıdaki Swift Package akışı üzerinden kullanılır.
+Result: a `.dylib` is produced under `build/`. This library is used directly by macOS apps, and indirectly by iOS apps via the Swift Package (see Step 5).
 
-> Bellek güvenliği doğrulamaları için ASan/UBSan etkin bir derleme yapmak isterseniz (Linux/macOS), CMake yapılandırmasına ilgili sanitizer bayraklarını (örn. `-DCMAKE_CXX_FLAGS="-fsanitize=address,undefined"`) ekleyebilirsiniz.
+> **Sanitizer builds (Linux/macOS):** to verify memory safety, add sanitizer flags to the CMake configure step, e.g.:
+> `cmake .. -G Ninja -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined"`
 
-### 4. .NET (Windows) Bağlayıcısını Kurma
+---
 
-.NET tarafı, `SafeHandle` ile yaşam döngüsü yönetimi yapan tip güvenli bir P/Invoke katmanıdır.
+## 4. Build the .NET Bindings (Windows)
 
-```bash
-cd C-IDS  # .NET proje/çözüm dosyasının bulunduğu klasöre gidin
+The .NET layer is a type-safe P/Invoke wrapper around the native core, using `SafeHandle` for lifetime management.
+
+**Where to start from:**
+
+- If you just finished **Step 3 (Windows)**, you are currently inside `c-ids.github.io\C-IDS\build`. Go back two levels first:
+  ```powershell
+  cd ..\..
+  ```
+  You should now be in `c-ids.github.io\`.
+
+- If you're starting fresh in a new terminal instead, clone the repo and move into it:
+  ```powershell
+  git clone https://github.com/aligokdam/c-ids.github.io.git
+  cd c-ids.github.io
+  ```
+
+Either way, once you're in the `c-ids.github.io` folder, run:
+
+```powershell
+cd C-IDS
 dotnet restore
 dotnet build -c Release
 ```
 
-Kendi .NET projenize eklemek için derlenmiş kütüphaneye proje referansı verin veya oluşan NuGet paketini/DLL'i projenize kopyalayın; ardından native C++ çekirdek kütüphanesinin (adım 3'te derlenen `.dll`) çalıştırılabilir dosyanızla aynı dizinde bulunduğundan emin olun.
+**Using it in your own app:** add a project reference to the built library (or copy the resulting package/DLL into your project), and make sure the native core library you built in Step 3 (the `.dll` from `build\Release\`) sits in the same directory as your app's executable.
 
-### 5. 📱 iOS (Swift) Bağlayıcısını Kurma
+---
 
-Swift bağlayıcısı bir Swift Package olarak dağıtılır ve C++ çekirdeğini bir `.xcframework` içinde sarmalayarak Objective-C köprüsü olmadan doğrudan Swift'ten kullanılabilir hale getirir. Gereksinimler: **macOS + Xcode 15+** ve **iOS 15.0+** dağıtım hedefi (iOS derlemesi yalnızca Xcode araç zinciri üzerinden yapılabilir; Linux veya Windows'ta doğrudan derlenemez).
+## 5. Build the Swift (iOS) Bindings
 
-**A) Xcode üzerinden (önerilen):**
+The Swift bindings are distributed as a Swift Package. They wrap the C++ core inside an `.xcframework`, so application code calls into it directly from Swift with no Objective-C bridge required. Requires **macOS + Xcode 15+** and an **iOS 15.0+** deployment target.
 
-1. Xcode'da iOS projenizi açın.
-2. **File → Add Package Dependencies…** seçin.
-3. Depo URL'sini girin: `https://github.com/aligokdam/c-ids.github.io.git`
-4. Sürüm kuralını seçin (örn. "Branch: main" veya belirli bir etiket) ve Swift binding hedefini (target) seçip **Add Package** ile ekleyin.
-5. Kütüphaneyi kullanacağınız uygulama hedefinde (App Target) **Frameworks, Libraries, and Embedded Content** altında paketin eklendiğini doğrulayın.
+### A) Via Xcode (recommended)
 
-**B) `Package.swift` üzerinden (kendi Swift paketinize bağımlılık olarak):**
+1. Open your iOS project in Xcode.
+2. Go to **File → Add Package Dependencies…**
+3. Enter the repository URL: `https://github.com/aligokdam/c-ids.github.io.git`
+4. Choose a version rule (e.g. "Branch: main" or a specific tag), select the Swift binding target, and click **Add Package**.
+5. In your app target, confirm the package appears under **Frameworks, Libraries, and Embedded Content**.
+
+### B) Via `Package.swift` (as a dependency of your own Swift package)
 
 ```swift
 // swift-tools-version:5.9
 import PackageDescription
 
 let package = Package(
-    name: "SizinUygulamaniz",
+    name: "YourApp",
     platforms: [.iOS(.v15)],
     dependencies: [
         .package(url: "https://github.com/aligokdam/c-ids.github.io.git", branch: "main")
     ],
     targets: [
         .target(
-            name: "SizinHedefiniz",
+            name: "YourTarget",
             dependencies: [
-                .product(name: "CIDS", package: "c-ids.github.io") // paket içindeki gerçek ürün adını depodan doğrulayın
+                .product(name: "CIDS", package: "c-ids.github.io") // verify the exact product name in the repo's Package.swift
             ]
         )
     ]
 )
 ```
 
-**C) Komut satırından derleme/test (simülatör veya cihaz için):**
+### C) Via the command line (simulator or device)
+
+**Where to start from:** same rule as Step 4 — if you're continuing from Step 3 (macOS), run `cd ../..` first to get back to `c-ids.github.io/`. Otherwise, clone fresh:
 
 ```bash
 git clone https://github.com/aligokdam/c-ids.github.io.git
 cd c-ids.github.io/C-IDS
 swift build
-# veya bir iOS simülatörü hedefleyerek:
+# or targeting an iOS simulator:
 xcodebuild -scheme CIDS -destination "generic/platform=iOS Simulator"
 ```
 
-> `.xcframework` hem cihaz (`arm64`) hem simülatör (`arm64`/`x86_64`) mimarilerini içerdiğinden ek bir "lipo" birleştirme adımına gerek yoktur.
-
-### 6. Kurulumu Doğrulama
-
-Derleme başarılı olduysa, C++ çekirdeğinin ürettiği kütüphaneyi bir örnek uygulamaya bağlayıp temel bir paket/kural eşleştirme çağrısı yaparak (örn. bir örnek trafik günlüğü besleyerek) motorun beklenen `rule=...` çıktısını ürettiğini kontrol edebilirsiniz. Canlı demoda örnek çıktı formatını görebilirsiniz: <https://aligokdam.github.io/c-ids.github.io/>
+> The `.xcframework` bundles both device (`arm64`) and simulator (`arm64`/`x86_64`) architectures, so no manual `lipo` merge step is needed.
 
 ---
 
-## 📖 Documentation and Live Demo
+## 6. Verify Your Installation
 
-For technical specifications, architecture notes, the ABI contract, and a live look at the project, please visit the official page: **<https://aligokdam.github.io/c-ids.github.io/>**
+Once a build succeeds, link the resulting core library into a small test app and feed it a sample traffic log or packet. If the engine prints the expected `rule=...` output for matched signatures, your build is working correctly. You can compare against the live demo's output format here: <https://aligokdam.github.io/c-ids.github.io/>
 
-Detailed architecture decisions, the ABI contract, and the security policy live in the `docs/` folder of the repository.
+---
 
-## 🤝 Contributing
+## More Information
 
-Contributions are welcome! Please review the repository guidelines for instructions on how to submit improvements.
-
-## ⚖️ License
-
-This project is licensed under the **MIT License**.
+- **Docs & live demo:** <https://aligokdam.github.io/c-ids.github.io/>
+- Architecture decisions, the ABI contract, and the security policy live in the `docs/` folder of the repository.
+- **License:** MIT
