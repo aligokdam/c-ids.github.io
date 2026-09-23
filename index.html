@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C-IDS — Cross-platform Intrusion Detection Core</title>
+<title>C-IDS: Cross-platform Intrusion Detection Core</title>
 <meta name="description" content="A cross-platform, modular Intrusion Detection System (IDS) core written in C++, with .NET and Swift bindings.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -513,7 +513,106 @@ textarea { font: inherit; color: inherit; }
     .scanline, .ticker-track, .caret { animation: none !important; }
     .guide-overlay, .guide-modal { transition: none !important; }
   }
+  /* ---------------- Theme toggle (bottom-left) + light theme ----------------
+     The dark palette above is the main theme and stays untouched. The light
+     theme only re-maps colours when <html data-theme="light"> is set. :where()
+     keeps each override at the same specificity as the rule it replaces, so
+     hover/focus states keep winning exactly as before. */
+
+  .theme-toggle {
+    left: 24px;
+    bottom: 20px;
+    bottom: max(20px, env(safe-area-inset-bottom));
+  }
+  .theme-icon-outer,
+  .theme-icon-inner {
+    transform-box: view-box;
+    transform-origin: 120px 120px;
+    transition: transform .35s ease-in-out;
+  }
+  .theme-icon-cut { fill: #0A0E13; }
+  html[data-theme="light"] .theme-icon-outer { transform: rotate(180deg); }
+  html[data-theme="light"] .theme-icon-inner { transform: rotate(-180deg); }
+  html[data-theme="light"] .theme-icon-cut { fill: #FFFFFF; }
+
+  html.theme-switching,
+  html.theme-switching *,
+  html.theme-switching *::before,
+  html.theme-switching *::after {
+    transition: background-color .35s ease, border-color .35s ease, color .35s ease,
+                fill .35s ease, box-shadow .35s ease, transform .35s ease-in-out !important;
+  }
+
+  :where(html[data-theme="light"]) body {
+    background-color: #F4F6F9;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255,159,28,0.12), transparent),
+      repeating-linear-gradient(180deg, rgba(15,23,42,0.018) 0px, rgba(15,23,42,0.018) 1px, transparent 1px, transparent 3px);
+  }
+  :where(html[data-theme="light"]) *, :where(html[data-theme="light"]) *::before, :where(html[data-theme="light"]) *::after { border-color: #D8DEE6; }
+  :where(html[data-theme="light"]) .border-line { border-color: #D8DEE6; }
+  :where(html[data-theme="light"]) .bg-panel { background-color: #FFFFFF; }
+  :where(html[data-theme="light"]) .bg-panel\/70 { background-color: rgba(255,255,255,0.75); }
+  :where(html[data-theme="light"]) .bg-panel2 { background-color: #EEF1F5; }
+  :where(html[data-theme="light"]) .bg-black\/40 { background-color: rgba(15,23,42,0.04); }
+  :where(html[data-theme="light"]) .from-base { --tw-from: #F4F6F9; }
+  :where(html[data-theme="light"]) .to-base { --tw-to: #F4F6F9; }
+
+  :where(html[data-theme="light"]) .text-ink { color: #0F141A; }
+  :where(html[data-theme="light"]) .text-ink\/90 { color: rgba(15,20,26,0.90); }
+  :where(html[data-theme="light"]) .text-muted { color: #5B6675; }
+  :where(html[data-theme="light"]) .text-muted\/50 { color: rgba(91,102,117,0.60); }
+  :where(html[data-theme="light"]) .text-muted\/70 { color: rgba(91,102,117,0.80); }
+  :where(html[data-theme="light"]) .text-muted\/80 { color: rgba(91,102,117,0.90); }
+  :where(html[data-theme="light"]) .text-signal { color: #D97706; }
+  :where(html[data-theme="light"]) .text-yellow-400 { color: #B7791F; }
+  :where(html[data-theme="light"]) .hover\:text-signal:hover { color: #D97706; }
+  :where(html[data-theme="light"]) .hover\:text-orange-400:hover { color: #EA580C; }
+  :where(html[data-theme="light"]) .hover\:text-yellow-300:hover { color: #975A16; }
+  :where(html[data-theme="light"]) .hover\:border-muted:hover { border-color: #5B6675; }
+  :where(html[data-theme="light"]) ::selection { background: rgba(255,159,28,0.30); color: #0F141A; }
+
+  :where(html[data-theme="light"]) .lang-panel {
+    background:
+      radial-gradient(ellipse at 100% 0%, rgba(255,159,28,0.12), transparent 60%),
+      rgba(255,255,255,0.96);
+    border-color: rgba(15,23,42,0.10);
+    box-shadow: 0 24px 60px rgba(15,23,42,0.16);
+  }
+  :where(html[data-theme="light"]) .lang-panel-header { color: #5B6675; border-bottom-color: #D8DEE6; }
+  :where(html[data-theme="light"]) .lang-panel-list::-webkit-scrollbar-thumb { background: rgba(15,23,42,0.15); }
+  :where(html[data-theme="light"]) .lang-option { color: #0F141A; }
+  :where(html[data-theme="light"]) .lang-option:hover,
+  :where(html[data-theme="light"]) .lang-option:focus-visible { background: rgba(15,23,42,0.05); }
+  :where(html[data-theme="light"]) .lang-option[aria-selected="true"] { background: rgba(255,159,28,0.14); border-color: rgba(217,119,6,0.40); color: #D97706; }
+  :where(html[data-theme="light"]) .lang-option .lang-check { color: #D97706; }
+
+  :where(html[data-theme="light"]) .guide-overlay { background: rgba(15,23,42,0.25); }
+  :where(html[data-theme="light"]) .guide-modal {
+    background: rgba(255,255,255,0.94);
+    border-color: rgba(15,23,42,0.10);
+    box-shadow: 0 30px 80px rgba(15,23,42,0.20);
+  }
+  :where(html[data-theme="light"]) .guide-close { background: rgba(15,23,42,0.04); border-color: rgba(15,23,42,0.12); color: #0F141A; }
+  :where(html[data-theme="light"]) .guide-close:hover { background: rgba(15,23,42,0.08); border-color: rgba(217,119,6,0.45); }
+  :where(html[data-theme="light"]) .guide-step-badge { color: #D97706; border-color: rgba(217,119,6,0.40); }
+  :where(html[data-theme="light"]) .guide-content::-webkit-scrollbar-thumb { background: rgba(15,23,42,0.15); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .theme-icon-outer, .theme-icon-inner { transition: none !important; }
+    html.theme-switching, html.theme-switching * { transition: none !important; }
+  }
 </style>
+<script>
+  /* Theme: restore the saved choice before first paint (no flash). */
+  (function () {
+    try {
+      if (window.localStorage.getItem("cids-theme") === "light") {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    } catch (err) { /* storage unavailable: stay on the main theme */ }
+  })();
+</script>
 </head>
 
 <body class="font-sans text-ink antialiased">
@@ -546,6 +645,20 @@ textarea { font: inherit; color: inherit; }
     </div>
   </div>
 
+  <!-- theme toggle (bottom-left, same round control style as the top bar) -->
+  <button type="button" id="theme-toggle"
+          class="theme-toggle fixed z-30 h-10 w-10 flex items-center justify-center rounded-full bg-panel/70 backdrop-blur border border-line text-ink/90 hover:border-signal/50 hover:text-signal transition-colors"
+          aria-label="Toggle light theme" aria-pressed="false">
+    <svg width="20" height="20" viewBox="0 0 240 240" aria-hidden="true">
+      <circle cx="120" cy="120" r="116.25" fill="currentColor"/>
+      <path class="theme-icon-outer theme-icon-cut" d="M120 25.5A94.5 94.5 0 0 1 120 214.5V172.5A52.5 52.5 0 0 1 120 67.5Z"/>
+      <g class="theme-icon-inner">
+        <path fill="currentColor" d="M120 67.5A52.5 52.5 0 0 1 120 172.5Z"/>
+        <path class="theme-icon-cut" d="M120 67.5A52.5 52.5 0 0 0 120 172.5Z"/>
+      </g>
+    </svg>
+  </button>
+
   <!-- Centered User Guide modal -->
   <div id="guide-overlay" class="guide-overlay"></div>
 
@@ -573,15 +686,15 @@ textarea { font: inherit; color: inherit; }
         <ol class="space-y-6 text-sm mb-8">
           <li class="flex gap-4">
             <span class="guide-step-badge">01</span>
-            <span class="text-muted leading-relaxed pt-1.5" data-i18n="guide_li1"><span class="text-ink font-medium">Core (C++20)</span> — parses traffic and matches it against detection rules behind a stable <code class="text-ink">extern "C"</code> boundary.</span>
+            <span class="text-muted leading-relaxed pt-1.5" data-i18n="guide_li1"><span class="text-ink font-medium">Core (C++20)</span>: parses traffic and matches it against detection rules behind a stable <code class="text-ink">extern "C"</code> boundary.</span>
           </li>
           <li class="flex gap-4">
             <span class="guide-step-badge">02</span>
-            <span class="text-muted leading-relaxed pt-1.5" data-i18n="guide_li2"><span class="text-ink font-medium">.NET bindings</span> — a type‑safe P/Invoke layer wraps the core for Windows desktop apps, using SafeHandle for lifetime management.</span>
+            <span class="text-muted leading-relaxed pt-1.5" data-i18n="guide_li2"><span class="text-ink font-medium">.NET bindings</span>: a type‑safe P/Invoke layer wraps the core for Windows desktop apps, using SafeHandle for lifetime management.</span>
           </li>
           <li class="flex gap-4">
             <span class="guide-step-badge">03</span>
-            <span class="text-muted leading-relaxed pt-1.5" data-i18n="guide_li3"><span class="text-ink font-medium">Swift bindings</span> — a Swift Package connects iOS apps to the core through a C module map and ships as an .xcframework.</span>
+            <span class="text-muted leading-relaxed pt-1.5" data-i18n="guide_li3"><span class="text-ink font-medium">Swift bindings</span>: a Swift Package connects iOS apps to the core through a C module map and ships as an .xcframework.</span>
           </li>
           <li class="flex gap-4">
             <span class="guide-step-badge">04</span>
@@ -740,7 +853,7 @@ textarea { font: inherit; color: inherit; }
     <p class="font-mono text-xs tracking-[0.25em] text-signal mb-4" data-i18n="demo_eyebrow">// TRY IT IN THE BROWSER</p>
     <h2 class="font-mono font-bold text-3xl sm:text-4xl mb-4" data-i18n="demo_title">Run the detector, no terminal required</h2>
     <p class="text-muted max-w-2xl mb-10 leading-relaxed" data-i18n="demo_desc">
-      A simplified, client-side simulation of the rule-matching logic in the C++ core — paste or generate a
+      A simplified, client-side simulation of the rule-matching logic in the C++ core. Paste or generate a
       traffic sample and see which lines a detection pass would flag, right here in the page.
     </p>
 
@@ -760,7 +873,7 @@ textarea { font: inherit; color: inherit; }
           class="mt-4 inline-flex items-center justify-center gap-2 bg-signal text-base font-semibold px-5 py-3 rounded-md hover:bg-orange-400 transition-colors"
           data-i18n="demo_run_btn">Run detection</button>
         <p class="mt-3 text-xs text-muted/70 font-mono leading-relaxed" data-i18n="demo_format_hint">
-          Format: PROTO SRC_IP:PORT DST_IP:PORT — one packet per line. ICMP lines omit ports.
+          Format: PROTO SRC_IP:PORT DST_IP:PORT. One packet per line. ICMP lines omit ports.
         </p>
       </div>
 
@@ -773,8 +886,8 @@ textarea { font: inherit; color: inherit; }
         </div>
         <p id="demo-summary" class="mt-3 font-mono text-xs text-muted min-h-[1.5em]"></p>
         <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 font-mono text-[11px] text-muted/70">
-          <span class="inline-flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-verify"></span><span data-i18n="demo_legend_low">sev 1–29 · low</span></span>
-          <span class="inline-flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-yellow-400"></span><span data-i18n="demo_legend_medium">sev 30–69 · medium</span></span>
+          <span class="inline-flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-verify"></span><span data-i18n="demo_legend_low">sev 1-29 · low</span></span>
+          <span class="inline-flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-yellow-400"></span><span data-i18n="demo_legend_medium">sev 30-69 · medium</span></span>
           <span class="inline-flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-red-400"></span><span data-i18n="demo_legend_high">sev 70+ · high</span></span>
         </div>
       </div>
@@ -788,8 +901,8 @@ textarea { font: inherit; color: inherit; }
       <p class="font-mono text-xs tracking-[0.25em] text-signal mb-4" data-i18n="footer_eyebrow">// GET STARTED</p>
       <h2 class="font-mono font-bold text-3xl sm:text-4xl mb-6" data-i18n="footer_title">Browse the source</h2>
       <p class="text-muted max-w-xl mx-auto mb-10" data-i18n="footer_desc">
-        Architecture decisions, the ABI contract, and the security policy —
-        all the details live in the <code class="text-ink">docs/</code> folder of the repo.
+        Architecture decisions, the ABI contract, and the security policy.
+        All the details live in the <code class="text-ink">docs/</code> folder of the repo.
       </p>
 
       <div class="flex flex-wrap items-center justify-center gap-4">
@@ -1313,31 +1426,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// GET STARTED",
     "footer_title": "Browse the source",
-    "footer_desc": "Architecture decisions, the ABI contract, and the security policy — all the details live in the <code class=\"text-ink\">docs/</code> folder of the repo.",
+    "footer_desc": "Architecture decisions, the ABI contract, and the security policy. All the details live in the <code class=\"text-ink\">docs/</code> folder of the repo.",
     "btn_open_github": "Open on GitHub",
     "guide_h1": "C‑IDS User Guide",
     "guide_sub": "What C‑IDS is and how the pieces fit together.",
     "guide_p1": "C‑IDS is a modular, cross‑platform Intrusion Detection System core. The detection logic lives once, in C++, and every platform talks to it through a stable binary interface instead of keeping its own copy of the logic.",
     "guide_how_title": "HOW IT'S STRUCTURED",
-    "guide_li1": "<span class=\"text-ink font-medium\">Core (C++20)</span> — parses traffic and matches it against detection rules behind a stable <code class=\"text-ink\">extern \"C\"</code> boundary.",
-    "guide_li2": "<span class=\"text-ink font-medium\">.NET bindings</span> — a type‑safe P/Invoke layer wraps the core for Windows desktop apps, using SafeHandle for lifetime management.",
-    "guide_li3": "<span class=\"text-ink font-medium\">Swift bindings</span> — a Swift Package connects iOS apps to the core through a C module map and ships as an .xcframework.",
+    "guide_li1": "<span class=\"text-ink font-medium\">Core (C++20)</span>: parses traffic and matches it against detection rules behind a stable <code class=\"text-ink\">extern \"C\"</code> boundary.",
+    "guide_li2": "<span class=\"text-ink font-medium\">.NET bindings</span>: a type‑safe P/Invoke layer wraps the core for Windows desktop apps, using SafeHandle for lifetime management.",
+    "guide_li3": "<span class=\"text-ink font-medium\">Swift bindings</span>: a Swift Package connects iOS apps to the core through a C module map and ships as an .xcframework.",
     "guide_li4": "Full architecture notes, the ABI contract, and the security policy live in the <code class=\"text-ink\">docs/</code> folder of the repository.",
     "guide_quickstart_title": "QUICK START",
     "guide_quickstart_note": "This builds the C++ core on Linux/macOS. Windows, .NET, and Swift build steps are covered in full in the repository's README.",
     "guide_privacy_note": "This page runs entirely in your browser. The live demo below never sends traffic data anywhere.",
     "demo_eyebrow": "// TRY IT IN THE BROWSER",
     "demo_title": "Run the detector, no terminal required",
-    "demo_desc": "A simplified, client-side simulation of the rule-matching logic in the C++ core — paste or generate a traffic sample and see which lines a detection pass would flag, right here in the page.",
+    "demo_desc": "A simplified, client-side simulation of the rule-matching logic in the C++ core. Paste or generate a traffic sample and see which lines a detection pass would flag, right here in the page.",
     "demo_input_label": "TRAFFIC INPUT",
     "demo_load_sample": "Load sample traffic",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "Run detection",
-    "demo_format_hint": "Format: PROTO SRC_IP:PORT DST_IP:PORT — one packet per line. ICMP lines omit ports.",
+    "demo_format_hint": "Format: PROTO SRC_IP:PORT DST_IP:PORT. One packet per line. ICMP lines omit ports.",
     "demo_output_label": "DETECTION OUTPUT",
     "demo_output_empty": "// waiting for input…",
-    "demo_legend_low": "sev 1–29 · low",
-    "demo_legend_medium": "sev 30–69 · medium",
+    "demo_legend_low": "sev 1-29 · low",
+    "demo_legend_medium": "sev 30-69 · medium",
     "demo_legend_high": "sev 70+ · high",
     "lang_label": "Language"
   },
@@ -1365,31 +1478,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// BAŞLANGIÇ",
     "footer_title": "Kaynak koduna göz atın",
-    "footer_desc": "Mimari kararlar, ABI sözleşmesi ve güvenlik politikası — tüm detaylar deponun <code class=\"text-ink\">docs/</code> klasöründe.",
+    "footer_desc": "Mimari kararlar, ABI sözleşmesi ve güvenlik politikası. Tüm detaylar deponun <code class=\"text-ink\">docs/</code> klasöründe.",
     "btn_open_github": "GitHub'da Aç",
     "guide_h1": "C‑IDS Kullanım Kılavuzu",
     "guide_sub": "C‑IDS'in ne olduğu ve parçaların nasıl bir araya geldiği.",
     "guide_p1": "C‑IDS, modüler ve cross‑platform bir Intrusion Detection System çekirdeğidir. Algılama mantığı tek bir yerde, C++'ta yaşar; her platform kendi mantık kopyasını tutmak yerine stabil bir binary arayüz üzerinden bu çekirdekle konuşur.",
     "guide_how_title": "NASIL YAPILANDIRILDI",
-    "guide_li1": "<span class=\"text-ink font-medium\">Çekirdek (C++20)</span> — trafiği ayrıştırır ve stabil bir <code class=\"text-ink\">extern \"C\"</code> sınırının arkasında algılama kurallarıyla eşleştirir.",
-    "guide_li2": "<span class=\"text-ink font-medium\">.NET bağlamaları</span> — Windows masaüstü uygulamaları için çekirdeği saran type‑safe bir P/Invoke katmanı; yaşam döngüsü için SafeHandle kullanır.",
-    "guide_li3": "<span class=\"text-ink font-medium\">Swift bağlamaları</span> — bir C modül haritası üzerinden iOS uygulamalarını çekirdeğe bağlayan ve .xcframework olarak dağıtılan bir Swift Package.",
+    "guide_li1": "<span class=\"text-ink font-medium\">Çekirdek (C++20)</span>: trafiği ayrıştırır ve stabil bir <code class=\"text-ink\">extern \"C\"</code> sınırının arkasında algılama kurallarıyla eşleştirir.",
+    "guide_li2": "<span class=\"text-ink font-medium\">.NET bağlamaları</span>: Windows masaüstü uygulamaları için çekirdeği saran type‑safe bir P/Invoke katmanı; yaşam döngüsü için SafeHandle kullanır.",
+    "guide_li3": "<span class=\"text-ink font-medium\">Swift bağlamaları</span>: bir C modül haritası üzerinden iOS uygulamalarını çekirdeğe bağlayan ve .xcframework olarak dağıtılan bir Swift Package.",
     "guide_li4": "Tüm mimari notlar, ABI sözleşmesi ve güvenlik politikası deponun <code class=\"text-ink\">docs/</code> klasöründe yer alır.",
     "guide_quickstart_title": "HIZLI BAŞLANGIÇ",
     "guide_quickstart_note": "Bu komutlar Linux/macOS üzerinde C++ çekirdeğini derler. Windows, .NET ve Swift derleme adımları deponun README dosyasında ayrıntılı olarak anlatılır.",
     "guide_privacy_note": "Bu sayfa tamamen tarayıcınızda çalışır. Aşağıdaki canlı demo, trafik verisini hiçbir yere göndermez.",
     "demo_eyebrow": "// TARAYICIDA DENE",
     "demo_title": "Terminal açmadan dedektörü çalıştır",
-    "demo_desc": "C++ çekirdeğindeki kural eşleştirme mantığının basitleştirilmiş, tarayıcı tarafında çalışan bir simülasyonu — bir trafik örneği yapıştırın ya da üretin, hangi satırların işaretleneceğini doğrudan bu sayfada görün.",
+    "demo_desc": "C++ çekirdeğindeki kural eşleştirme mantığının basitleştirilmiş, tarayıcı tarafında çalışan bir simülasyonu. Bir trafik örneği yapıştırın ya da üretin, hangi satırların işaretleneceğini doğrudan bu sayfada görün.",
     "demo_input_label": "TRAFİK GİRİŞİ",
     "demo_load_sample": "Örnek trafik yükle",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "Algılamayı çalıştır",
-    "demo_format_hint": "Format: PROTO KAYNAK_IP:PORT HEDEF_IP:PORT — her satır bir paket. ICMP satırlarında port olmaz.",
+    "demo_format_hint": "Format: PROTO KAYNAK_IP:PORT HEDEF_IP:PORT. Her satır bir paket. ICMP satırlarında port olmaz.",
     "demo_output_label": "ALGILAMA ÇIKTISI",
     "demo_output_empty": "// giriş bekleniyor…",
-    "demo_legend_low": "sev 1–29 · düşük",
-    "demo_legend_medium": "sev 30–69 · orta",
+    "demo_legend_low": "sev 1-29 · düşük",
+    "demo_legend_medium": "sev 30-69 · orta",
     "demo_legend_high": "sev 70+ · yüksek",
     "lang_label": "Dil"
   },
@@ -1417,31 +1530,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// MAGSIMULA",
     "footer_title": "Tingnan ang source code",
-    "footer_desc": "Mga desisyon sa architecture, ang ABI contract, at ang security policy — lahat ng detalye ay nasa <code class=\"text-ink\">docs/</code> folder ng repo.",
+    "footer_desc": "Mga desisyon sa architecture, ang ABI contract, at ang security policy. Lahat ng detalye ay nasa <code class=\"text-ink\">docs/</code> folder ng repo.",
     "btn_open_github": "Buksan sa GitHub",
     "guide_h1": "Gabay ng Gumagamit ng C‑IDS",
     "guide_sub": "Kung ano ang C‑IDS at kung paano magkakasama ang mga bahagi nito.",
     "guide_p1": "Ang C‑IDS ay isang modular, cross‑platform na Intrusion Detection System core. Ang detection logic ay nakatira sa iisang lugar, sa C++, at kumokonekta rito ang bawat platform sa pamamagitan ng matatag na binary interface sa halip na magtago ng sarili nitong kopya.",
     "guide_how_title": "PAANO ITO NAKABALANGKAS",
-    "guide_li1": "<span class=\"text-ink font-medium\">Core (C++20)</span> — sinusuri ang trapiko at itinutugma ito sa mga detection rule sa likod ng matatag na <code class=\"text-ink\">extern \"C\"</code> boundary.",
-    "guide_li2": "<span class=\"text-ink font-medium\">.NET bindings</span> — isang type‑safe na P/Invoke layer na binabalot ang core para sa mga Windows desktop app, gamit ang SafeHandle para sa lifetime management.",
-    "guide_li3": "<span class=\"text-ink font-medium\">Swift bindings</span> — isang Swift Package na kumokonekta sa mga iOS app sa core sa pamamagitan ng C module map, ipinapamahagi bilang .xcframework.",
+    "guide_li1": "<span class=\"text-ink font-medium\">Core (C++20)</span>: sinusuri ang trapiko at itinutugma ito sa mga detection rule sa likod ng matatag na <code class=\"text-ink\">extern \"C\"</code> boundary.",
+    "guide_li2": "<span class=\"text-ink font-medium\">.NET bindings</span>: isang type‑safe na P/Invoke layer na binabalot ang core para sa mga Windows desktop app, gamit ang SafeHandle para sa lifetime management.",
+    "guide_li3": "<span class=\"text-ink font-medium\">Swift bindings</span>: isang Swift Package na kumokonekta sa mga iOS app sa core sa pamamagitan ng C module map, ipinapamahagi bilang .xcframework.",
     "guide_li4": "Ang kumpletong mga tala sa architecture, ang ABI contract, at ang security policy ay nasa <code class=\"text-ink\">docs/</code> folder ng repository.",
     "guide_quickstart_title": "MABILISANG SIMULA",
     "guide_quickstart_note": "Bini-build nito ang C++ core sa Linux/macOS. Ang mga hakbang para sa Windows, .NET, at Swift ay ganap na tinatalakay sa README ng repository.",
     "guide_privacy_note": "Ang pahinang ito ay ganap na tumatakbo sa iyong browser. Ang live demo sa ibaba ay hindi kailanman nagpapadala ng traffic data kahit saan.",
     "demo_eyebrow": "// SUBUKAN SA BROWSER",
     "demo_title": "Patakbuhin ang detector, walang kailangang terminal",
-    "demo_desc": "Isang pinasimple, client-side na simulation ng rule-matching logic sa C++ core — mag-paste o gumawa ng traffic sample at tingnan kung aling mga linya ang mai-flag ng isang detection pass, dito mismo sa pahina.",
+    "demo_desc": "Isang pinasimple, client-side na simulation ng rule-matching logic sa C++ core. Mag-paste o gumawa ng traffic sample at tingnan kung aling mga linya ang mai-flag ng isang detection pass, dito mismo sa pahina.",
     "demo_input_label": "TRAFFIC INPUT",
     "demo_load_sample": "I-load ang sample traffic",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "Patakbuhin ang detection",
-    "demo_format_hint": "Format: PROTO SRC_IP:PORT DST_IP:PORT — isang packet bawat linya. Walang port ang mga linyang ICMP.",
+    "demo_format_hint": "Format: PROTO SRC_IP:PORT DST_IP:PORT. Isang packet bawat linya. Walang port ang mga linyang ICMP.",
     "demo_output_label": "DETECTION OUTPUT",
     "demo_output_empty": "// naghihintay ng input…",
-    "demo_legend_low": "sev 1–29 · mababa",
-    "demo_legend_medium": "sev 30–69 · katamtaman",
+    "demo_legend_low": "sev 1-29 · mababa",
+    "demo_legend_medium": "sev 30-69 · katamtaman",
     "demo_legend_high": "sev 70+ · mataas",
     "lang_label": "Wika"
   },
@@ -1469,31 +1582,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// COMMENCER",
     "footer_title": "Parcourir le code source",
-    "footer_desc": "Les décisions d'architecture, le contrat ABI et la politique de sécurité — tous les détails se trouvent dans le dossier <code class=\"text-ink\">docs/</code> du dépôt.",
+    "footer_desc": "Les décisions d'architecture, le contrat ABI et la politique de sécurité. Tous les détails se trouvent dans le dossier <code class=\"text-ink\">docs/</code> du dépôt.",
     "btn_open_github": "Ouvrir sur GitHub",
     "guide_h1": "Guide d'utilisation de C‑IDS",
     "guide_sub": "Ce qu'est C‑IDS et comment les pièces s'assemblent.",
     "guide_p1": "C‑IDS est un noyau de système de détection d'intrusion modulaire et multiplateforme. La logique de détection vit à un seul endroit, en C++, et chaque plateforme lui parle via une interface binaire stable plutôt que de garder sa propre copie de la logique.",
     "guide_how_title": "STRUCTURE",
-    "guide_li1": "<span class=\"text-ink font-medium\">Noyau (C++20)</span> — analyse le trafic et le compare aux règles de détection derrière une frontière <code class=\"text-ink\">extern \"C\"</code> stable.",
-    "guide_li2": "<span class=\"text-ink font-medium\">Bindings .NET</span> — une couche P/Invoke type-safe enveloppe le noyau pour les applications de bureau Windows, en utilisant SafeHandle pour la gestion du cycle de vie.",
-    "guide_li3": "<span class=\"text-ink font-medium\">Bindings Swift</span> — un Swift Package relie les applications iOS au noyau via une C module map, distribué sous forme de .xcframework.",
+    "guide_li1": "<span class=\"text-ink font-medium\">Noyau (C++20)</span>: analyse le trafic et le compare aux règles de détection derrière une frontière <code class=\"text-ink\">extern \"C\"</code> stable.",
+    "guide_li2": "<span class=\"text-ink font-medium\">Bindings .NET</span>: une couche P/Invoke type-safe enveloppe le noyau pour les applications de bureau Windows, en utilisant SafeHandle pour la gestion du cycle de vie.",
+    "guide_li3": "<span class=\"text-ink font-medium\">Bindings Swift</span>: un Swift Package relie les applications iOS au noyau via une C module map, distribué sous forme de .xcframework.",
     "guide_li4": "Les notes d'architecture complètes, le contrat ABI et la politique de sécurité se trouvent dans le dossier <code class=\"text-ink\">docs/</code> du dépôt.",
     "guide_quickstart_title": "DÉMARRAGE RAPIDE",
     "guide_quickstart_note": "Ceci compile le noyau C++ sous Linux/macOS. Les étapes pour Windows, .NET et Swift sont détaillées dans le README du dépôt.",
     "guide_privacy_note": "Cette page s'exécute entièrement dans votre navigateur. La démo en direct ci-dessous n'envoie jamais de données de trafic où que ce soit.",
     "demo_eyebrow": "// ESSAYEZ DANS LE NAVIGATEUR",
     "demo_title": "Lancez le détecteur, sans terminal",
-    "demo_desc": "Une simulation simplifiée, côté client, de la logique de correspondance des règles du noyau C++ — collez ou générez un échantillon de trafic et voyez quelles lignes seraient signalées, directement sur cette page.",
+    "demo_desc": "Une simulation simplifiée, côté client, de la logique de correspondance des règles du noyau C++. Collez ou générez un échantillon de trafic et voyez quelles lignes seraient signalées, directement sur cette page.",
     "demo_input_label": "ENTRÉE DE TRAFIC",
     "demo_load_sample": "Charger un trafic d'exemple",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "Lancer la détection",
-    "demo_format_hint": "Format : PROTO IP_SRC:PORT IP_DST:PORT — un paquet par ligne. Les lignes ICMP n'ont pas de port.",
+    "demo_format_hint": "Format : PROTO IP_SRC:PORT IP_DST:PORT. Un paquet par ligne. Les lignes ICMP n'ont pas de port.",
     "demo_output_label": "RÉSULTAT DE DÉTECTION",
     "demo_output_empty": "// en attente d'une entrée…",
-    "demo_legend_low": "sev 1–29 · faible",
-    "demo_legend_medium": "sev 30–69 · moyen",
+    "demo_legend_low": "sev 1-29 · faible",
+    "demo_legend_medium": "sev 30-69 · moyen",
     "demo_legend_high": "sev 70+ · élevé",
     "lang_label": "Langue"
   },
@@ -1521,31 +1634,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// LOSLEGEN",
     "footer_title": "Quellcode durchsuchen",
-    "footer_desc": "Architekturentscheidungen, der ABI-Vertrag und die Sicherheitsrichtlinie — alle Details befinden sich im Ordner <code class=\"text-ink\">docs/</code> des Repos.",
+    "footer_desc": "Architekturentscheidungen, der ABI-Vertrag und die Sicherheitsrichtlinie. Alle Details befinden sich im Ordner <code class=\"text-ink\">docs/</code> des Repos.",
     "btn_open_github": "Auf GitHub öffnen",
     "guide_h1": "C‑IDS-Benutzerhandbuch",
     "guide_sub": "Was C‑IDS ist und wie die Teile zusammenpassen.",
     "guide_p1": "C‑IDS ist ein modularer, plattformübergreifender Intrusion-Detection-System-Kern. Die Erkennungslogik existiert nur einmal, in C++, und jede Plattform spricht über eine stabile Binärschnittstelle mit ihr, statt eine eigene Kopie der Logik zu pflegen.",
     "guide_how_title": "WIE ES AUFGEBAUT IST",
-    "guide_li1": "<span class=\"text-ink font-medium\">Kern (C++20)</span> — parst den Traffic und gleicht ihn hinter einer stabilen <code class=\"text-ink\">extern \"C\"</code>-Grenze mit Erkennungsregeln ab.",
-    "guide_li2": "<span class=\"text-ink font-medium\">.NET-Bindings</span> — eine typsichere P/Invoke-Schicht umhüllt den Kern für Windows-Desktop-Apps und nutzt SafeHandle für die Lebenszyklusverwaltung.",
-    "guide_li3": "<span class=\"text-ink font-medium\">Swift-Bindings</span> — ein Swift Package verbindet iOS-Apps über eine C-Module-Map mit dem Kern und wird als .xcframework ausgeliefert.",
+    "guide_li1": "<span class=\"text-ink font-medium\">Kern (C++20)</span>: parst den Traffic und gleicht ihn hinter einer stabilen <code class=\"text-ink\">extern \"C\"</code>-Grenze mit Erkennungsregeln ab.",
+    "guide_li2": "<span class=\"text-ink font-medium\">.NET-Bindings</span>: eine typsichere P/Invoke-Schicht umhüllt den Kern für Windows-Desktop-Apps und nutzt SafeHandle für die Lebenszyklusverwaltung.",
+    "guide_li3": "<span class=\"text-ink font-medium\">Swift-Bindings</span>: ein Swift Package verbindet iOS-Apps über eine C-Module-Map mit dem Kern und wird als .xcframework ausgeliefert.",
     "guide_li4": "Vollständige Architekturnotizen, der ABI-Vertrag und die Sicherheitsrichtlinie befinden sich im Ordner <code class=\"text-ink\">docs/</code> des Repositorys.",
     "guide_quickstart_title": "SCHNELLSTART",
     "guide_quickstart_note": "Dies baut den C++-Kern unter Linux/macOS. Die Build-Schritte für Windows, .NET und Swift sind vollständig im README des Repositorys beschrieben.",
     "guide_privacy_note": "Diese Seite läuft vollständig in Ihrem Browser. Die Live-Demo unten sendet niemals Traffic-Daten irgendwohin.",
     "demo_eyebrow": "// IM BROWSER AUSPROBIEREN",
     "demo_title": "Detektor starten, kein Terminal nötig",
-    "demo_desc": "Eine vereinfachte, clientseitige Simulation der Regel-Matching-Logik im C++-Kern — fügen Sie eine Traffic-Probe ein oder erzeugen Sie eine und sehen Sie direkt hier, welche Zeilen ein Erkennungslauf markieren würde.",
+    "demo_desc": "Eine vereinfachte, clientseitige Simulation der Regel-Matching-Logik im C++-Kern. Fügen Sie eine Traffic-Probe ein oder erzeugen Sie eine und sehen Sie direkt hier, welche Zeilen ein Erkennungslauf markieren würde.",
     "demo_input_label": "TRAFFIC-EINGABE",
     "demo_load_sample": "Beispiel-Traffic laden",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "Erkennung starten",
-    "demo_format_hint": "Format: PROTO QUELL_IP:PORT ZIEL_IP:PORT — ein Paket pro Zeile. ICMP-Zeilen haben keine Ports.",
+    "demo_format_hint": "Format: PROTO QUELL_IP:PORT ZIEL_IP:PORT. Ein Paket pro Zeile. ICMP-Zeilen haben keine Ports.",
     "demo_output_label": "ERKENNUNGSAUSGABE",
     "demo_output_empty": "// warte auf Eingabe…",
-    "demo_legend_low": "sev 1–29 · niedrig",
-    "demo_legend_medium": "sev 30–69 · mittel",
+    "demo_legend_low": "sev 1-29 · niedrig",
+    "demo_legend_medium": "sev 30-69 · mittel",
     "demo_legend_high": "sev 70+ · hoch",
     "lang_label": "Sprache"
   },
@@ -1573,31 +1686,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// FARA",
     "footer_title": "Bincika lambar tushe",
-    "footer_desc": "Shawarwarin gine-gine, yarjejeniyar ABI, da manufar tsaro — dukkan bayanai suna cikin babban fayil na <code class=\"text-ink\">docs/</code> na ma'ajiyar.",
+    "footer_desc": "Shawarwarin gine-gine, yarjejeniyar ABI, da manufar tsaro. Dukkan bayanai suna cikin babban fayil na <code class=\"text-ink\">docs/</code> na ma'ajiyar.",
     "btn_open_github": "Bude akan GitHub",
     "guide_h1": "Jagorar Amfani da C‑IDS",
     "guide_sub": "Menene C‑IDS kuma yadda sassan suke haduwa.",
     "guide_p1": "C‑IDS tushe ne na Intrusion Detection System mai daidaitawa kuma mai daukacin dandamali. Dabarar ganowa tana rayuwa a wuri daya kawai, cikin C++, kuma kowane dandamali yana magana da ita ta hanyar tsayayyen mahadin binary maimakon ajiye kwafinsa.",
     "guide_how_title": "YADDA AKA TSARA SHI",
-    "guide_li1": "<span class=\"text-ink font-medium\">Tushe (C++20)</span> — yana nazarin zirga-zirga kuma yana daidaita shi da ka'idojin gano bayan tsayayyen iyaka na <code class=\"text-ink\">extern \"C\"</code>.",
-    "guide_li2": "<span class=\"text-ink font-medium\">Hadin .NET</span> — layin P/Invoke mai aminci wanda ke lullube tushe don aikace-aikacen Windows desktop, ta amfani da SafeHandle don gudanar da rayuwa.",
-    "guide_li3": "<span class=\"text-ink font-medium\">Hadin Swift</span> — Swift Package wanda ke hada aikace-aikacen iOS da tushe ta hanyar C module map kuma ana rarraba shi a matsayin .xcframework.",
+    "guide_li1": "<span class=\"text-ink font-medium\">Tushe (C++20)</span>: yana nazarin zirga-zirga kuma yana daidaita shi da ka'idojin gano bayan tsayayyen iyaka na <code class=\"text-ink\">extern \"C\"</code>.",
+    "guide_li2": "<span class=\"text-ink font-medium\">Hadin .NET</span>: layin P/Invoke mai aminci wanda ke lullube tushe don aikace-aikacen Windows desktop, ta amfani da SafeHandle don gudanar da rayuwa.",
+    "guide_li3": "<span class=\"text-ink font-medium\">Hadin Swift</span>: Swift Package wanda ke hada aikace-aikacen iOS da tushe ta hanyar C module map kuma ana rarraba shi a matsayin .xcframework.",
     "guide_li4": "Cikakkun bayanan gine-gine, yarjejeniyar ABI, da manufar tsaro suna cikin babban fayil na <code class=\"text-ink\">docs/</code> na ma'ajiyar.",
     "guide_quickstart_title": "FARAWA DA SAURI",
     "guide_quickstart_note": "Wannan yana gina tushen C++ akan Linux/macOS. Matakan gini na Windows, .NET, da Swift an bayyana su dalla-dalla a cikin README na ma'ajiyar.",
     "guide_privacy_note": "Wannan shafi yana aiki gaba daya a cikin burauzarku. Rayayyen demo a kasa ba ya taba aika bayanan zirga-zirga zuwa ko'ina.",
     "demo_eyebrow": "// GWADA A BURAUZA",
     "demo_title": "Kunna na'urar ganowa, ba tare da terminal ba",
-    "demo_desc": "Kwaikwayo mai sauki na dabarar daidaita ka'idoji a cikin tushen C++ — manna ko kirkiri samfurin zirga-zirga ka ga wace layuka wani zagayen ganowa zai yiwa alama, daidai a wannan shafi.",
+    "demo_desc": "Kwaikwayo mai sauki na dabarar daidaita ka'idoji a cikin tushen C++. Manna ko kirkiri samfurin zirga-zirga ka ga wace layuka wani zagayen ganowa zai yiwa alama, daidai a wannan shafi.",
     "demo_input_label": "SHIGARWAR ZIRGA-ZIRGA",
     "demo_load_sample": "Loda samfurin zirga-zirga",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "Kunna ganowa",
-    "demo_format_hint": "Tsari: PROTO SRC_IP:PORT DST_IP:PORT — fakiti daya a kowace layi. Layukan ICMP ba su da tashar jiragen ruwa.",
+    "demo_format_hint": "Tsari: PROTO SRC_IP:PORT DST_IP:PORT. Fakiti daya a kowace layi. Layukan ICMP ba su da tashar jiragen ruwa.",
     "demo_output_label": "SAKAMAKON GANOWA",
     "demo_output_empty": "// jiran shigarwa…",
-    "demo_legend_low": "sev 1–29 · kasa",
-    "demo_legend_medium": "sev 30–69 · matsakaici",
+    "demo_legend_low": "sev 1-29 · kasa",
+    "demo_legend_medium": "sev 30-69 · matsakaici",
     "demo_legend_high": "sev 70+ · sama",
     "lang_label": "Harshe"
   },
@@ -1625,31 +1738,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// MULAI",
     "footer_title": "Jelajahi kode sumber",
-    "footer_desc": "Keputusan arsitektur, kontrak ABI, dan kebijakan keamanan — semua detail ada di folder <code class=\"text-ink\">docs/</code> pada repo.",
+    "footer_desc": "Keputusan arsitektur, kontrak ABI, dan kebijakan keamanan. Semua detail ada di folder <code class=\"text-ink\">docs/</code> pada repo.",
     "btn_open_github": "Buka di GitHub",
     "guide_h1": "Panduan Pengguna C‑IDS",
     "guide_sub": "Apa itu C‑IDS dan bagaimana bagian-bagiannya saling terhubung.",
     "guide_p1": "C‑IDS adalah inti Intrusion Detection System yang modular dan lintas platform. Logika deteksi hanya ada di satu tempat, dalam C++, dan setiap platform berkomunikasi dengannya melalui antarmuka biner yang stabil alih-alih menyimpan salinan logikanya sendiri.",
     "guide_how_title": "CARA PENYUSUNANNYA",
-    "guide_li1": "<span class=\"text-ink font-medium\">Inti (C++20)</span> — mengurai lalu lintas dan mencocokkannya dengan aturan deteksi di balik batas <code class=\"text-ink\">extern \"C\"</code> yang stabil.",
-    "guide_li2": "<span class=\"text-ink font-medium\">Binding .NET</span> — lapisan P/Invoke type-safe yang membungkus inti untuk aplikasi desktop Windows, menggunakan SafeHandle untuk manajemen siklus hidup.",
-    "guide_li3": "<span class=\"text-ink font-medium\">Binding Swift</span> — Swift Package yang menghubungkan aplikasi iOS ke inti melalui C module map dan didistribusikan sebagai .xcframework.",
+    "guide_li1": "<span class=\"text-ink font-medium\">Inti (C++20)</span>: mengurai lalu lintas dan mencocokkannya dengan aturan deteksi di balik batas <code class=\"text-ink\">extern \"C\"</code> yang stabil.",
+    "guide_li2": "<span class=\"text-ink font-medium\">Binding .NET</span>: lapisan P/Invoke type-safe yang membungkus inti untuk aplikasi desktop Windows, menggunakan SafeHandle untuk manajemen siklus hidup.",
+    "guide_li3": "<span class=\"text-ink font-medium\">Binding Swift</span>: Swift Package yang menghubungkan aplikasi iOS ke inti melalui C module map dan didistribusikan sebagai .xcframework.",
     "guide_li4": "Catatan arsitektur lengkap, kontrak ABI, dan kebijakan keamanan ada di folder <code class=\"text-ink\">docs/</code> pada repository.",
     "guide_quickstart_title": "MULAI CEPAT",
     "guide_quickstart_note": "Ini membangun inti C++ di Linux/macOS. Langkah build untuk Windows, .NET, dan Swift dijelaskan lengkap di README repository.",
     "guide_privacy_note": "Halaman ini berjalan sepenuhnya di browser Anda. Demo live di bawah tidak pernah mengirim data lalu lintas ke mana pun.",
     "demo_eyebrow": "// COBA DI BROWSER",
     "demo_title": "Jalankan detektor, tanpa terminal",
-    "demo_desc": "Simulasi sisi klien yang disederhanakan dari logika pencocokan aturan di inti C++ — tempel atau buat sampel lalu lintas dan lihat baris mana yang akan ditandai oleh proses deteksi, langsung di halaman ini.",
+    "demo_desc": "Simulasi sisi klien yang disederhanakan dari logika pencocokan aturan di inti C++. Tempel atau buat sampel lalu lintas dan lihat baris mana yang akan ditandai oleh proses deteksi, langsung di halaman ini.",
     "demo_input_label": "INPUT LALU LINTAS",
     "demo_load_sample": "Muat lalu lintas contoh",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "Jalankan deteksi",
-    "demo_format_hint": "Format: PROTO IP_SUMBER:PORT IP_TUJUAN:PORT — satu paket per baris. Baris ICMP tidak memiliki port.",
+    "demo_format_hint": "Format: PROTO IP_SUMBER:PORT IP_TUJUAN:PORT. Satu paket per baris. Baris ICMP tidak memiliki port.",
     "demo_output_label": "OUTPUT DETEKSI",
     "demo_output_empty": "// menunggu input…",
-    "demo_legend_low": "sev 1–29 · rendah",
-    "demo_legend_medium": "sev 30–69 · sedang",
+    "demo_legend_low": "sev 1-29 · rendah",
+    "demo_legend_medium": "sev 30-69 · sedang",
     "demo_legend_high": "sev 70+ · tinggi",
     "lang_label": "Bahasa"
   },
@@ -1677,31 +1790,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// INIZIA",
     "footer_title": "Esplora il codice sorgente",
-    "footer_desc": "Decisioni architetturali, il contratto ABI e la security policy — tutti i dettagli sono nella cartella <code class=\"text-ink\">docs/</code> del repo.",
+    "footer_desc": "Decisioni architetturali, il contratto ABI e la security policy. Tutti i dettagli sono nella cartella <code class=\"text-ink\">docs/</code> del repo.",
     "btn_open_github": "Apri su GitHub",
     "guide_h1": "Guida utente di C‑IDS",
     "guide_sub": "Cos'e C‑IDS e come si incastrano i pezzi.",
     "guide_p1": "C‑IDS e un nucleo di Intrusion Detection System modulare e multipiattaforma. La logica di rilevamento vive in un solo posto, in C++, e ogni piattaforma vi comunica tramite un'interfaccia binaria stabile invece di mantenere una propria copia della logica.",
     "guide_how_title": "COME E STRUTTURATO",
-    "guide_li1": "<span class=\"text-ink font-medium\">Nucleo (C++20)</span> — analizza il traffico e lo confronta con le regole di rilevamento dietro un confine <code class=\"text-ink\">extern \"C\"</code> stabile.",
-    "guide_li2": "<span class=\"text-ink font-medium\">Binding .NET</span> — un livello P/Invoke type-safe racchiude il nucleo per le app desktop Windows, usando SafeHandle per la gestione del ciclo di vita.",
-    "guide_li3": "<span class=\"text-ink font-medium\">Binding Swift</span> — uno Swift Package collega le app iOS al nucleo tramite una C module map ed e distribuito come .xcframework.",
+    "guide_li1": "<span class=\"text-ink font-medium\">Nucleo (C++20)</span>: analizza il traffico e lo confronta con le regole di rilevamento dietro un confine <code class=\"text-ink\">extern \"C\"</code> stabile.",
+    "guide_li2": "<span class=\"text-ink font-medium\">Binding .NET</span>: un livello P/Invoke type-safe racchiude il nucleo per le app desktop Windows, usando SafeHandle per la gestione del ciclo di vita.",
+    "guide_li3": "<span class=\"text-ink font-medium\">Binding Swift</span>: uno Swift Package collega le app iOS al nucleo tramite una C module map ed e distribuito come .xcframework.",
     "guide_li4": "Le note architetturali complete, il contratto ABI e la security policy si trovano nella cartella <code class=\"text-ink\">docs/</code> del repository.",
     "guide_quickstart_title": "AVVIO RAPIDO",
     "guide_quickstart_note": "Questo compila il nucleo C++ su Linux/macOS. I passaggi di build per Windows, .NET e Swift sono descritti per intero nel README del repository.",
     "guide_privacy_note": "Questa pagina funziona interamente nel tuo browser. La demo live qui sotto non invia mai dati di traffico da nessuna parte.",
     "demo_eyebrow": "// PROVALO NEL BROWSER",
     "demo_title": "Avvia il rilevatore, senza terminale",
-    "demo_desc": "Una simulazione semplificata, lato client, della logica di corrispondenza delle regole nel nucleo C++ — incolla o genera un campione di traffico e scopri quali righe verrebbero segnalate, direttamente in questa pagina.",
+    "demo_desc": "Una simulazione semplificata, lato client, della logica di corrispondenza delle regole nel nucleo C++. Incolla o genera un campione di traffico e scopri quali righe verrebbero segnalate, direttamente in questa pagina.",
     "demo_input_label": "INPUT DI TRAFFICO",
     "demo_load_sample": "Carica traffico di esempio",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "Avvia rilevamento",
-    "demo_format_hint": "Formato: PROTO IP_ORIG:PORT IP_DEST:PORT — un pacchetto per riga. Le righe ICMP non hanno porte.",
+    "demo_format_hint": "Formato: PROTO IP_ORIG:PORT IP_DEST:PORT. Un pacchetto per riga. Le righe ICMP non hanno porte.",
     "demo_output_label": "OUTPUT DI RILEVAMENTO",
     "demo_output_empty": "// in attesa di input…",
-    "demo_legend_low": "sev 1–29 · basso",
-    "demo_legend_medium": "sev 30–69 · medio",
+    "demo_legend_low": "sev 1-29 · basso",
+    "demo_legend_medium": "sev 30-69 · medio",
     "demo_legend_high": "sev 70+ · alto",
     "lang_label": "Lingua"
   },
@@ -1729,31 +1842,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// COMECAR",
     "footer_title": "Explore o codigo-fonte",
-    "footer_desc": "Decisoes de arquitetura, o contrato ABI e a politica de seguranca — todos os detalhes estao na pasta <code class=\"text-ink\">docs/</code> do repositorio.",
+    "footer_desc": "Decisoes de arquitetura, o contrato ABI e a politica de seguranca. Todos os detalhes estao na pasta <code class=\"text-ink\">docs/</code> do repositorio.",
     "btn_open_github": "Abrir no GitHub",
     "guide_h1": "Guia do Usuario do C‑IDS",
     "guide_sub": "O que e o C‑IDS e como as pecas se encaixam.",
     "guide_p1": "O C‑IDS e um nucleo de Intrusion Detection System modular e multiplataforma. A logica de deteccao existe em um so lugar, em C++, e cada plataforma conversa com ela atraves de uma interface binaria estavel, em vez de manter sua propria copia da logica.",
     "guide_how_title": "COMO ESTA ESTRUTURADO",
-    "guide_li1": "<span class=\"text-ink font-medium\">Nucleo (C++20)</span> — analisa o trafego e o compara com regras de deteccao atras de uma fronteira <code class=\"text-ink\">extern \"C\"</code> estavel.",
-    "guide_li2": "<span class=\"text-ink font-medium\">Bindings .NET</span> — uma camada P/Invoke type-safe envolve o nucleo para aplicativos desktop Windows, usando SafeHandle para gerenciamento de ciclo de vida.",
-    "guide_li3": "<span class=\"text-ink font-medium\">Bindings Swift</span> — um Swift Package conecta aplicativos iOS ao nucleo atraves de um C module map e e distribuido como .xcframework.",
+    "guide_li1": "<span class=\"text-ink font-medium\">Nucleo (C++20)</span>: analisa o trafego e o compara com regras de deteccao atras de uma fronteira <code class=\"text-ink\">extern \"C\"</code> estavel.",
+    "guide_li2": "<span class=\"text-ink font-medium\">Bindings .NET</span>: uma camada P/Invoke type-safe envolve o nucleo para aplicativos desktop Windows, usando SafeHandle para gerenciamento de ciclo de vida.",
+    "guide_li3": "<span class=\"text-ink font-medium\">Bindings Swift</span>: um Swift Package conecta aplicativos iOS ao nucleo atraves de um C module map e e distribuido como .xcframework.",
     "guide_li4": "Notas completas de arquitetura, o contrato ABI e a politica de seguranca estao na pasta <code class=\"text-ink\">docs/</code> do repositorio.",
     "guide_quickstart_title": "INICIO RAPIDO",
     "guide_quickstart_note": "Isso compila o nucleo C++ em Linux/macOS. As etapas de build para Windows, .NET e Swift estao totalmente descritas no README do repositorio.",
     "guide_privacy_note": "Esta pagina funciona inteiramente no seu navegador. A demo ao vivo abaixo nunca envia dados de trafego para lugar nenhum.",
     "demo_eyebrow": "// EXPERIMENTE NO NAVEGADOR",
     "demo_title": "Execute o detector, sem precisar de terminal",
-    "demo_desc": "Uma simulacao simplificada, do lado do cliente, da logica de correspondencia de regras do nucleo C++ — cole ou gere uma amostra de trafego e veja quais linhas uma passagem de deteccao sinalizaria, bem aqui na pagina.",
+    "demo_desc": "Uma simulacao simplificada, do lado do cliente, da logica de correspondencia de regras do nucleo C++. Cole ou gere uma amostra de trafego e veja quais linhas uma passagem de deteccao sinalizaria, bem aqui na pagina.",
     "demo_input_label": "ENTRADA DE TRAFEGO",
     "demo_load_sample": "Carregar trafego de exemplo",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "Executar deteccao",
-    "demo_format_hint": "Formato: PROTO IP_ORIG:PORTA IP_DEST:PORTA — um pacote por linha. Linhas ICMP nao tem porta.",
+    "demo_format_hint": "Formato: PROTO IP_ORIG:PORTA IP_DEST:PORTA. Um pacote por linha. Linhas ICMP nao tem porta.",
     "demo_output_label": "SAIDA DE DETECCAO",
     "demo_output_empty": "// aguardando entrada…",
-    "demo_legend_low": "sev 1–29 · baixa",
-    "demo_legend_medium": "sev 30–69 · media",
+    "demo_legend_low": "sev 1-29 · baixa",
+    "demo_legend_medium": "sev 30-69 · media",
     "demo_legend_high": "sev 70+ · alta",
     "lang_label": "Idioma"
   },
@@ -1781,31 +1894,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// EMPEZAR",
     "footer_title": "Explora el codigo fuente",
-    "footer_desc": "Las decisiones de arquitectura, el contrato ABI y la politica de seguridad — todos los detalles estan en la carpeta <code class=\"text-ink\">docs/</code> del repositorio.",
+    "footer_desc": "Las decisiones de arquitectura, el contrato ABI y la politica de seguridad. Todos los detalles estan en la carpeta <code class=\"text-ink\">docs/</code> del repositorio.",
     "btn_open_github": "Abrir en GitHub",
     "guide_h1": "Guia de usuario de C‑IDS",
     "guide_sub": "Que es C‑IDS y como encajan las piezas.",
     "guide_p1": "C‑IDS es un nucleo de sistema de deteccion de intrusiones modular y multiplataforma. La logica de deteccion vive en un solo lugar, en C++, y cada plataforma se comunica con ella mediante una interfaz binaria estable en lugar de mantener su propia copia de la logica.",
     "guide_how_title": "COMO ESTA ESTRUCTURADO",
-    "guide_li1": "<span class=\"text-ink font-medium\">Nucleo (C++20)</span> — analiza el trafico y lo compara con reglas de deteccion detras de un limite <code class=\"text-ink\">extern \"C\"</code> estable.",
-    "guide_li2": "<span class=\"text-ink font-medium\">Bindings de .NET</span> — una capa P/Invoke type-safe envuelve el nucleo para apps de escritorio de Windows, usando SafeHandle para la gestion del ciclo de vida.",
-    "guide_li3": "<span class=\"text-ink font-medium\">Bindings de Swift</span> — un Swift Package conecta apps de iOS con el nucleo mediante un C module map y se distribuye como .xcframework.",
+    "guide_li1": "<span class=\"text-ink font-medium\">Nucleo (C++20)</span>: analiza el trafico y lo compara con reglas de deteccion detras de un limite <code class=\"text-ink\">extern \"C\"</code> estable.",
+    "guide_li2": "<span class=\"text-ink font-medium\">Bindings de .NET</span>: una capa P/Invoke type-safe envuelve el nucleo para apps de escritorio de Windows, usando SafeHandle para la gestion del ciclo de vida.",
+    "guide_li3": "<span class=\"text-ink font-medium\">Bindings de Swift</span>: un Swift Package conecta apps de iOS con el nucleo mediante un C module map y se distribuye como .xcframework.",
     "guide_li4": "Las notas completas de arquitectura, el contrato ABI y la politica de seguridad estan en la carpeta <code class=\"text-ink\">docs/</code> del repositorio.",
     "guide_quickstart_title": "INICIO RAPIDO",
     "guide_quickstart_note": "Esto compila el nucleo C++ en Linux/macOS. Los pasos de compilacion para Windows, .NET y Swift se explican en detalle en el README del repositorio.",
     "guide_privacy_note": "Esta pagina se ejecuta enteramente en tu navegador. La demo en vivo de abajo nunca envia datos de trafico a ningun lado.",
     "demo_eyebrow": "// PRUEBALO EN EL NAVEGADOR",
     "demo_title": "Ejecuta el detector, sin necesidad de terminal",
-    "demo_desc": "Una simulacion simplificada, del lado del cliente, de la logica de coincidencia de reglas del nucleo C++ — pega o genera una muestra de trafico y mira que lineas marcaria un analisis de deteccion, aqui mismo en la pagina.",
+    "demo_desc": "Una simulacion simplificada, del lado del cliente, de la logica de coincidencia de reglas del nucleo C++. Pega o genera una muestra de trafico y mira que lineas marcaria un analisis de deteccion, aqui mismo en la pagina.",
     "demo_input_label": "ENTRADA DE TRAFICO",
     "demo_load_sample": "Cargar trafico de ejemplo",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "Ejecutar deteccion",
-    "demo_format_hint": "Formato: PROTO IP_ORIGEN:PUERTO IP_DESTINO:PUERTO — un paquete por linea. Las lineas ICMP no tienen puertos.",
+    "demo_format_hint": "Formato: PROTO IP_ORIGEN:PUERTO IP_DESTINO:PUERTO. Un paquete por linea. Las lineas ICMP no tienen puertos.",
     "demo_output_label": "SALIDA DE DETECCION",
     "demo_output_empty": "// esperando entrada…",
-    "demo_legend_low": "sev 1–29 · baja",
-    "demo_legend_medium": "sev 30–69 · media",
+    "demo_legend_low": "sev 1-29 · baja",
+    "demo_legend_medium": "sev 30-69 · media",
     "demo_legend_high": "sev 70+ · alta",
     "lang_label": "Idioma"
   },
@@ -1833,31 +1946,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// BAT DAU",
     "footer_title": "Duyet ma nguon",
-    "footer_desc": "Cac quyet dinh kien truc, hop dong ABI va chinh sach bao mat — moi chi tiet deu nam trong thu muc <code class=\"text-ink\">docs/</code> cua repo.",
+    "footer_desc": "Cac quyet dinh kien truc, hop dong ABI va chinh sach bao mat. Moi chi tiet deu nam trong thu muc <code class=\"text-ink\">docs/</code> cua repo.",
     "btn_open_github": "Mo tren GitHub",
     "guide_h1": "Huong dan su dung C‑IDS",
     "guide_sub": "C‑IDS la gi va cac phan khop voi nhau ra sao.",
     "guide_p1": "C‑IDS la mot loi Intrusion Detection System mo-dun, da nen tang. Logic phat hien chi ton tai o mot noi duy nhat, bang C++, va moi nen tang giao tiep voi no qua mot giao dien nhi phan on dinh thay vi giu ban sao logic rieng.",
     "guide_how_title": "CACH TO CHUC",
-    "guide_li1": "<span class=\"text-ink font-medium\">Loi (C++20)</span> — phan tich luu luong va so khop voi cac quy tac phat hien dang sau mot ranh gioi <code class=\"text-ink\">extern \"C\"</code> on dinh.",
-    "guide_li2": "<span class=\"text-ink font-medium\">Binding .NET</span> — mot lop P/Invoke an toan kieu du lieu boc loi cho cac ung dung desktop Windows, dung SafeHandle de quan ly vong doi.",
-    "guide_li3": "<span class=\"text-ink font-medium\">Binding Swift</span> — mot Swift Package ket noi cac ung dung iOS voi loi qua C module map va duoc phan phoi duoi dang .xcframework.",
+    "guide_li1": "<span class=\"text-ink font-medium\">Loi (C++20)</span>: phan tich luu luong va so khop voi cac quy tac phat hien dang sau mot ranh gioi <code class=\"text-ink\">extern \"C\"</code> on dinh.",
+    "guide_li2": "<span class=\"text-ink font-medium\">Binding .NET</span>: mot lop P/Invoke an toan kieu du lieu boc loi cho cac ung dung desktop Windows, dung SafeHandle de quan ly vong doi.",
+    "guide_li3": "<span class=\"text-ink font-medium\">Binding Swift</span>: mot Swift Package ket noi cac ung dung iOS voi loi qua C module map va duoc phan phoi duoi dang .xcframework.",
     "guide_li4": "Ghi chu kien truc day du, hop dong ABI va chinh sach bao mat nam trong thu muc <code class=\"text-ink\">docs/</code> cua repository.",
     "guide_quickstart_title": "BAT DAU NHANH",
     "guide_quickstart_note": "Lenh nay build loi C++ tren Linux/macOS. Cac buoc build cho Windows, .NET va Swift duoc trinh bay day du trong README cua repository.",
     "guide_privacy_note": "Trang nay chay hoan toan trong trinh duyet cua ban. Ban demo truc tiep ben duoi khong bao gio gui du lieu luu luong di bat cu dau.",
     "demo_eyebrow": "// THU NGAY TRONG TRINH DUYET",
     "demo_title": "Chay bo phat hien, khong can terminal",
-    "demo_desc": "Mot mo phong don gian hoa, phia client, cua logic so khop quy tac trong loi C++ — dan hoac tao mau luu luong va xem dong nao se bi gan co, ngay tai trang nay.",
+    "demo_desc": "Mot mo phong don gian hoa, phia client, cua logic so khop quy tac trong loi C++. Dan hoac tao mau luu luong va xem dong nao se bi gan co, ngay tai trang nay.",
     "demo_input_label": "DAU VAO LUU LUONG",
     "demo_load_sample": "Tai luu luong mau",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "Chay phat hien",
-    "demo_format_hint": "Dinh dang: PROTO IP_NGUON:PORT IP_DICH:PORT — moi dong mot goi tin. Dong ICMP khong co cong.",
+    "demo_format_hint": "Dinh dang: PROTO IP_NGUON:PORT IP_DICH:PORT. Moi dong mot goi tin. Dong ICMP khong co cong.",
     "demo_output_label": "KET QUA PHAT HIEN",
     "demo_output_empty": "// dang cho dau vao…",
-    "demo_legend_low": "sev 1–29 · thap",
-    "demo_legend_medium": "sev 30–69 · trung binh",
+    "demo_legend_low": "sev 1-29 · thap",
+    "demo_legend_medium": "sev 30-69 · trung binh",
     "demo_legend_high": "sev 70+ · cao",
     "lang_label": "Ngon ngu"
   },
@@ -1885,31 +1998,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// ابدأ الآن",
     "footer_title": "تصفح الكود المصدري",
-    "footer_desc": "قرارات البنية، وعقد ABI، وسياسة الأمان — جميع التفاصيل موجودة في مجلد <code class=\"text-ink\">docs/</code> داخل المستودع.",
+    "footer_desc": "قرارات البنية، وعقد ABI، وسياسة الأمان. جميع التفاصيل موجودة في مجلد <code class=\"text-ink\">docs/</code> داخل المستودع.",
     "btn_open_github": "فتح على GitHub",
     "guide_h1": "دليل استخدام C‑IDS",
     "guide_sub": "ما هو C‑IDS وكيف تتناسق أجزاؤه.",
     "guide_p1": "C‑IDS هو نواة نظام كشف تسلل معيارية وعابرة للمنصات. منطق الكشف موجود في مكان واحد فقط، بلغة C++، وتتواصل معه كل منصة عبر واجهة ثنائية مستقرة بدلاً من الاحتفاظ بنسخة خاصة بها من المنطق.",
     "guide_how_title": "كيفية البنية",
-    "guide_li1": "<span class=\"text-ink font-medium\">النواة (C++20)</span> — تحلل حركة المرور وتطابقها مع قواعد الكشف خلف حدود <code class=\"text-ink\">extern \"C\"</code> مستقرة.",
-    "guide_li2": "<span class=\"text-ink font-medium\">روابط .NET</span> — طبقة P/Invoke آمنة النوع تغلف النواة لتطبيقات سطح مكتب Windows، باستخدام SafeHandle لإدارة دورة الحياة.",
-    "guide_li3": "<span class=\"text-ink font-medium\">روابط Swift</span> — حزمة Swift تربط تطبيقات iOS بالنواة عبر خريطة وحدة C وتُوزّع كملف .xcframework.",
+    "guide_li1": "<span class=\"text-ink font-medium\">النواة (C++20)</span>: تحلل حركة المرور وتطابقها مع قواعد الكشف خلف حدود <code class=\"text-ink\">extern \"C\"</code> مستقرة.",
+    "guide_li2": "<span class=\"text-ink font-medium\">روابط .NET</span>: طبقة P/Invoke آمنة النوع تغلف النواة لتطبيقات سطح مكتب Windows، باستخدام SafeHandle لإدارة دورة الحياة.",
+    "guide_li3": "<span class=\"text-ink font-medium\">روابط Swift</span>: حزمة Swift تربط تطبيقات iOS بالنواة عبر خريطة وحدة C وتُوزّع كملف .xcframework.",
     "guide_li4": "ملاحظات البنية الكاملة، وعقد ABI، وسياسة الأمان موجودة في مجلد <code class=\"text-ink\">docs/</code> داخل المستودع.",
     "guide_quickstart_title": "بداية سريعة",
     "guide_quickstart_note": "هذا يبني نواة C++ على Linux/macOS. خطوات البناء لـ Windows و.NET وSwift موضحة بالكامل في ملف README الخاص بالمستودع.",
     "guide_privacy_note": "تعمل هذه الصفحة بالكامل داخل متصفحك. العرض التوضيحي المباشر أدناه لا يرسل بيانات حركة المرور إلى أي مكان أبدًا.",
     "demo_eyebrow": "// جرّبه في المتصفح",
     "demo_title": "شغّل أداة الكشف، دون الحاجة لطرفية",
-    "demo_desc": "محاكاة مبسطة من جانب المتصفح لمنطق مطابقة القواعد في نواة C++ — الصق أو ولّد عينة حركة مرور وشاهد أي الأسطر سيعلّمها تمرير الكشف، هنا مباشرة في الصفحة.",
+    "demo_desc": "محاكاة مبسطة من جانب المتصفح لمنطق مطابقة القواعد في نواة C++. الصق أو ولّد عينة حركة مرور وشاهد أي الأسطر سيعلّمها تمرير الكشف، هنا مباشرة في الصفحة.",
     "demo_input_label": "إدخال حركة المرور",
     "demo_load_sample": "تحميل حركة مرور نموذجية",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "تشغيل الكشف",
-    "demo_format_hint": "الصيغة: PROTO SRC_IP:PORT DST_IP:PORT — حزمة واحدة في كل سطر. أسطر ICMP لا تحتوي على منافذ.",
+    "demo_format_hint": "الصيغة: PROTO SRC_IP:PORT DST_IP:PORT. حزمة واحدة في كل سطر. أسطر ICMP لا تحتوي على منافذ.",
     "demo_output_label": "ناتج الكشف",
     "demo_output_empty": "// بانتظار الإدخال…",
-    "demo_legend_low": "sev 1–29 · منخفض",
-    "demo_legend_medium": "sev 30–69 · متوسط",
+    "demo_legend_low": "sev 1-29 · منخفض",
+    "demo_legend_medium": "sev 30-69 · متوسط",
     "demo_legend_high": "sev 70+ · مرتفع",
     "lang_label": "اللغة"
   },
@@ -1937,31 +2050,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// شروع کنید",
     "footer_title": "مرور کد منبع",
-    "footer_desc": "تصمیمات معماری، قرارداد ABI و سیاست امنیتی — همه جزئیات در پوشه <code class=\"text-ink\">docs/</code> مخزن قرار دارند.",
+    "footer_desc": "تصمیمات معماری، قرارداد ABI و سیاست امنیتی. همه جزئیات در پوشه <code class=\"text-ink\">docs/</code> مخزن قرار دارند.",
     "btn_open_github": "باز کردن در GitHub",
     "guide_h1": "راهنمای کاربر C‑IDS",
     "guide_sub": "C‑IDS چیست و بخش‌ها چگونه در کنار هم قرار می‌گیرند.",
     "guide_p1": "C‑IDS یک هسته سیستم تشخیص نفوذ ماژولار و چندسکویی است. منطق تشخیص فقط در یک جا، به زبان C++، وجود دارد و هر پلتفرم به‌جای نگه‌داشتن نسخه خودش از منطق، از طریق یک رابط باینری پایدار با آن ارتباط برقرار می‌کند.",
     "guide_how_title": "نحوه ساختار",
-    "guide_li1": "<span class=\"text-ink font-medium\">هسته (C++20)</span> — ترافیک را تجزیه کرده و آن را در پشت یک مرز پایدار <code class=\"text-ink\">extern \"C\"</code> با قوانین تشخیص مطابقت می‌دهد.",
-    "guide_li2": "<span class=\"text-ink font-medium\">باندینگ‌های .NET</span> — یک لایه P/Invoke type-safe هسته را برای برنامه‌های دسکتاپ ویندوز می‌پوشاند و از SafeHandle برای مدیریت چرخه عمر استفاده می‌کند.",
-    "guide_li3": "<span class=\"text-ink font-medium\">باندینگ‌های Swift</span> — یک Swift Package برنامه‌های iOS را از طریق یک C module map به هسته متصل می‌کند و به‌صورت .xcframework توزیع می‌شود.",
+    "guide_li1": "<span class=\"text-ink font-medium\">هسته (C++20)</span>: ترافیک را تجزیه کرده و آن را در پشت یک مرز پایدار <code class=\"text-ink\">extern \"C\"</code> با قوانین تشخیص مطابقت می‌دهد.",
+    "guide_li2": "<span class=\"text-ink font-medium\">باندینگ‌های .NET</span>: یک لایه P/Invoke type-safe هسته را برای برنامه‌های دسکتاپ ویندوز می‌پوشاند و از SafeHandle برای مدیریت چرخه عمر استفاده می‌کند.",
+    "guide_li3": "<span class=\"text-ink font-medium\">باندینگ‌های Swift</span>: یک Swift Package برنامه‌های iOS را از طریق یک C module map به هسته متصل می‌کند و به‌صورت .xcframework توزیع می‌شود.",
     "guide_li4": "یادداشت‌های کامل معماری، قرارداد ABI و سیاست امنیتی در پوشه <code class=\"text-ink\">docs/</code> مخزن قرار دارند.",
     "guide_quickstart_title": "شروع سریع",
     "guide_quickstart_note": "این دستورات هسته C++ را روی Linux/macOS می‌سازند. مراحل ساخت برای Windows، .NET و Swift به‌طور کامل در README مخزن توضیح داده شده‌اند.",
     "guide_privacy_note": "این صفحه به‌طور کامل در مرورگر شما اجرا می‌شود. دموی زنده در پایین هرگز داده‌های ترافیک را به هیچ‌جا ارسال نمی‌کند.",
     "demo_eyebrow": "// در مرورگر امتحان کنید",
     "demo_title": "اجرای آشکارساز، بدون نیاز به ترمینال",
-    "demo_desc": "یک شبیه‌سازی ساده‌شده در سمت مرورگر از منطق تطبیق قوانین در هسته C++ — یک نمونه ترافیک را جای‌گذاری یا تولید کنید و ببینید کدام خطوط توسط یک بررسی تشخیصی علامت‌گذاری می‌شوند، درست همین‌جا در صفحه.",
+    "demo_desc": "یک شبیه‌سازی ساده‌شده در سمت مرورگر از منطق تطبیق قوانین در هسته C++. یک نمونه ترافیک را جای‌گذاری یا تولید کنید و ببینید کدام خطوط توسط یک بررسی تشخیصی علامت‌گذاری می‌شوند، درست همین‌جا در صفحه.",
     "demo_input_label": "ورودی ترافیک",
     "demo_load_sample": "بارگذاری ترافیک نمونه",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "اجرای تشخیص",
-    "demo_format_hint": "قالب: PROTO SRC_IP:PORT DST_IP:PORT — یک بسته در هر خط. خطوط ICMP پورت ندارند.",
+    "demo_format_hint": "قالب: PROTO SRC_IP:PORT DST_IP:PORT. یک بسته در هر خط. خطوط ICMP پورت ندارند.",
     "demo_output_label": "خروجی تشخیص",
     "demo_output_empty": "// در انتظار ورودی…",
-    "demo_legend_low": "sev 1–29 · کم",
-    "demo_legend_medium": "sev 30–69 · متوسط",
+    "demo_legend_low": "sev 1-29 · کم",
+    "demo_legend_medium": "sev 30-69 · متوسط",
     "demo_legend_high": "sev 70+ · بالا",
     "lang_label": "زبان"
   },
@@ -1989,31 +2102,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// شروع کریں",
     "footer_title": "سورس کوڈ دیکھیں",
-    "footer_desc": "آرکیٹیکچر کے فیصلے، ABI معاہدہ، اور سیکیورٹی پالیسی — تمام تفصیلات ریپو کے <code class=\"text-ink\">docs/</code> فولڈر میں موجود ہیں۔",
+    "footer_desc": "آرکیٹیکچر کے فیصلے، ABI معاہدہ، اور سیکیورٹی پالیسی۔ تمام تفصیلات ریپو کے <code class=\"text-ink\">docs/</code> فولڈر میں موجود ہیں۔",
     "btn_open_github": "GitHub پر کھولیں",
     "guide_h1": "C‑IDS صارف گائیڈ",
     "guide_sub": "C‑IDS کیا ہے اور اجزاء کیسے مل کر کام کرتے ہیں۔",
     "guide_p1": "C‑IDS ایک ماڈیولر، کراس پلیٹ فارم Intrusion Detection System کور ہے۔ ڈیٹیکشن لاجک صرف ایک جگہ، C++ میں موجود ہے، اور ہر پلیٹ فارم اپنی لاجک کی کاپی رکھنے کے بجائے ایک مستحکم بائنری انٹرفیس کے ذریعے اس سے بات کرتا ہے۔",
     "guide_how_title": "یہ کیسے تشکیل شدہ ہے",
-    "guide_li1": "<span class=\"text-ink font-medium\">کور (C++20)</span> — ٹریفک کو پارس کرتا ہے اور ایک مستحکم <code class=\"text-ink\">extern \"C\"</code> باؤنڈری کے پیچھے ڈیٹیکشن رولز سے ملاتا ہے۔",
-    "guide_li2": "<span class=\"text-ink font-medium\">.NET بائنڈنگز</span> — ایک ٹائپ سیف P/Invoke تہہ ونڈوز ڈیسک ٹاپ ایپس کے لیے کور کو لپیٹتی ہے، لائف ٹائم مینجمنٹ کے لیے SafeHandle استعمال کرتے ہوئے۔",
-    "guide_li3": "<span class=\"text-ink font-medium\">Swift بائنڈنگز</span> — ایک Swift Package جو iOS ایپس کو C module map کے ذریعے کور سے جوڑتا ہے اور .xcframework کے طور پر تقسیم ہوتا ہے۔",
+    "guide_li1": "<span class=\"text-ink font-medium\">کور (C++20)</span>: ٹریفک کو پارس کرتا ہے اور ایک مستحکم <code class=\"text-ink\">extern \"C\"</code> باؤنڈری کے پیچھے ڈیٹیکشن رولز سے ملاتا ہے۔",
+    "guide_li2": "<span class=\"text-ink font-medium\">.NET بائنڈنگز</span>: ایک ٹائپ سیف P/Invoke تہہ ونڈوز ڈیسک ٹاپ ایپس کے لیے کور کو لپیٹتی ہے، لائف ٹائم مینجمنٹ کے لیے SafeHandle استعمال کرتے ہوئے۔",
+    "guide_li3": "<span class=\"text-ink font-medium\">Swift بائنڈنگز</span>: ایک Swift Package جو iOS ایپس کو C module map کے ذریعے کور سے جوڑتا ہے اور .xcframework کے طور پر تقسیم ہوتا ہے۔",
     "guide_li4": "مکمل آرکیٹیکچر نوٹس، ABI معاہدہ، اور سیکیورٹی پالیسی ریپوزیٹری کے <code class=\"text-ink\">docs/</code> فولڈر میں موجود ہیں۔",
     "guide_quickstart_title": "فوری آغاز",
     "guide_quickstart_note": "یہ Linux/macOS پر C++ کور بناتا ہے۔ ونڈوز، .NET، اور Swift کے بلڈ مراحل ریپوزیٹری کے README میں مکمل طور پر بیان کیے گئے ہیں۔",
     "guide_privacy_note": "یہ صفحہ مکمل طور پر آپ کے براؤزر میں چلتا ہے۔ نیچے دیا گیا لائیو ڈیمو ٹریفک ڈیٹا کبھی بھی کہیں نہیں بھیجتا۔",
     "demo_eyebrow": "// براؤزر میں آزمائیں",
     "demo_title": "ڈیٹیکٹر چلائیں، ٹرمینل کی ضرورت نہیں",
-    "demo_desc": "C++ کور میں رول میچنگ لاجک کی ایک سادہ، کلائنٹ سائیڈ سمولیشن — ٹریفک نمونہ پیسٹ کریں یا بنائیں اور دیکھیں کہ ڈیٹیکشن پاس کن لائنوں کو نشان زد کرے گا، بالکل اسی صفحے پر۔",
+    "demo_desc": "C++ کور میں رول میچنگ لاجک کی ایک سادہ، کلائنٹ سائیڈ سمولیشن۔ ٹریفک نمونہ پیسٹ کریں یا بنائیں اور دیکھیں کہ ڈیٹیکشن پاس کن لائنوں کو نشان زد کرے گا، بالکل اسی صفحے پر۔",
     "demo_input_label": "ٹریفک ان پٹ",
     "demo_load_sample": "نمونہ ٹریفک لوڈ کریں",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "ڈیٹیکشن چلائیں",
-    "demo_format_hint": "فارمیٹ: PROTO SRC_IP:PORT DST_IP:PORT — ہر لائن میں ایک پیکٹ۔ ICMP لائنوں میں پورٹ نہیں ہوتا۔",
+    "demo_format_hint": "فارمیٹ: PROTO SRC_IP:PORT DST_IP:PORT۔ ہر لائن میں ایک پیکٹ۔ ICMP لائنوں میں پورٹ نہیں ہوتا۔",
     "demo_output_label": "ڈیٹیکشن آؤٹ پٹ",
     "demo_output_empty": "// ان پٹ کا انتظار…",
-    "demo_legend_low": "sev 1–29 · کم",
-    "demo_legend_medium": "sev 30–69 · درمیانہ",
+    "demo_legend_low": "sev 1-29 · کم",
+    "demo_legend_medium": "sev 30-69 · درمیانہ",
     "demo_legend_high": "sev 70+ · زیادہ",
     "lang_label": "زبان"
   },
@@ -2041,31 +2154,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// НАЧАТЬ",
     "footer_title": "Просмотреть исходный код",
-    "footer_desc": "Архитектурные решения, контракт ABI и политика безопасности — все детали находятся в папке <code class=\"text-ink\">docs/</code> репозитория.",
+    "footer_desc": "Архитектурные решения, контракт ABI и политика безопасности. Все детали находятся в папке <code class=\"text-ink\">docs/</code> репозитория.",
     "btn_open_github": "Открыть на GitHub",
     "guide_h1": "Руководство пользователя C‑IDS",
     "guide_sub": "Что такое C‑IDS и как части сочетаются друг с другом.",
-    "guide_p1": "C‑IDS — это модульное, кроссплатформенное ядро системы обнаружения вторжений. Логика обнаружения существует только в одном месте, на C++, и каждая платформа обращается к ней через стабильный бинарный интерфейс, а не хранит собственную копию логики.",
+    "guide_p1": "C‑IDS представляет собой модульное, кроссплатформенное ядро системы обнаружения вторжений. Логика обнаружения существует только в одном месте, на C++, и каждая платформа обращается к ней через стабильный бинарный интерфейс, а не хранит собственную копию логики.",
     "guide_how_title": "КАК ЭТО УСТРОЕНО",
-    "guide_li1": "<span class=\"text-ink font-medium\">Ядро (C++20)</span> — разбирает трафик и сопоставляет его с правилами обнаружения за стабильной границей <code class=\"text-ink\">extern \"C\"</code>.",
-    "guide_li2": "<span class=\"text-ink font-medium\">Биндинги .NET</span> — типобезопасный слой P/Invoke оборачивает ядро для настольных приложений Windows, используя SafeHandle для управления жизненным циклом.",
-    "guide_li3": "<span class=\"text-ink font-medium\">Биндинги Swift</span> — Swift Package подключает приложения iOS к ядру через C module map и распространяется как .xcframework.",
+    "guide_li1": "<span class=\"text-ink font-medium\">Ядро (C++20)</span>: разбирает трафик и сопоставляет его с правилами обнаружения за стабильной границей <code class=\"text-ink\">extern \"C\"</code>.",
+    "guide_li2": "<span class=\"text-ink font-medium\">Биндинги .NET</span>: типобезопасный слой P/Invoke оборачивает ядро для настольных приложений Windows, используя SafeHandle для управления жизненным циклом.",
+    "guide_li3": "<span class=\"text-ink font-medium\">Биндинги Swift</span>: Swift Package подключает приложения iOS к ядру через C module map и распространяется как .xcframework.",
     "guide_li4": "Полные заметки об архитектуре, контракт ABI и политика безопасности находятся в папке <code class=\"text-ink\">docs/</code> репозитория.",
     "guide_quickstart_title": "БЫСТРЫЙ СТАРТ",
     "guide_quickstart_note": "Это собирает ядро C++ на Linux/macOS. Шаги сборки для Windows, .NET и Swift полностью описаны в README репозитория.",
     "guide_privacy_note": "Эта страница полностью работает в вашем браузере. Демонстрация ниже никогда никуда не отправляет данные трафика.",
     "demo_eyebrow": "// ПОПРОБУЙТЕ В БРАУЗЕРЕ",
     "demo_title": "Запустите детектор без терминала",
-    "demo_desc": "Упрощённая клиентская симуляция логики сопоставления правил в ядре C++ — вставьте или сгенерируйте образец трафика и посмотрите, какие строки пометит проверка обнаружения, прямо на этой странице.",
+    "demo_desc": "Упрощённая клиентская симуляция логики сопоставления правил в ядре C++. Вставьте или сгенерируйте образец трафика и посмотрите, какие строки пометит проверка обнаружения, прямо на этой странице.",
     "demo_input_label": "ВХОДНОЙ ТРАФИК",
     "demo_load_sample": "Загрузить пример трафика",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "Запустить обнаружение",
-    "demo_format_hint": "Формат: PROTO SRC_IP:PORT DST_IP:PORT — один пакет на строку. У строк ICMP нет портов.",
+    "demo_format_hint": "Формат: PROTO SRC_IP:PORT DST_IP:PORT. Один пакет на строку. У строк ICMP нет портов.",
     "demo_output_label": "РЕЗУЛЬТАТ ОБНАРУЖЕНИЯ",
     "demo_output_empty": "// ожидание ввода…",
-    "demo_legend_low": "sev 1–29 · низкий",
-    "demo_legend_medium": "sev 30–69 · средний",
+    "demo_legend_low": "sev 1-29 · низкий",
+    "demo_legend_medium": "sev 30-69 · средний",
     "demo_legend_high": "sev 70+ · высокий",
     "lang_label": "Язык"
   },
@@ -2093,31 +2206,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// 开始使用",
     "footer_title": "浏览源代码",
-    "footer_desc": "架构决策、ABI 契约与安全策略 — 所有细节均位于仓库的 <code class=\"text-ink\">docs/</code> 文件夹中。",
+    "footer_desc": "架构决策、ABI 契约与安全策略。所有细节均位于仓库的 <code class=\"text-ink\">docs/</code> 文件夹中。",
     "btn_open_github": "在 GitHub 上打开",
     "guide_h1": "C‑IDS 使用指南",
     "guide_sub": "C‑IDS 是什么，各部分如何协同工作。",
     "guide_p1": "C‑IDS 是一个模块化、跨平台的入侵检测系统核心。检测逻辑只存在于一处，即 C++ 中，每个平台都通过稳定的二进制接口与其通信，而不是各自保留一份逻辑副本。",
     "guide_how_title": "结构说明",
-    "guide_li1": "<span class=\"text-ink font-medium\">核心（C++20）</span> — 在稳定的 <code class=\"text-ink\">extern \"C\"</code> 边界后解析流量并与检测规则进行匹配。",
-    "guide_li2": "<span class=\"text-ink font-medium\">.NET 绑定</span> — 一个类型安全的 P/Invoke 层为 Windows 桌面应用封装核心，使用 SafeHandle 管理生命周期。",
-    "guide_li3": "<span class=\"text-ink font-medium\">Swift 绑定</span> — 一个 Swift Package 通过 C 模块映射将 iOS 应用连接到核心，并以 .xcframework 形式分发。",
+    "guide_li1": "<span class=\"text-ink font-medium\">核心（C++20）</span>：在稳定的 <code class=\"text-ink\">extern \"C\"</code> 边界后解析流量并与检测规则进行匹配。",
+    "guide_li2": "<span class=\"text-ink font-medium\">.NET 绑定</span>：一个类型安全的 P/Invoke 层为 Windows 桌面应用封装核心，使用 SafeHandle 管理生命周期。",
+    "guide_li3": "<span class=\"text-ink font-medium\">Swift 绑定</span>：一个 Swift Package 通过 C 模块映射将 iOS 应用连接到核心，并以 .xcframework 形式分发。",
     "guide_li4": "完整的架构说明、ABI 契约与安全策略均位于仓库的 <code class=\"text-ink\">docs/</code> 文件夹中。",
     "guide_quickstart_title": "快速开始",
     "guide_quickstart_note": "以上命令在 Linux/macOS 上构建 C++ 核心。Windows、.NET 和 Swift 的构建步骤在仓库的 README 中有完整说明。",
     "guide_privacy_note": "此页面完全在您的浏览器中运行。下方的实时演示绝不会将流量数据发送到任何地方。",
     "demo_eyebrow": "// 在浏览器中试用",
     "demo_title": "无需终端即可运行检测器",
-    "demo_desc": "C++ 核心中规则匹配逻辑的简化客户端模拟 — 粘贴或生成流量样本，直接在页面中查看检测流程会标记哪些行。",
+    "demo_desc": "C++ 核心中规则匹配逻辑的简化客户端模拟。粘贴或生成流量样本，直接在页面中查看检测流程会标记哪些行。",
     "demo_input_label": "流量输入",
     "demo_load_sample": "加载示例流量",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "运行检测",
-    "demo_format_hint": "格式：PROTO 源IP:端口 目标IP:端口 — 每行一个数据包。ICMP 行不含端口。",
+    "demo_format_hint": "格式：PROTO 源IP:端口 目标IP:端口。每行一个数据包。ICMP 行不含端口。",
     "demo_output_label": "检测输出",
     "demo_output_empty": "// 等待输入…",
-    "demo_legend_low": "sev 1–29 · 低",
-    "demo_legend_medium": "sev 30–69 · 中",
+    "demo_legend_low": "sev 1-29 · 低",
+    "demo_legend_medium": "sev 30-69 · 中",
     "demo_legend_high": "sev 70+ · 高",
     "lang_label": "语言"
   },
@@ -2145,15 +2258,15 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// はじめる",
     "footer_title": "ソースコードを見る",
-    "footer_desc": "アーキテクチャの決定事項、ABI 契約、セキュリティポリシー — 詳細はすべてリポジトリの <code class=\"text-ink\">docs/</code> フォルダにあります。",
+    "footer_desc": "アーキテクチャの決定事項、ABI 契約、セキュリティポリシー。詳細はすべてリポジトリの <code class=\"text-ink\">docs/</code> フォルダにあります。",
     "btn_open_github": "GitHub で開く",
     "guide_h1": "C‑IDS ユーザーガイド",
     "guide_sub": "C‑IDS とは何か、各パーツがどう組み合わさるか。",
     "guide_p1": "C‑IDS はモジュール式でクロスプラットフォームな侵入検知システムのコアです。検知ロジックは C++ の一箇所にのみ存在し、各プラットフォームは独自のロジックのコピーを持つ代わりに、安定したバイナリインターフェースを通じてそれと通信します。",
     "guide_how_title": "構成の仕組み",
-    "guide_li1": "<span class=\"text-ink font-medium\">コア（C++20）</span> — トラフィックを解析し、安定した <code class=\"text-ink\">extern \"C\"</code> 境界の裏で検知ルールと照合します。",
-    "guide_li2": "<span class=\"text-ink font-medium\">.NET バインディング</span> — 型安全な P/Invoke レイヤーが Windows デスクトップアプリ向けにコアをラップし、ライフタイム管理に SafeHandle を使用します。",
-    "guide_li3": "<span class=\"text-ink font-medium\">Swift バインディング</span> — Swift Package が C モジュールマップを介して iOS アプリをコアに接続し、.xcframework として配布されます。",
+    "guide_li1": "<span class=\"text-ink font-medium\">コア（C++20）</span>：トラフィックを解析し、安定した <code class=\"text-ink\">extern \"C\"</code> 境界の裏で検知ルールと照合します。",
+    "guide_li2": "<span class=\"text-ink font-medium\">.NET バインディング</span>：型安全な P/Invoke レイヤーが Windows デスクトップアプリ向けにコアをラップし、ライフタイム管理に SafeHandle を使用します。",
+    "guide_li3": "<span class=\"text-ink font-medium\">Swift バインディング</span>：Swift Package が C モジュールマップを介して iOS アプリをコアに接続し、.xcframework として配布されます。",
     "guide_li4": "完全なアーキテクチャノート、ABI 契約、セキュリティポリシーはリポジトリの <code class=\"text-ink\">docs/</code> フォルダにあります。",
     "guide_quickstart_title": "クイックスタート",
     "guide_quickstart_note": "これは Linux/macOS 上で C++ コアをビルドします。Windows、.NET、Swift のビルド手順はリポジトリの README に詳しく記載されています。",
@@ -2165,11 +2278,11 @@ const translations = {
     "demo_load_sample": "サンプルトラフィックを読み込む",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "検知を実行",
-    "demo_format_hint": "形式: PROTO 送信元IP:ポート 宛先IP:ポート — 1行に1パケット。ICMP 行にはポートがありません。",
+    "demo_format_hint": "形式: PROTO 送信元IP:ポート 宛先IP:ポート。1行に1パケット。ICMP 行にはポートがありません。",
     "demo_output_label": "検知出力",
     "demo_output_empty": "// 入力を待っています…",
-    "demo_legend_low": "sev 1–29 · 低",
-    "demo_legend_medium": "sev 30–69 · 中",
+    "demo_legend_low": "sev 1-29 · 低",
+    "demo_legend_medium": "sev 30-69 · 中",
     "demo_legend_high": "sev 70+ · 高",
     "lang_label": "言語"
   },
@@ -2197,31 +2310,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// 시작하기",
     "footer_title": "소스 코드 둘러보기",
-    "footer_desc": "아키텍처 결정 사항, ABI 계약, 보안 정책 — 모든 세부 사항은 저장소의 <code class=\"text-ink\">docs/</code> 폴더에 있습니다.",
+    "footer_desc": "아키텍처 결정 사항, ABI 계약, 보안 정책. 모든 세부 사항은 저장소의 <code class=\"text-ink\">docs/</code> 폴더에 있습니다.",
     "btn_open_github": "GitHub에서 열기",
     "guide_h1": "C‑IDS 사용자 가이드",
     "guide_sub": "C‑IDS가 무엇이며 각 부분이 어떻게 맞물리는지.",
     "guide_p1": "C‑IDS는 모듈형, 크로스 플랫폼 침입 탐지 시스템 코어입니다. 탐지 로직은 C++로 단 한 곳에만 존재하며, 각 플랫폼은 자체 로직 사본을 유지하는 대신 안정적인 바이너리 인터페이스를 통해 통신합니다.",
     "guide_how_title": "구조 방식",
-    "guide_li1": "<span class=\"text-ink font-medium\">코어 (C++20)</span> — 트래픽을 파싱하고 안정적인 <code class=\"text-ink\">extern \"C\"</code> 경계 뒤에서 탐지 규칙과 매칭합니다.",
-    "guide_li2": "<span class=\"text-ink font-medium\">.NET 바인딩</span> — 타입 세이프 P/Invoke 레이어가 Windows 데스크톱 앱용으로 코어를 감싸며, 수명 관리를 위해 SafeHandle을 사용합니다.",
-    "guide_li3": "<span class=\"text-ink font-medium\">Swift 바인딩</span> — Swift Package가 C 모듈 맵을 통해 iOS 앱을 코어에 연결하며 .xcframework로 배포됩니다.",
+    "guide_li1": "<span class=\"text-ink font-medium\">코어 (C++20)</span>: 트래픽을 파싱하고 안정적인 <code class=\"text-ink\">extern \"C\"</code> 경계 뒤에서 탐지 규칙과 매칭합니다.",
+    "guide_li2": "<span class=\"text-ink font-medium\">.NET 바인딩</span>: 타입 세이프 P/Invoke 레이어가 Windows 데스크톱 앱용으로 코어를 감싸며, 수명 관리를 위해 SafeHandle을 사용합니다.",
+    "guide_li3": "<span class=\"text-ink font-medium\">Swift 바인딩</span>: Swift Package가 C 모듈 맵을 통해 iOS 앱을 코어에 연결하며 .xcframework로 배포됩니다.",
     "guide_li4": "전체 아키텍처 노트, ABI 계약, 보안 정책은 저장소의 <code class=\"text-ink\">docs/</code> 폴더에 있습니다.",
     "guide_quickstart_title": "빠른 시작",
     "guide_quickstart_note": "이 명령은 Linux/macOS에서 C++ 코어를 빌드합니다. Windows, .NET, Swift 빌드 단계는 저장소의 README에 자세히 설명되어 있습니다.",
     "guide_privacy_note": "이 페이지는 전적으로 브라우저 내에서 실행됩니다. 아래의 라이브 데모는 트래픽 데이터를 어디로도 전송하지 않습니다.",
     "demo_eyebrow": "// 브라우저에서 사용해보기",
     "demo_title": "터미널 없이 탐지기 실행",
-    "demo_desc": "C++ 코어의 규칙 매칭 로직을 단순화한 클라이언트 측 시뮬레이션입니다 — 트래픽 샘플을 붙여넣거나 생성하여 탐지 과정에서 어떤 줄이 표시되는지 바로 이 페이지에서 확인하세요.",
+    "demo_desc": "C++ 코어의 규칙 매칭 로직을 단순화한 클라이언트 측 시뮬레이션입니다. 트래픽 샘플을 붙여넣거나 생성하여 탐지 과정에서 어떤 줄이 표시되는지 바로 이 페이지에서 확인하세요.",
     "demo_input_label": "트래픽 입력",
     "demo_load_sample": "샘플 트래픽 불러오기",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "탐지 실행",
-    "demo_format_hint": "형식: PROTO SRC_IP:PORT DST_IP:PORT — 한 줄에 패킷 하나. ICMP 줄에는 포트가 없습니다.",
+    "demo_format_hint": "형식: PROTO SRC_IP:PORT DST_IP:PORT. 한 줄에 패킷 하나. ICMP 줄에는 포트가 없습니다.",
     "demo_output_label": "탐지 결과",
     "demo_output_empty": "// 입력 대기 중…",
-    "demo_legend_low": "sev 1–29 · 낮음",
-    "demo_legend_medium": "sev 30–69 · 중간",
+    "demo_legend_low": "sev 1-29 · 낮음",
+    "demo_legend_medium": "sev 30-69 · 중간",
     "demo_legend_high": "sev 70+ · 높음",
     "lang_label": "언어"
   },
@@ -2249,31 +2362,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// शुरू करें",
     "footer_title": "सोर्स कोड ब्राउज़ करें",
-    "footer_desc": "आर्किटेक्चर के निर्णय, ABI अनुबंध, और सुरक्षा नीति — सभी विवरण रिपॉज़िटरी के <code class=\"text-ink\">docs/</code> फ़ोल्डर में हैं।",
+    "footer_desc": "आर्किटेक्चर के निर्णय, ABI अनुबंध, और सुरक्षा नीति। सभी विवरण रिपॉज़िटरी के <code class=\"text-ink\">docs/</code> फ़ोल्डर में हैं।",
     "btn_open_github": "GitHub पर खोलें",
     "guide_h1": "C‑IDS उपयोगकर्ता गाइड",
     "guide_sub": "C‑IDS क्या है और भाग कैसे मिलकर काम करते हैं।",
     "guide_p1": "C‑IDS एक मॉड्यूलर, क्रॉस‑प्लेटफ़ॉर्म Intrusion Detection System कोर है। डिटेक्शन लॉजिक केवल एक ही जगह, C++ में मौजूद है, और हर प्लेटफ़ॉर्म अपनी खुद की लॉजिक कॉपी रखने के बजाय एक स्थिर बाइनरी इंटरफ़ेस के ज़रिए इससे बात करता है।",
     "guide_how_title": "यह कैसे संरचित है",
-    "guide_li1": "<span class=\"text-ink font-medium\">कोर (C++20)</span> — ट्रैफ़िक को पार्स करता है और इसे एक स्थिर <code class=\"text-ink\">extern \"C\"</code> सीमा के पीछे डिटेक्शन नियमों से मिलाता है।",
-    "guide_li2": "<span class=\"text-ink font-medium\">.NET बाइंडिंग्स</span> — एक टाइप-सेफ़ P/Invoke परत Windows डेस्कटॉप ऐप्स के लिए कोर को लपेटती है, जीवनचक्र प्रबंधन हेतु SafeHandle का उपयोग करते हुए।",
-    "guide_li3": "<span class=\"text-ink font-medium\">Swift बाइंडिंग्स</span> — एक Swift Package जो C मॉड्यूल मैप के ज़रिए iOS ऐप्स को कोर से जोड़ता है और .xcframework के रूप में वितरित होता है।",
+    "guide_li1": "<span class=\"text-ink font-medium\">कोर (C++20)</span>: ट्रैफ़िक को पार्स करता है और इसे एक स्थिर <code class=\"text-ink\">extern \"C\"</code> सीमा के पीछे डिटेक्शन नियमों से मिलाता है।",
+    "guide_li2": "<span class=\"text-ink font-medium\">.NET बाइंडिंग्स</span>: एक टाइप-सेफ़ P/Invoke परत Windows डेस्कटॉप ऐप्स के लिए कोर को लपेटती है, जीवनचक्र प्रबंधन हेतु SafeHandle का उपयोग करते हुए।",
+    "guide_li3": "<span class=\"text-ink font-medium\">Swift बाइंडिंग्स</span>: एक Swift Package जो C मॉड्यूल मैप के ज़रिए iOS ऐप्स को कोर से जोड़ता है और .xcframework के रूप में वितरित होता है।",
     "guide_li4": "पूर्ण आर्किटेक्चर नोट्स, ABI अनुबंध, और सुरक्षा नीति रिपॉज़िटरी के <code class=\"text-ink\">docs/</code> फ़ोल्डर में हैं।",
     "guide_quickstart_title": "त्वरित आरंभ",
     "guide_quickstart_note": "यह Linux/macOS पर C++ कोर बनाता है। Windows, .NET, और Swift के बिल्ड चरण रिपॉज़िटरी के README में पूरी तरह बताए गए हैं।",
     "guide_privacy_note": "यह पेज पूरी तरह आपके ब्राउज़र में चलता है। नीचे दिया गया लाइव डेमो ट्रैफ़िक डेटा कहीं भी नहीं भेजता।",
     "demo_eyebrow": "// ब्राउज़र में आज़माएं",
     "demo_title": "डिटेक्टर चलाएं, टर्मिनल की ज़रूरत नहीं",
-    "demo_desc": "C++ कोर में नियम-मिलान लॉजिक का एक सरलीकृत, क्लाइंट-साइड सिमुलेशन — एक ट्रैफ़िक सैंपल पेस्ट करें या बनाएं और देखें कि डिटेक्शन पास किन पंक्तियों को फ़्लैग करेगा, ठीक इसी पेज पर।",
+    "demo_desc": "C++ कोर में नियम-मिलान लॉजिक का एक सरलीकृत, क्लाइंट-साइड सिमुलेशन। एक ट्रैफ़िक सैंपल पेस्ट करें या बनाएं और देखें कि डिटेक्शन पास किन पंक्तियों को फ़्लैग करेगा, ठीक इसी पेज पर।",
     "demo_input_label": "ट्रैफ़िक इनपुट",
     "demo_load_sample": "नमूना ट्रैफ़िक लोड करें",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "डिटेक्शन चलाएं",
-    "demo_format_hint": "फ़ॉर्मेट: PROTO SRC_IP:PORT DST_IP:PORT — प्रति पंक्ति एक पैकेट। ICMP पंक्तियों में पोर्ट नहीं होता।",
+    "demo_format_hint": "फ़ॉर्मेट: PROTO SRC_IP:PORT DST_IP:PORT। प्रति पंक्ति एक पैकेट। ICMP पंक्तियों में पोर्ट नहीं होता।",
     "demo_output_label": "डिटेक्शन आउटपुट",
     "demo_output_empty": "// इनपुट की प्रतीक्षा है…",
-    "demo_legend_low": "sev 1–29 · निम्न",
-    "demo_legend_medium": "sev 30–69 · मध्यम",
+    "demo_legend_low": "sev 1-29 · निम्न",
+    "demo_legend_medium": "sev 30-69 · मध्यम",
     "demo_legend_high": "sev 70+ · उच्च",
     "lang_label": "भाषा"
   },
@@ -2301,31 +2414,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// सुरुवात करा",
     "footer_title": "सोर्स कोड पहा",
-    "footer_desc": "आर्किटेक्चर निर्णय, ABI करार, आणि सुरक्षा धोरण — सर्व तपशील रिपोच्या <code class=\"text-ink\">docs/</code> फोल्डरमध्ये आहेत.",
+    "footer_desc": "आर्किटेक्चर निर्णय, ABI करार, आणि सुरक्षा धोरण. सर्व तपशील रिपोच्या <code class=\"text-ink\">docs/</code> फोल्डरमध्ये आहेत.",
     "btn_open_github": "GitHub वर उघडा",
     "guide_h1": "C‑IDS वापरकर्ता मार्गदर्शक",
     "guide_sub": "C‑IDS काय आहे आणि भाग कसे एकत्र बसतात.",
     "guide_p1": "C‑IDS हे एक मॉड्युलर, क्रॉस‑प्लॅटफॉर्म Intrusion Detection System कोअर आहे. डिटेक्शन लॉजिक फक्त एकाच ठिकाणी, C++ मध्ये, अस्तित्वात आहे, आणि प्रत्येक प्लॅटफॉर्म स्वतःची लॉजिक कॉपी ठेवण्याऐवजी स्थिर बायनरी इंटरफेसद्वारे त्याच्याशी बोलतो.",
     "guide_how_title": "रचना कशी आहे",
-    "guide_li1": "<span class=\"text-ink font-medium\">कोअर (C++20)</span> — ट्रॅफिक पार्स करते आणि स्थिर <code class=\"text-ink\">extern \"C\"</code> सीमेमागे डिटेक्शन नियमांशी जुळवते.",
-    "guide_li2": "<span class=\"text-ink font-medium\">.NET बाइंडिंग्ज</span> — एक टाइप-सेफ P/Invoke थर Windows डेस्कटॉप अ‍ॅप्ससाठी कोअर गुंडाळतो, जीवनचक्र व्यवस्थापनासाठी SafeHandle वापरून.",
-    "guide_li3": "<span class=\"text-ink font-medium\">Swift बाइंडिंग्ज</span> — एक Swift Package जो C मॉड्यूल मॅपद्वारे iOS अ‍ॅप्सना कोअरशी जोडतो आणि .xcframework म्हणून वितरित होतो.",
+    "guide_li1": "<span class=\"text-ink font-medium\">कोअर (C++20)</span>: ट्रॅफिक पार्स करते आणि स्थिर <code class=\"text-ink\">extern \"C\"</code> सीमेमागे डिटेक्शन नियमांशी जुळवते.",
+    "guide_li2": "<span class=\"text-ink font-medium\">.NET बाइंडिंग्ज</span>: एक टाइप-सेफ P/Invoke थर Windows डेस्कटॉप अ‍ॅप्ससाठी कोअर गुंडाळतो, जीवनचक्र व्यवस्थापनासाठी SafeHandle वापरून.",
+    "guide_li3": "<span class=\"text-ink font-medium\">Swift बाइंडिंग्ज</span>: एक Swift Package जो C मॉड्यूल मॅपद्वारे iOS अ‍ॅप्सना कोअरशी जोडतो आणि .xcframework म्हणून वितरित होतो.",
     "guide_li4": "संपूर्ण आर्किटेक्चर टिपा, ABI करार, आणि सुरक्षा धोरण रिपॉझिटरीच्या <code class=\"text-ink\">docs/</code> फोल्डरमध्ये आहेत.",
     "guide_quickstart_title": "त्वरित सुरुवात",
     "guide_quickstart_note": "हे Linux/macOS वर C++ कोअर तयार करते. Windows, .NET, आणि Swift बिल्ड पायऱ्या रिपॉझिटरीच्या README मध्ये पूर्णपणे स्पष्ट केल्या आहेत.",
     "guide_privacy_note": "हे पान पूर्णपणे तुमच्या ब्राउझरमध्ये चालते. खालील लाइव्ह डेमो ट्रॅफिक डेटा कधीही कुठेही पाठवत नाही.",
     "demo_eyebrow": "// ब्राउझरमध्ये वापरून पहा",
     "demo_title": "टर्मिनलशिवाय डिटेक्टर चालवा",
-    "demo_desc": "C++ कोअरमधील नियम-जुळणी लॉजिकचे सुलभीकृत, क्लायंट-साइड सिम्युलेशन — ट्रॅफिक नमुना पेस्ट करा किंवा तयार करा आणि डिटेक्शन पास कोणत्या ओळींना फ्लॅग करेल ते याच पानावर पहा.",
+    "demo_desc": "C++ कोअरमधील नियम-जुळणी लॉजिकचे सुलभीकृत, क्लायंट-साइड सिम्युलेशन. ट्रॅफिक नमुना पेस्ट करा किंवा तयार करा आणि डिटेक्शन पास कोणत्या ओळींना फ्लॅग करेल ते याच पानावर पहा.",
     "demo_input_label": "ट्रॅफिक इनपुट",
     "demo_load_sample": "नमुना ट्रॅफिक लोड करा",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "डिटेक्शन चालवा",
-    "demo_format_hint": "फॉरमॅट: PROTO SRC_IP:PORT DST_IP:PORT — प्रत्येक ओळीत एक पॅकेट. ICMP ओळींना पोर्ट नसतो.",
+    "demo_format_hint": "फॉरमॅट: PROTO SRC_IP:PORT DST_IP:PORT. प्रत्येक ओळीत एक पॅकेट. ICMP ओळींना पोर्ट नसतो.",
     "demo_output_label": "डिटेक्शन आउटपुट",
     "demo_output_empty": "// इनपुटची प्रतीक्षा आहे…",
-    "demo_legend_low": "sev 1–29 · कमी",
-    "demo_legend_medium": "sev 30–69 · मध्यम",
+    "demo_legend_low": "sev 1-29 · कमी",
+    "demo_legend_medium": "sev 30-69 · मध्यम",
     "demo_legend_high": "sev 70+ · जास्त",
     "lang_label": "भाषा"
   },
@@ -2353,31 +2466,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// শুরু করুন",
     "footer_title": "সোর্স কোড ব্রাউজ করুন",
-    "footer_desc": "আর্কিটেকচার সিদ্ধান্ত, ABI চুক্তি, এবং নিরাপত্তা নীতি — সমস্ত বিবরণ রেপোর <code class=\"text-ink\">docs/</code> ফোল্ডারে রয়েছে।",
+    "footer_desc": "আর্কিটেকচার সিদ্ধান্ত, ABI চুক্তি, এবং নিরাপত্তা নীতি। সমস্ত বিবরণ রেপোর <code class=\"text-ink\">docs/</code> ফোল্ডারে রয়েছে।",
     "btn_open_github": "GitHub-এ খুলুন",
     "guide_h1": "C‑IDS ব্যবহারকারী গাইড",
     "guide_sub": "C‑IDS কী এবং অংশগুলো কীভাবে একসাথে কাজ করে।",
     "guide_p1": "C‑IDS একটি মডিউলার, ক্রস‑প্ল্যাটফর্ম Intrusion Detection System কোর। ডিটেকশন লজিক শুধুমাত্র একটি জায়গায়, C++ এ বিদ্যমান, এবং প্রতিটি প্ল্যাটফর্ম নিজস্ব লজিক কপি রাখার পরিবর্তে একটি স্থিতিশীল বাইনারি ইন্টারফেসের মাধ্যমে এর সাথে যোগাযোগ করে।",
     "guide_how_title": "কীভাবে গঠিত",
-    "guide_li1": "<span class=\"text-ink font-medium\">কোর (C++20)</span> — ট্রাফিক পার্স করে এবং একটি স্থিতিশীল <code class=\"text-ink\">extern \"C\"</code> সীমানার পেছনে ডিটেকশন নিয়মের সাথে মেলায়।",
-    "guide_li2": "<span class=\"text-ink font-medium\">.NET বাইন্ডিং</span> — একটি টাইপ-সেফ P/Invoke স্তর Windows ডেস্কটপ অ্যাপের জন্য কোর মুড়ে রাখে, জীবনচক্র ব্যবস্থাপনার জন্য SafeHandle ব্যবহার করে।",
-    "guide_li3": "<span class=\"text-ink font-medium\">Swift বাইন্ডিং</span> — একটি Swift Package যা C মডিউল ম্যাপের মাধ্যমে iOS অ্যাপকে কোরের সাথে সংযুক্ত করে এবং .xcframework হিসেবে বিতরণ করা হয়।",
+    "guide_li1": "<span class=\"text-ink font-medium\">কোর (C++20)</span>: ট্রাফিক পার্স করে এবং একটি স্থিতিশীল <code class=\"text-ink\">extern \"C\"</code> সীমানার পেছনে ডিটেকশন নিয়মের সাথে মেলায়।",
+    "guide_li2": "<span class=\"text-ink font-medium\">.NET বাইন্ডিং</span>: একটি টাইপ-সেফ P/Invoke স্তর Windows ডেস্কটপ অ্যাপের জন্য কোর মুড়ে রাখে, জীবনচক্র ব্যবস্থাপনার জন্য SafeHandle ব্যবহার করে।",
+    "guide_li3": "<span class=\"text-ink font-medium\">Swift বাইন্ডিং</span>: একটি Swift Package যা C মডিউল ম্যাপের মাধ্যমে iOS অ্যাপকে কোরের সাথে সংযুক্ত করে এবং .xcframework হিসেবে বিতরণ করা হয়।",
     "guide_li4": "সম্পূর্ণ আর্কিটেকচার নোট, ABI চুক্তি, এবং নিরাপত্তা নীতি রিপোজিটরির <code class=\"text-ink\">docs/</code> ফোল্ডারে রয়েছে।",
     "guide_quickstart_title": "দ্রুত শুরু",
     "guide_quickstart_note": "এটি Linux/macOS-এ C++ কোর তৈরি করে। Windows, .NET, এবং Swift বিল্ড ধাপগুলি রিপোজিটরির README-এ সম্পূর্ণভাবে বর্ণিত আছে।",
     "guide_privacy_note": "এই পৃষ্ঠাটি সম্পূর্ণভাবে আপনার ব্রাউজারে চলে। নিচের লাইভ ডেমো ট্রাফিক ডেটা কখনোই কোথাও পাঠায় না।",
     "demo_eyebrow": "// ব্রাউজারে চেষ্টা করুন",
     "demo_title": "টার্মিনাল ছাড়াই ডিটেক্টর চালান",
-    "demo_desc": "C++ কোরের নিয়ম-মিলকরণ লজিকের একটি সরলীকৃত, ক্লায়েন্ট-সাইড সিমুলেশন — একটি ট্রাফিক নমুনা পেস্ট করুন বা তৈরি করুন এবং দেখুন একটি ডিটেকশন পাস কোন লাইনগুলো ফ্ল্যাগ করবে, ঠিক এই পৃষ্ঠায়।",
+    "demo_desc": "C++ কোরের নিয়ম-মিলকরণ লজিকের একটি সরলীকৃত, ক্লায়েন্ট-সাইড সিমুলেশন। একটি ট্রাফিক নমুনা পেস্ট করুন বা তৈরি করুন এবং দেখুন একটি ডিটেকশন পাস কোন লাইনগুলো ফ্ল্যাগ করবে, ঠিক এই পৃষ্ঠায়।",
     "demo_input_label": "ট্রাফিক ইনপুট",
     "demo_load_sample": "নমুনা ট্রাফিক লোড করুন",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "ডিটেকশন চালান",
-    "demo_format_hint": "ফরম্যাট: PROTO SRC_IP:PORT DST_IP:PORT — প্রতি লাইনে একটি প্যাকেট। ICMP লাইনে পোর্ট থাকে না।",
+    "demo_format_hint": "ফরম্যাট: PROTO SRC_IP:PORT DST_IP:PORT। প্রতি লাইনে একটি প্যাকেট। ICMP লাইনে পোর্ট থাকে না।",
     "demo_output_label": "ডিটেকশন আউটপুট",
     "demo_output_empty": "// ইনপুটের অপেক্ষায়…",
-    "demo_legend_low": "sev 1–29 · নিম্ন",
-    "demo_legend_medium": "sev 30–69 · মধ্যম",
+    "demo_legend_low": "sev 1-29 · নিম্ন",
+    "demo_legend_medium": "sev 30-69 · মধ্যম",
     "demo_legend_high": "sev 70+ · উচ্চ",
     "lang_label": "ভাষা"
   },
@@ -2405,31 +2518,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// ਸ਼ੁਰੂ ਕਰੋ",
     "footer_title": "ਸੋਰਸ ਕੋਡ ਬ੍ਰਾਊਜ਼ ਕਰੋ",
-    "footer_desc": "ਆਰਕੀਟੈਕਚਰ ਫੈਸਲੇ, ABI ਸਮਝੌਤਾ, ਅਤੇ ਸੁਰੱਖਿਆ ਨੀਤੀ — ਸਾਰੇ ਵੇਰਵੇ ਰੀਪੋ ਦੇ <code class=\"text-ink\">docs/</code> ਫੋਲਡਰ ਵਿੱਚ ਹਨ।",
+    "footer_desc": "ਆਰਕੀਟੈਕਚਰ ਫੈਸਲੇ, ABI ਸਮਝੌਤਾ, ਅਤੇ ਸੁਰੱਖਿਆ ਨੀਤੀ। ਸਾਰੇ ਵੇਰਵੇ ਰੀਪੋ ਦੇ <code class=\"text-ink\">docs/</code> ਫੋਲਡਰ ਵਿੱਚ ਹਨ।",
     "btn_open_github": "GitHub ਉੱਤੇ ਖੋਲ੍ਹੋ",
     "guide_h1": "C‑IDS ਵਰਤੋਂਕਾਰ ਗਾਈਡ",
     "guide_sub": "C‑IDS ਕੀ ਹੈ ਅਤੇ ਭਾਗ ਕਿਵੇਂ ਇਕੱਠੇ ਫਿੱਟ ਹੁੰਦੇ ਹਨ।",
     "guide_p1": "C‑IDS ਇੱਕ ਮੌਡਿਊਲਰ, ਕਰਾਸ‑ਪਲੇਟਫਾਰਮ Intrusion Detection System ਕੋਰ ਹੈ। ਡਿਟੈਕਸ਼ਨ ਲਾਜਿਕ ਸਿਰਫ਼ ਇੱਕ ਥਾਂ, C++ ਵਿੱਚ ਮੌਜੂਦ ਹੈ, ਅਤੇ ਹਰ ਪਲੇਟਫਾਰਮ ਆਪਣੀ ਲਾਜਿਕ ਦੀ ਕਾਪੀ ਰੱਖਣ ਦੀ ਬਜਾਏ ਇੱਕ ਸਥਿਰ ਬਾਈਨਰੀ ਇੰਟਰਫੇਸ ਰਾਹੀਂ ਇਸ ਨਾਲ ਗੱਲ ਕਰਦਾ ਹੈ।",
     "guide_how_title": "ਇਹ ਕਿਵੇਂ ਬਣਿਆ ਹੈ",
-    "guide_li1": "<span class=\"text-ink font-medium\">ਕੋਰ (C++20)</span> — ਟ੍ਰੈਫਿਕ ਨੂੰ ਪਾਰਸ ਕਰਦਾ ਹੈ ਅਤੇ ਇਸਨੂੰ ਇੱਕ ਸਥਿਰ <code class=\"text-ink\">extern \"C\"</code> ਸੀਮਾ ਦੇ ਪਿੱਛੇ ਡਿਟੈਕਸ਼ਨ ਨਿਯਮਾਂ ਨਾਲ ਮਿਲਾਉਂਦਾ ਹੈ।",
-    "guide_li2": "<span class=\"text-ink font-medium\">.NET ਬਾਈਂਡਿੰਗਾਂ</span> — ਇੱਕ ਟਾਈਪ-ਸੇਫ਼ P/Invoke ਲੇਅਰ Windows ਡੈਸਕਟਾਪ ਐਪਸ ਲਈ ਕੋਰ ਨੂੰ ਲਪੇਟਦੀ ਹੈ, ਜੀਵਨ ਚੱਕਰ ਪ੍ਰਬੰਧਨ ਲਈ SafeHandle ਵਰਤਦੇ ਹੋਏ।",
-    "guide_li3": "<span class=\"text-ink font-medium\">Swift ਬਾਈਂਡਿੰਗਾਂ</span> — ਇੱਕ Swift Package ਜੋ C ਮੌਡਿਊਲ ਮੈਪ ਰਾਹੀਂ iOS ਐਪਸ ਨੂੰ ਕੋਰ ਨਾਲ ਜੋੜਦਾ ਹੈ ਅਤੇ .xcframework ਵਜੋਂ ਵੰਡਿਆ ਜਾਂਦਾ ਹੈ।",
+    "guide_li1": "<span class=\"text-ink font-medium\">ਕੋਰ (C++20)</span>: ਟ੍ਰੈਫਿਕ ਨੂੰ ਪਾਰਸ ਕਰਦਾ ਹੈ ਅਤੇ ਇਸਨੂੰ ਇੱਕ ਸਥਿਰ <code class=\"text-ink\">extern \"C\"</code> ਸੀਮਾ ਦੇ ਪਿੱਛੇ ਡਿਟੈਕਸ਼ਨ ਨਿਯਮਾਂ ਨਾਲ ਮਿਲਾਉਂਦਾ ਹੈ।",
+    "guide_li2": "<span class=\"text-ink font-medium\">.NET ਬਾਈਂਡਿੰਗਾਂ</span>: ਇੱਕ ਟਾਈਪ-ਸੇਫ਼ P/Invoke ਲੇਅਰ Windows ਡੈਸਕਟਾਪ ਐਪਸ ਲਈ ਕੋਰ ਨੂੰ ਲਪੇਟਦੀ ਹੈ, ਜੀਵਨ ਚੱਕਰ ਪ੍ਰਬੰਧਨ ਲਈ SafeHandle ਵਰਤਦੇ ਹੋਏ।",
+    "guide_li3": "<span class=\"text-ink font-medium\">Swift ਬਾਈਂਡਿੰਗਾਂ</span>: ਇੱਕ Swift Package ਜੋ C ਮੌਡਿਊਲ ਮੈਪ ਰਾਹੀਂ iOS ਐਪਸ ਨੂੰ ਕੋਰ ਨਾਲ ਜੋੜਦਾ ਹੈ ਅਤੇ .xcframework ਵਜੋਂ ਵੰਡਿਆ ਜਾਂਦਾ ਹੈ।",
     "guide_li4": "ਪੂਰੇ ਆਰਕੀਟੈਕਚਰ ਨੋਟਸ, ABI ਸਮਝੌਤਾ, ਅਤੇ ਸੁਰੱਖਿਆ ਨੀਤੀ ਰਿਪੋਜ਼ਟਰੀ ਦੇ <code class=\"text-ink\">docs/</code> ਫੋਲਡਰ ਵਿੱਚ ਹਨ।",
     "guide_quickstart_title": "ਤੇਜ਼ ਸ਼ੁਰੂਆਤ",
     "guide_quickstart_note": "ਇਹ Linux/macOS ਉੱਤੇ C++ ਕੋਰ ਬਣਾਉਂਦਾ ਹੈ। Windows, .NET, ਅਤੇ Swift ਬਿਲਡ ਕਦਮ ਰਿਪੋਜ਼ਟਰੀ ਦੇ README ਵਿੱਚ ਪੂਰੀ ਤਰ੍ਹਾਂ ਦੱਸੇ ਗਏ ਹਨ।",
     "guide_privacy_note": "ਇਹ ਪੰਨਾ ਪੂਰੀ ਤਰ੍ਹਾਂ ਤੁਹਾਡੇ ਬ੍ਰਾਊਜ਼ਰ ਵਿੱਚ ਚੱਲਦਾ ਹੈ। ਹੇਠਾਂ ਦਿੱਤਾ ਲਾਈਵ ਡੈਮੋ ਟ੍ਰੈਫਿਕ ਡਾਟਾ ਕਦੇ ਵੀ ਕਿਤੇ ਨਹੀਂ ਭੇਜਦਾ।",
     "demo_eyebrow": "// ਬ੍ਰਾਊਜ਼ਰ ਵਿੱਚ ਅਜ਼ਮਾਓ",
     "demo_title": "ਡਿਟੈਕਟਰ ਚਲਾਓ, ਟਰਮੀਨਲ ਦੀ ਲੋੜ ਨਹੀਂ",
-    "demo_desc": "C++ ਕੋਰ ਵਿੱਚ ਨਿਯਮ-ਮਿਲਾਨ ਲਾਜਿਕ ਦਾ ਇੱਕ ਸਰਲ, ਕਲਾਇੰਟ-ਸਾਈਡ ਸਿਮੂਲੇਸ਼ਨ — ਇੱਕ ਟ੍ਰੈਫਿਕ ਨਮੂਨਾ ਪੇਸਟ ਕਰੋ ਜਾਂ ਬਣਾਓ ਅਤੇ ਵੇਖੋ ਕਿ ਡਿਟੈਕਸ਼ਨ ਪਾਸ ਕਿਹੜੀਆਂ ਲਾਈਨਾਂ ਨੂੰ ਫਲੈਗ ਕਰੇਗਾ, ਇਸੇ ਪੰਨੇ ਉੱਤੇ।",
+    "demo_desc": "C++ ਕੋਰ ਵਿੱਚ ਨਿਯਮ-ਮਿਲਾਨ ਲਾਜਿਕ ਦਾ ਇੱਕ ਸਰਲ, ਕਲਾਇੰਟ-ਸਾਈਡ ਸਿਮੂਲੇਸ਼ਨ। ਇੱਕ ਟ੍ਰੈਫਿਕ ਨਮੂਨਾ ਪੇਸਟ ਕਰੋ ਜਾਂ ਬਣਾਓ ਅਤੇ ਵੇਖੋ ਕਿ ਡਿਟੈਕਸ਼ਨ ਪਾਸ ਕਿਹੜੀਆਂ ਲਾਈਨਾਂ ਨੂੰ ਫਲੈਗ ਕਰੇਗਾ, ਇਸੇ ਪੰਨੇ ਉੱਤੇ।",
     "demo_input_label": "ਟ੍ਰੈਫਿਕ ਇਨਪੁੱਟ",
     "demo_load_sample": "ਨਮੂਨਾ ਟ੍ਰੈਫਿਕ ਲੋਡ ਕਰੋ",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "ਡਿਟੈਕਸ਼ਨ ਚਲਾਓ",
-    "demo_format_hint": "ਫਾਰਮੈਟ: PROTO SRC_IP:PORT DST_IP:PORT — ਹਰ ਲਾਈਨ ਵਿੱਚ ਇੱਕ ਪੈਕੇਟ। ICMP ਲਾਈਨਾਂ ਵਿੱਚ ਪੋਰਟ ਨਹੀਂ ਹੁੰਦਾ।",
+    "demo_format_hint": "ਫਾਰਮੈਟ: PROTO SRC_IP:PORT DST_IP:PORT। ਹਰ ਲਾਈਨ ਵਿੱਚ ਇੱਕ ਪੈਕੇਟ। ICMP ਲਾਈਨਾਂ ਵਿੱਚ ਪੋਰਟ ਨਹੀਂ ਹੁੰਦਾ।",
     "demo_output_label": "ਡਿਟੈਕਸ਼ਨ ਆਉਟਪੁੱਟ",
     "demo_output_empty": "// ਇਨਪੁੱਟ ਦੀ ਉਡੀਕ…",
-    "demo_legend_low": "sev 1–29 · ਘੱਟ",
-    "demo_legend_medium": "sev 30–69 · ਦਰਮਿਆਨਾ",
+    "demo_legend_low": "sev 1-29 · ਘੱਟ",
+    "demo_legend_medium": "sev 30-69 · ਦਰਮਿਆਨਾ",
     "demo_legend_high": "sev 70+ · ਵੱਧ",
     "lang_label": "ਭਾਸ਼ਾ"
   },
@@ -2457,31 +2570,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// தொடங்குங்கள்",
     "footer_title": "மூலக் குறியீட்டை உலாவவும்",
-    "footer_desc": "கட்டமைப்பு முடிவுகள், ABI ஒப்பந்தம், மற்றும் பாதுகாப்புக் கொள்கை — அனைத்து விவரங்களும் ரெப்போவின் <code class=\"text-ink\">docs/</code> கோப்புறையில் உள்ளன.",
+    "footer_desc": "கட்டமைப்பு முடிவுகள், ABI ஒப்பந்தம், மற்றும் பாதுகாப்புக் கொள்கை. அனைத்து விவரங்களும் ரெப்போவின் <code class=\"text-ink\">docs/</code> கோப்புறையில் உள்ளன.",
     "btn_open_github": "GitHub-இல் திறக்கவும்",
     "guide_h1": "C‑IDS பயனர் வழிகாட்டி",
     "guide_sub": "C‑IDS என்றால் என்ன, பாகங்கள் எவ்வாறு இணைந்து செயல்படுகின்றன.",
     "guide_p1": "C‑IDS என்பது மட்யூலர், கிராஸ்‑பிளாட்பார Intrusion Detection System மையமாகும். கண்டறிதல் தர்க்கம் C++ இல் ஒரே ஒரு இடத்தில் மட்டுமே உள்ளது, மேலும் ஒவ்வொரு பிளாட்பாரமும் தனது சொந்த நகலை வைத்திருப்பதற்குப் பதிலாக நிலையான பைனரி இடைமுகம் மூலம் அதனுடன் தொடர்பு கொள்கிறது.",
     "guide_how_title": "இது எவ்வாறு கட்டமைக்கப்பட்டுள்ளது",
-    "guide_li1": "<span class=\"text-ink font-medium\">மையம் (C++20)</span> — போக்குவரத்தை பாகுபடுத்தி, நிலையான <code class=\"text-ink\">extern \"C\"</code> எல்லைக்குப் பின்னால் கண்டறிதல் விதிகளுடன் பொருத்துகிறது.",
-    "guide_li2": "<span class=\"text-ink font-medium\">.NET பைண்டிங்குகள்</span> — Windows டெஸ்க்டாப் ஆப்களுக்காக மையத்தை மறைக்கும் ஒரு type-safe P/Invoke அடுக்கு, வாழ்க்கைச் சுழற்சி மேலாண்மைக்கு SafeHandle-ஐப் பயன்படுத்துகிறது.",
-    "guide_li3": "<span class=\"text-ink font-medium\">Swift பைண்டிங்குகள்</span> — C மட்யூல் மேப் மூலம் iOS ஆப்களை மையத்துடன் இணைக்கும் ஒரு Swift Package, .xcframework ஆக விநியோகிக்கப்படுகிறது.",
+    "guide_li1": "<span class=\"text-ink font-medium\">மையம் (C++20)</span>: போக்குவரத்தை பாகுபடுத்தி, நிலையான <code class=\"text-ink\">extern \"C\"</code> எல்லைக்குப் பின்னால் கண்டறிதல் விதிகளுடன் பொருத்துகிறது.",
+    "guide_li2": "<span class=\"text-ink font-medium\">.NET பைண்டிங்குகள்</span>: Windows டெஸ்க்டாப் ஆப்களுக்காக மையத்தை மறைக்கும் ஒரு type-safe P/Invoke அடுக்கு, வாழ்க்கைச் சுழற்சி மேலாண்மைக்கு SafeHandle-ஐப் பயன்படுத்துகிறது.",
+    "guide_li3": "<span class=\"text-ink font-medium\">Swift பைண்டிங்குகள்</span>: C மட்யூல் மேப் மூலம் iOS ஆப்களை மையத்துடன் இணைக்கும் ஒரு Swift Package, .xcframework ஆக விநியோகிக்கப்படுகிறது.",
     "guide_li4": "முழுமையான கட்டமைப்பு குறிப்புகள், ABI ஒப்பந்தம், மற்றும் பாதுகாப்புக் கொள்கை ரெப்போசிட்டரியின் <code class=\"text-ink\">docs/</code> கோப்புறையில் உள்ளன.",
     "guide_quickstart_title": "விரைவு தொடக்கம்",
     "guide_quickstart_note": "இது Linux/macOS இல் C++ மையத்தை உருவாக்குகிறது. Windows, .NET, மற்றும் Swift உருவாக்க படிகள் ரெப்போசிட்டரியின் README இல் முழுமையாக விளக்கப்பட்டுள்ளன.",
     "guide_privacy_note": "இந்தப் பக்கம் முழுவதுமாக உங்கள் உலாவியில் இயங்குகிறது. கீழே உள்ள லைவ் டெமோ போக்குவரத்து தரவை ஒருபோதும் எங்கும் அனுப்பாது.",
     "demo_eyebrow": "// உலாவியில் முயற்சிக்கவும்",
     "demo_title": "டெர்மினல் தேவையின்றி கண்டறியியை இயக்கவும்",
-    "demo_desc": "C++ மையத்தில் உள்ள விதி-பொருத்த தர்க்கத்தின் எளிமைப்படுத்தப்பட்ட, கிளையன்ட்-சைட் உருவகப்படுத்துதல் — ஒரு போக்குவரத்து மாதிரியை ஒட்டவும் அல்லது உருவாக்கவும், கண்டறிதல் பாஸ் எந்த வரிகளைக் கொடியிடும் என்பதை இந்தப் பக்கத்திலேயே பாருங்கள்.",
+    "demo_desc": "C++ மையத்தில் உள்ள விதி-பொருத்த தர்க்கத்தின் எளிமைப்படுத்தப்பட்ட, கிளையன்ட்-சைட் உருவகப்படுத்துதல். ஒரு போக்குவரத்து மாதிரியை ஒட்டவும் அல்லது உருவாக்கவும், கண்டறிதல் பாஸ் எந்த வரிகளைக் கொடியிடும் என்பதை இந்தப் பக்கத்திலேயே பாருங்கள்.",
     "demo_input_label": "போக்குவரத்து உள்ளீடு",
     "demo_load_sample": "மாதிரி போக்குவரத்தை ஏற்றவும்",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "கண்டறிதலை இயக்கவும்",
-    "demo_format_hint": "வடிவம்: PROTO SRC_IP:PORT DST_IP:PORT — ஒரு வரிக்கு ஒரு பாக்கெட். ICMP வரிகளுக்கு போர்ட் இல்லை.",
+    "demo_format_hint": "வடிவம்: PROTO SRC_IP:PORT DST_IP:PORT. ஒரு வரிக்கு ஒரு பாக்கெட். ICMP வரிகளுக்கு போர்ட் இல்லை.",
     "demo_output_label": "கண்டறிதல் வெளியீடு",
     "demo_output_empty": "// உள்ளீட்டுக்காக காத்திருக்கிறது…",
-    "demo_legend_low": "sev 1–29 · குறைவு",
-    "demo_legend_medium": "sev 30–69 · நடுத்தரம்",
+    "demo_legend_low": "sev 1-29 · குறைவு",
+    "demo_legend_medium": "sev 30-69 · நடுத்தரம்",
     "demo_legend_high": "sev 70+ · அதிகம்",
     "lang_label": "மொழி"
   },
@@ -2509,31 +2622,31 @@ const translations = {
     "swift_li3": "› iOS 15+",
     "footer_eyebrow": "// ప్రారంభించండి",
     "footer_title": "సోర్స్ కోడ్‌ను బ్రౌజ్ చేయండి",
-    "footer_desc": "ఆర్కిటెక్చర్ నిర్ణయాలు, ABI ఒప్పందం, మరియు భద్రతా విధానం — అన్ని వివరాలు రెపో యొక్క <code class=\"text-ink\">docs/</code> ఫోల్డర్‌లో ఉన్నాయి.",
+    "footer_desc": "ఆర్కిటెక్చర్ నిర్ణయాలు, ABI ఒప్పందం, మరియు భద్రతా విధానం. అన్ని వివరాలు రెపో యొక్క <code class=\"text-ink\">docs/</code> ఫోల్డర్‌లో ఉన్నాయి.",
     "btn_open_github": "GitHub‌లో తెరవండి",
     "guide_h1": "C‑IDS వినియోగదారు గైడ్",
     "guide_sub": "C‑IDS అంటే ఏమిటి మరియు భాగాలు ఎలా కలిసి పనిచేస్తాయి.",
     "guide_p1": "C‑IDS అనేది మాడ్యులర్, క్రాస్‑ప్లాట్‌ఫారమ్ Intrusion Detection System కోర్. డిటెక్షన్ లాజిక్ C++ లో ఒకే చోట మాత్రమే ఉంటుంది, మరియు ప్రతి ప్లాట్‌ఫారమ్ తన సొంత లాజిక్ కాపీని ఉంచుకోవడానికి బదులుగా స్థిరమైన బైనరీ ఇంటర్‌ఫేస్ ద్వారా దానితో మాట్లాడుతుంది.",
     "guide_how_title": "ఇది ఎలా నిర్మించబడింది",
-    "guide_li1": "<span class=\"text-ink font-medium\">కోర్ (C++20)</span> — ట్రాఫిక్‌ను పార్స్ చేసి, స్థిరమైన <code class=\"text-ink\">extern \"C\"</code> సరిహద్దు వెనుక డిటెక్షన్ నియమాలతో సరిపోల్చుతుంది.",
-    "guide_li2": "<span class=\"text-ink font-medium\">.NET బైండింగ్‌లు</span> — Windows డెస్క్‌టాప్ యాప్‌ల కోసం కోర్‌ను చుట్టే ఒక టైప్-సేఫ్ P/Invoke లేయర్, జీవితచక్ర నిర్వహణ కోసం SafeHandleని ఉపయోగిస్తుంది.",
-    "guide_li3": "<span class=\"text-ink font-medium\">Swift బైండింగ్‌లు</span> — C మాడ్యూల్ మ్యాప్ ద్వారా iOS యాప్‌లను కోర్‌కు కనెక్ట్ చేసే ఒక Swift Package, .xcframework గా పంపిణీ చేయబడుతుంది.",
+    "guide_li1": "<span class=\"text-ink font-medium\">కోర్ (C++20)</span>: ట్రాఫిక్‌ను పార్స్ చేసి, స్థిరమైన <code class=\"text-ink\">extern \"C\"</code> సరిహద్దు వెనుక డిటెక్షన్ నియమాలతో సరిపోల్చుతుంది.",
+    "guide_li2": "<span class=\"text-ink font-medium\">.NET బైండింగ్‌లు</span>: Windows డెస్క్‌టాప్ యాప్‌ల కోసం కోర్‌ను చుట్టే ఒక టైప్-సేఫ్ P/Invoke లేయర్, జీవితచక్ర నిర్వహణ కోసం SafeHandleని ఉపయోగిస్తుంది.",
+    "guide_li3": "<span class=\"text-ink font-medium\">Swift బైండింగ్‌లు</span>: C మాడ్యూల్ మ్యాప్ ద్వారా iOS యాప్‌లను కోర్‌కు కనెక్ట్ చేసే ఒక Swift Package, .xcframework గా పంపిణీ చేయబడుతుంది.",
     "guide_li4": "పూర్తి ఆర్కిటెక్చర్ నోట్స్, ABI ఒప్పందం, మరియు భద్రతా విధానం రిపోజిటరీ యొక్క <code class=\"text-ink\">docs/</code> ఫోల్డర్‌లో ఉన్నాయి.",
     "guide_quickstart_title": "త్వరిత ప్రారంభం",
     "guide_quickstart_note": "ఇది Linux/macOSలో C++ కోర్‌ను బిల్డ్ చేస్తుంది. Windows, .NET, మరియు Swift బిల్డ్ దశలు రిపోజిటరీ యొక్క README లో పూర్తిగా వివరించబడ్డాయి.",
     "guide_privacy_note": "ఈ పేజీ పూర్తిగా మీ బ్రౌజర్‌లో నడుస్తుంది. దిగువ లైవ్ డెమో ట్రాఫిక్ డేటాను ఎప్పటికీ ఎక్కడికీ పంపదు.",
     "demo_eyebrow": "// బ్రౌజర్‌లో ప్రయత్నించండి",
     "demo_title": "టెర్మినల్ అవసరం లేకుండా డిటెక్టర్‌ను రన్ చేయండి",
-    "demo_desc": "C++ కోర్‌లోని రూల్-మ్యాచింగ్ లాజిక్ యొక్క సరళీకృత, క్లయింట్-సైడ్ అనుకరణ — ఒక ట్రాఫిక్ నమూనాను పేస్ట్ చేయండి లేదా రూపొందించండి మరియు డిటెక్షన్ పాస్ ఏ లైన్‌లను ఫ్లాగ్ చేస్తుందో ఇక్కడే ఈ పేజీలో చూడండి.",
+    "demo_desc": "C++ కోర్‌లోని రూల్-మ్యాచింగ్ లాజిక్ యొక్క సరళీకృత, క్లయింట్-సైడ్ అనుకరణ. ఒక ట్రాఫిక్ నమూనాను పేస్ట్ చేయండి లేదా రూపొందించండి మరియు డిటెక్షన్ పాస్ ఏ లైన్‌లను ఫ్లాగ్ చేస్తుందో ఇక్కడే ఈ పేజీలో చూడండి.",
     "demo_input_label": "ట్రాఫిక్ ఇన్‌పుట్",
     "demo_load_sample": "నమూనా ట్రాఫిక్‌ను లోడ్ చేయండి",
     "demo_input_placeholder": "TCP 10.0.0.22:44110 45.83.12.9:22",
     "demo_run_btn": "డిటెక్షన్‌ను రన్ చేయండి",
-    "demo_format_hint": "ఫార్మాట్: PROTO SRC_IP:PORT DST_IP:PORT — ప్రతి లైన్‌కు ఒక ప్యాకెట్. ICMP లైన్‌లకు పోర్ట్ ఉండదు.",
+    "demo_format_hint": "ఫార్మాట్: PROTO SRC_IP:PORT DST_IP:PORT. ప్రతి లైన్‌కు ఒక ప్యాకెట్. ICMP లైన్‌లకు పోర్ట్ ఉండదు.",
     "demo_output_label": "డిటెక్షన్ అవుట్‌పుట్",
     "demo_output_empty": "// ఇన్‌పుట్ కోసం వేచి ఉంది…",
-    "demo_legend_low": "sev 1–29 · తక్కువ",
-    "demo_legend_medium": "sev 30–69 · మధ్యస్థం",
+    "demo_legend_low": "sev 1-29 · తక్కువ",
+    "demo_legend_medium": "sev 30-69 · మధ్యస్థం",
     "demo_legend_high": "sev 70+ · ఎక్కువ",
     "lang_label": "భాష"
   }
@@ -2844,6 +2957,31 @@ document.getElementById("demo-run").addEventListener("click", () => {
 // Deferred to the end of the script so every value it (and its callees,
 // like rerenderDemoForLanguage) can reference is already declared.
 applyTranslations(languageSelector.getCurrent());
+
+/* ---------------- Theme toggle: main (dark) theme <-> light theme ---------------- */
+(function () {
+  const THEME_STORAGE_KEY = "cids-theme";
+  const root = document.documentElement;
+  const themeToggle = document.getElementById("theme-toggle");
+  let switchTimer = null;
+
+  function isLight() { return root.getAttribute("data-theme") === "light"; }
+  function syncToggle() { themeToggle.setAttribute("aria-pressed", String(isLight())); }
+
+  themeToggle.addEventListener("click", () => {
+    const toLight = !isLight();
+    root.classList.add("theme-switching");
+    window.clearTimeout(switchTimer);
+    if (toLight) root.setAttribute("data-theme", "light");
+    else root.removeAttribute("data-theme");
+    try { window.localStorage.setItem(THEME_STORAGE_KEY, toLight ? "light" : "dark"); }
+    catch (err) { /* storage unavailable: theme still switches for this visit */ }
+    syncToggle();
+    switchTimer = window.setTimeout(() => root.classList.remove("theme-switching"), 400);
+  });
+
+  syncToggle();
+})();
 
   </script>
 
