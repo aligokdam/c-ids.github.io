@@ -219,3 +219,13 @@ A client-side simulation of the same rule-matching logic shared by the C++ core 
 - **Docs & live demo:** <https://aligokdam.github.io/c-ids.github.io/>
 - Architecture decisions, the ABI contract, and the security policy live in the `docs/` folder of the repository.
 - **License:** MIT
+
+---
+
+## License
+
+MIT License
+
+---
+
+Created by **Ali Gökdam**
