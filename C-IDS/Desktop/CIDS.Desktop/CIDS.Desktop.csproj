@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- AllowUnsafeBlocks intentionally OFF: NativeMethods.cs should need
+         no unsafe code at all — see Interop/NativeMethods.cs comments on
+         why raw pointers never appear on the C# side either. -->
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <Platforms>x64;ARM64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The native artifact produced by Core's CMake build. Copied next
+         to the managed executable so P/Invoke's default probing finds it
+         without needing an absolute path baked in anywhere. -->
+    <None Include="..\..\build\bin\cids_abi.dll"
+          Condition="Exists('..\..\build\bin\cids_abi.dll')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Interop\NativeMethods.cs" />
+  </ItemGroup>
+
+</Project>
