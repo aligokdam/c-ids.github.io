@@ -1,5 +1,0 @@
-module CIDSCBridge {
-    header "cids_abi.h"
-    header "cids_packet_abi.h"
-    export *
-}
