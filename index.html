@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0A0E13">
+<title>C-IDS: Cross-platform Intrusion Detection Core</title>
+<meta name="description" content="A cross-platform, modular Intrusion Detection System (IDS) core written in C++, with .NET and Swift bindings.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ---------------------------------------------------------------
+   Static utility CSS for C-IDS — replaces cdn.tailwindcss.com.
+   Hand-built to cover only the classes actually used in index.html,
+   matching Tailwind's default scale/behaviour 1:1 for this page.
+   ------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; border-width: 0; border-style: solid; border-color: #232B36; }
+html { line-height: 1.5; -webkit-text-size-adjust: 100%; }
+body { margin: 0; }
+h1,h2,h3,p,pre,ol,ul { margin: 0; }
+ol,ul { padding: 0; list-style: none; }
+a { color: inherit; text-decoration: inherit; }
+button { font: inherit; color: inherit; background: none; padding: 0; cursor: pointer; }
+code, pre { font-family: 'IBM Plex Mono', monospace; }
+svg { display: block; vertical-align: middle; }
+textarea { font: inherit; color: inherit; }
+
+.antialiased { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+.font-sans { font-family: 'Inter', sans-serif; }
+.font-mono { font-family: 'IBM Plex Mono', monospace; }
+
+/* layout / display */
+.fixed { position: fixed; }
+.absolute { position: absolute; }
+.relative { position: relative; }
+.inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+.inset-x-0 { left: 0; right: 0; }
+.top-0 { top: 0; }
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+.grid { display: grid; }
+.hidden { display: none; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-1 { flex: 1 1 0%; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.items-baseline { align-items: baseline; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.overflow-hidden { overflow: hidden; }
+.backdrop-blur { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.overflow-x-auto { overflow-x: auto; }
+.overflow-y-auto { overflow-y: auto; }
+.pointer-events-none { pointer-events: none; }
+.pointer-events-auto { pointer-events: auto; }
+.text-center { text-align: center; }
+.resize-y { resize: vertical; }
+.group:hover .group-hover\:translate-x-0\.5 { transform: translateX(2px); }
+
+.z-10 { z-index: 10; }
+.z-30 { z-index: 30; }
+
+/* gap */
+.gap-1\.5 { gap: 6px; }
+.gap-2 { gap: 8px; }
+.gap-2\.5 { gap: 10px; }
+.gap-4 { gap: 16px; }
+.gap-5 { gap: 20px; }
+.gap-x-4 { column-gap: 16px; }
+.gap-y-1\.5 { row-gap: 6px; }
+
+/* spacing helpers (space-y-N applies margin-top to all but first child) */
+.space-y-1 > * + * { margin-top: 4px; }
+.space-y-1\.5 > * + * { margin-top: 6px; }
+.space-y-6 > * + * { margin-top: 24px; }
+
+/* margin */
+.mx-auto { margin-left: auto; margin-right: auto; }
+.mt-1\.5 { margin-top: 6px; }
+.mt-3 { margin-top: 12px; }
+.mt-4 { margin-top: 16px; }
+.mt-5 { margin-top: 20px; }
+.mt-7 { margin-top: 28px; }
+.mt-8 { margin-top: 32px; }
+.mt-14 { margin-top: 56px; }
+.mb-2 { margin-bottom: 8px; }
+.mb-3 { margin-bottom: 12px; }
+.mb-4 { margin-bottom: 16px; }
+.mb-5 { margin-bottom: 20px; }
+.mb-6 { margin-bottom: 24px; }
+.mb-7 { margin-bottom: 28px; }
+.mb-8 { margin-bottom: 32px; }
+.mb-10 { margin-bottom: 40px; }
+
+/* padding */
+.p-0\.5 { padding: 2px; }
+.p-3 { padding: 12px; }
+.p-4 { padding: 16px; }
+.p-5 { padding: 20px; }
+.p-6 { padding: 24px; }
+.px-2 { padding-left: 8px; padding-right: 8px; }
+.px-3\.5 { padding-left: 14px; padding-right: 14px; }
+.px-5 { padding-left: 20px; padding-right: 20px; }
+.px-6 { padding-left: 24px; padding-right: 24px; }
+.px-7 { padding-left: 28px; padding-right: 28px; }
+.px-8 { padding-left: 32px; padding-right: 32px; }
+.py-1 { padding-top: 4px; padding-bottom: 4px; }
+.py-1\.5 { padding-top: 6px; padding-bottom: 6px; }
+.py-3 { padding-top: 12px; padding-bottom: 12px; }
+.py-3\.5 { padding-top: 14px; padding-bottom: 14px; }
+.py-4 { padding-top: 16px; padding-bottom: 16px; }
+.py-5 { padding-top: 20px; padding-bottom: 20px; }
+.py-24 { padding-top: 96px; padding-bottom: 96px; }
+.pb-5 { padding-bottom: 20px; }
+.pb-8 { padding-bottom: 32px; }
+.pb-20 { padding-bottom: 80px; }
+.pt-1\.5 { padding-top: 6px; }
+.pt-6 { padding-top: 24px; }
+.pt-7 { padding-top: 28px; }
+.pt-24 { padding-top: 96px; }
+
+/* sizing */
+.w-2 { width: 8px; }
+.w-10 { width: 40px; }
+.w-full { width: 100%; }
+.h-2 { height: 8px; }
+.h-10 { height: 40px; }
+.h-40 { height: 160px; }
+.max-w-2xl { max-width: 672px; }
+.max-w-5xl { max-width: 1024px; }
+.max-w-xl { max-width: 576px; }
+.min-h-\[1\.5em\] { min-height: 1.5em; }
+.min-h-\[260px\] { min-height: 260px; }
+.max-h-\[360px\] { max-height: 360px; }
+
+/* borders */
+.border { border-width: 1px; }
+.border-t { border-top-width: 1px; }
+.border-b { border-bottom-width: 1px; }
+.border-line { border-color: #232B36; }
+.border-signal\/30 { border-color: rgba(255,159,28,0.30); }
+.rounded { border-radius: 6px; }
+.rounded-md { border-radius: 8px; }
+.rounded-lg { border-radius: 12px; }
+.rounded-full { border-radius: 9999px; }
+
+/* colors */
+.bg-panel { background-color: #11161D; }
+.bg-panel\/70 { background-color: rgba(17,22,29,0.70); }
+.bg-panel2 { background-color: #161C25; }
+.bg-signal { background-color: #FF9F1C; }
+.bg-verify { background-color: #37D0A6; }
+.bg-red-400 { background-color: #F87171; }
+.bg-yellow-400 { background-color: #FACC15; }
+.bg-black\/40 { background-color: rgba(0,0,0,0.40); }
+.bg-gradient-to-b { background-image: linear-gradient(to bottom, var(--tw-from), var(--tw-via), var(--tw-to)); }
+.from-base { --tw-from: #0A0E13; }
+.via-transparent { --tw-via: transparent; }
+.to-base { --tw-to: #0A0E13; }
+
+.text-ink { color: #E7ECF1; }
+.text-ink\/90 { color: rgba(231,236,241,0.90); }
+.text-muted { color: #8B97A6; }
+.text-muted\/50 { color: rgba(139,151,166,0.50); }
+.text-muted\/70 { color: rgba(139,151,166,0.70); }
+.text-muted\/80 { color: rgba(139,151,166,0.80); }
+.text-signal { color: #FF9F1C; }
+.text-yellow-400 { color: #FACC15; }
+
+.hover\:bg-orange-400:hover { background-color: #FB923C; }
+.hover\:border-muted:hover { border-color: #8B97A6; }
+.hover\:border-signal\/50:hover { border-color: rgba(255,159,28,0.50); }
+.hover\:text-orange-400:hover { color: #FB923C; }
+.hover\:text-signal:hover { color: #FF9F1C; }
+.hover\:text-yellow-300:hover { color: #FDE047; }
+
+.transition-colors { transition-property: color, background-color, border-color; transition-duration: .2s; transition-timing-function: ease; }
+
+/* typography */
+.text-xs { font-size: 12px; line-height: 16px; }
+.text-sm { font-size: 14px; line-height: 20px; }
+.text-base { font-size: 16px; line-height: 24px; }
+.text-lg { font-size: 18px; line-height: 28px; }
+.text-2xl { font-size: 24px; line-height: 32px; }
+.text-3xl { font-size: 30px; line-height: 36px; }
+.text-6xl { font-size: 60px; line-height: 1; }
+.text-\[11px\] { font-size: 11px; }
+.text-\[12px\] { font-size: 12px; }
+.text-\[13px\] { font-size: 13px; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.leading-relaxed { line-height: 1.625; }
+.leading-\[0\.95\] { line-height: 0.95; }
+.leading-\[1\.9\] { line-height: 1.9; }
+.tracking-tight { letter-spacing: -0.025em; }
+.tracking-wide { letter-spacing: 0.025em; }
+.tracking-widest { letter-spacing: 0.1em; }
+.tracking-\[0\.2em\] { letter-spacing: 0.2em; }
+.tracking-\[0\.25em\] { letter-spacing: 0.25em; }
+
+/* Breakpoints: sm = 640px, lg = 1024px */
+@media (min-width: 640px) {
+  .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .sm\:text-4xl { font-size: 36px; line-height: 40px; }
+  .sm\:text-8xl { font-size: 96px; line-height: 1; }
+  .sm\:text-xl { font-size: 20px; line-height: 28px; }
+  .sm\:px-8 { padding-left: 32px; padding-right: 32px; }
+  .sm\:pt-8 { padding-top: 32px; }
+}
+@media (min-width: 1024px) {
+  .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: #0A0E13;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255,159,28,0.08), transparent),
+      repeating-linear-gradient(180deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 3px);
+  }
+
+  /* ambient scanning line across the hero */
+  @keyframes scan {
+    0%   { transform: translateY(-10%); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateY(110%); opacity: 0; }
+  }
+  .scanline {
+    position: absolute; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,159,28,0.55), transparent);
+    animation: scan 5s linear infinite;
+  }
+
+  /* scrolling fake console ticker */
+  @keyframes ticker {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-50%); }
+  }
+  .ticker-track {
+    animation: ticker 22s linear infinite;
+  }
+  .ticker-wrap:hover .ticker-track {
+    animation-play-state: paused;
+  }
+
+  .caret {
+    display: inline-block; width: 0.55ch; background: #FF9F1C;
+    animation: blink 1.1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .card-glow {
+    transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
+  }
+  .card-glow:hover {
+    border-color: rgba(255,159,28,0.45);
+    box-shadow: 0 0 0 1px rgba(255,159,28,0.12), 0 20px 40px -20px rgba(255,159,28,0.15);
+    transform: translateY(-2px);
+  }
+
+  .btn-primary, .btn-secondary {
+    min-width: 200px;
+    justify-content: center;
+  }
+
+  /* ---------------- Language selector: globe trigger + glass panel ----------------
+     Reusable pattern: a .lang-panel anchored under a round icon button, styled with
+     the same glass/blur/border/shadow language as .guide-modal so it reads as a
+     native part of the UI rather than a generic browser dropdown. */
+
+  .lang-panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    z-index: 40;
+    width: min(280px, calc(100vw - 32px));
+    max-height: min(420px, calc(100vh - 100px));
+    background:
+      radial-gradient(ellipse at 100% 0%, rgba(255,159,28,0.14), transparent 60%),
+      rgba(17,22,29,0.94);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 16px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px) scale(.97);
+    transform-origin: top right;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .lang-panel.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+  html[dir="rtl"] .lang-panel {
+    right: auto;
+    left: 0;
+    transform-origin: top left;
+  }
+
+  .lang-panel-header {
+    padding: 12px 14px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #8B97A6;
+    border-bottom: 1px solid #232B36;
+    flex: none;
+  }
+
+  .lang-panel-list {
+    list-style: none;
+    margin: 0;
+    padding: 6px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .lang-panel-list::-webkit-scrollbar { width: 8px; }
+  .lang-panel-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.10); border-radius: 9999px; }
+
+  .lang-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #E7ECF1;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+  }
+  html[dir="rtl"] .lang-option { text-align: right; }
+  .lang-option:hover,
+  .lang-option:focus-visible {
+    background: rgba(255,255,255,0.06);
+  }
+  .lang-option[aria-selected="true"] {
+    background: rgba(255,159,28,0.12);
+    border-color: rgba(255,159,28,0.35);
+    color: #FF9F1C;
+  }
+  .lang-option .lang-check {
+    width: 15px;
+    height: 15px;
+    flex: none;
+    opacity: 0;
+    color: #FF9F1C;
+  }
+  .lang-option[aria-selected="true"] .lang-check {
+    opacity: 1;
+  }
+
+  @media (max-width: 480px) {
+    .lang-panel {
+      position: fixed;
+      top: calc(env(safe-area-inset-top) + 68px);
+      right: 12px;
+      left: 12px;
+      width: auto;
+      max-height: min(60vh, 460px);
+    }
+    html[dir="rtl"] .lang-panel { left: 12px; right: 12px; }
+    .lang-option { padding: 12px 12px; font-size: 15px; }
+  }
+
+  ::selection { background: rgba(255,159,28,0.35); color: #fff; }
+
+  #demo-input:focus, #demo-run:focus-visible, #demo-load-sample:focus-visible {
+    outline: 2px solid rgba(255,159,28,0.6);
+    outline-offset: 2px;
+  }
+
+  /* ---------------- Centered User Guide modal ---------------- */
+
+  .guide-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(4,5,8,0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .28s ease;
+  }
+  .guide-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .guide-modal-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    padding-top: max(20px, env(safe-area-inset-top));
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+    pointer-events: none;
+  }
+  .guide-modal-wrap.is-open {
+    pointer-events: auto;
+  }
+
+  .guide-modal {
+    position: relative;
+    width: min(680px, calc(100vw - 40px));
+    max-height: 80dvh;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: rgba(20,21,30,0.92);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 22px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    opacity: 0;
+    transform: scale(.96) translateY(8px);
+    transition: opacity .3s cubic-bezier(.16,1,.3,1), transform .3s cubic-bezier(.16,1,.3,1);
+  }
+  .guide-modal.is-open {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  .guide-modal-glow {
+    position: absolute;
+    top: -18%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 220px;
+    background: radial-gradient(ellipse at center, rgba(255,159,28,0.22), transparent 70%);
+    filter: blur(6px);
+    pointer-events: none;
+  }
+
+  .guide-close {
+    height: 40px;
+    width: 40px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #E7ECF1;
+    transition: background-color .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .guide-close:hover {
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(255,159,28,0.4);
+  }
+  .guide-close:active { transform: scale(0.94); }
+  .guide-close:focus-visible {
+    outline: 2px solid rgba(255,159,28,0.6);
+    outline-offset: 2px;
+  }
+
+  .guide-step-badge {
+    height: 34px;
+    width: 34px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: rgba(255,159,28,0.12);
+    border: 1px solid rgba(255,159,28,0.35);
+    color: #FF9F1C;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  .guide-content::-webkit-scrollbar { width: 8px; }
+  .guide-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 9999px; }
+
+  @media (max-width: 480px) {
+    .guide-modal { border-radius: 18px; }
+    .guide-modal-header { padding: 18px 18px 14px !important; }
+    .guide-modal-title { font-size: 19px !important; }
+    .guide-content { padding: 0 18px 18px !important; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scanline, .ticker-track, .caret { animation: none !important; }
+    .guide-overlay, .guide-modal { transition: none !important; }
+  }
+  /* ---------------- Theme toggle (header, next to language) + light theme ----------------
+     The dark palette above is the main theme and stays untouched. The light
+     theme only re-maps colours when <html data-theme="light"> is set. :where()
+     keeps each override at the same specificity as the rule it replaces, so
+     hover/focus states keep winning exactly as before. */
+
+  .theme-icon-outer,
+  .theme-icon-inner {
+    transform-box: view-box;
+    transform-origin: 120px 120px;
+    transition: transform .35s ease-in-out;
+  }
+  .theme-icon-cut { fill: #0A0E13; }
+  html[data-theme="light"] .theme-icon-outer { transform: rotate(180deg); }
+  html[data-theme="light"] .theme-icon-inner { transform: rotate(-180deg); }
+  html[data-theme="light"] .theme-icon-cut { fill: #FFFFFF; }
+
+  html.theme-switching,
+  html.theme-switching *,
+  html.theme-switching *::before,
+  html.theme-switching *::after {
+    transition: background-color .35s ease, border-color .35s ease, color .35s ease,
+                fill .35s ease, box-shadow .35s ease, transform .35s ease-in-out !important;
+  }
+
+  :where(html[data-theme="light"]) body {
+    background-color: #F4F6F9;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255,159,28,0.12), transparent),
+      repeating-linear-gradient(180deg, rgba(15,23,42,0.018) 0px, rgba(15,23,42,0.018) 1px, transparent 1px, transparent 3px);
+  }
+  :where(html[data-theme="light"]) *, :where(html[data-theme="light"]) *::before, :where(html[data-theme="light"]) *::after { border-color: #D8DEE6; }
+  :where(html[data-theme="light"]) .border-line { border-color: #D8DEE6; }
+  :where(html[data-theme="light"]) .bg-panel { background-color: #FFFFFF; }
+  :where(html[data-theme="light"]) .bg-panel\/70 { background-color: rgba(255,255,255,0.75); }
+  :where(html[data-theme="light"]) .bg-panel2 { background-color: #EEF1F5; }
+  :where(html[data-theme="light"]) .bg-black\/40 { background-color: rgba(15,23,42,0.04); }
+  :where(html[data-theme="light"]) .from-base { --tw-from: #F4F6F9; }
+  :where(html[data-theme="light"]) .to-base { --tw-to: #F4F6F9; }
+
+  :where(html[data-theme="light"]) .text-ink { color: #0F141A; }
+  :where(html[data-theme="light"]) .text-ink\/90 { color: rgba(15,20,26,0.90); }
+  :where(html[data-theme="light"]) .text-muted { color: #5B6675; }
+  :where(html[data-theme="light"]) .text-muted\/50 { color: rgba(91,102,117,0.60); }
+  :where(html[data-theme="light"]) .text-muted\/70 { color: rgba(91,102,117,0.80); }
+  :where(html[data-theme="light"]) .text-muted\/80 { color: rgba(91,102,117,0.90); }
+  :where(html[data-theme="light"]) .text-signal { color: #D97706; }
+  :where(html[data-theme="light"]) .text-yellow-400 { color: #B7791F; }
+  :where(html[data-theme="light"]) .hover\:text-signal:hover { color: #D97706; }
+  :where(html[data-theme="light"]) .hover\:text-orange-400:hover { color: #EA580C; }
+  :where(html[data-theme="light"]) .hover\:text-yellow-300:hover { color: #975A16; }
+  :where(html[data-theme="light"]) .hover\:border-muted:hover { border-color: #5B6675; }
+  :where(html[data-theme="light"]) ::selection { background: rgba(255,159,28,0.30); color: #0F141A; }
+
+  :where(html[data-theme="light"]) .lang-panel {
+    background:
+      radial-gradient(ellipse at 100% 0%, rgba(255,159,28,0.12), transparent 60%),
+      rgba(255,255,255,0.96);
+    border-color: rgba(15,23,42,0.10);
+    box-shadow: 0 24px 60px rgba(15,23,42,0.16);
+  }
+  :where(html[data-theme="light"]) .lang-panel-header { color: #5B6675; border-bottom-color: #D8DEE6; }
+  :where(html[data-theme="light"]) .lang-panel-list::-webkit-scrollbar-thumb { background: rgba(15,23,42,0.15); }
+  :where(html[data-theme="light"]) .lang-option { color: #0F141A; }
+  :where(html[data-theme="light"]) .lang-option:hover,
+  :where(html[data-theme="light"]) .lang-option:focus-visible { background: rgba(15,23,42,0.05); }
+  :where(html[data-theme="light"]) .lang-option[aria-selected="true"] { background: rgba(255,159,28,0.14); border-color: rgba(217,119,6,0.40); color: #D97706; }
+  :where(html[data-theme="light"]) .lang-option .lang-check { color: #D97706; }
+
+  :where(html[data-theme="light"]) .guide-overlay { background: rgba(15,23,42,0.25); }
+  :where(html[data-theme="light"]) .guide-modal {
+    background: rgba(255,255,255,0.94);
+    border-color: rgba(15,23,42,0.10);
+    box-shadow: 0 30px 80px rgba(15,23,42,0.20);
+  }
+  :where(html[data-theme="light"]) .guide-close { background: rgba(15,23,42,0.04); border-color: rgba(15,23,42,0.12); color: #0F141A; }
+  :where(html[data-theme="light"]) .guide-close:hover { background: rgba(15,23,42,0.08); border-color: rgba(217,119,6,0.45); }
+  :where(html[data-theme="light"]) .guide-step-badge { color: #D97706; border-color: rgba(217,119,6,0.40); }
+  :where(html[data-theme="light"]) .guide-content::-webkit-scrollbar-thumb { background: rgba(15,23,42,0.15); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .theme-icon-outer, .theme-icon-inner { transition: none !important; }
+    html.theme-switching, html.theme-switching * { transition: none !important; }
+  }
+
+  /* ==================================================================
+     LAYOUT LAYER: header, demo output, legal views, footer, mobile.
+     Everything below is additive. Desktop sizes are untouched except
+     where noted; the phone layout lives in the max-width: 639px block.
+     ================================================================== */
+
+  /* ---- Demo output utilities (used by renderDemoResults in the script) ---- */
+  .whitespace-pre-wrap { white-space: pre-wrap; }
+  /* Named after the class the renderer sets; wraps at spaces first and only
+     splits a token (e.g. a long IP:port) when it cannot fit on its own line. */
+  .break-all { overflow-wrap: anywhere; }
+  .inline-block { display: inline-block; }
+  .align-middle { vertical-align: middle; }
+  .border-l-2 { border-left-width: 2px; }
+  .border-transparent { border-color: transparent; }
+  .pl-2 { padding-left: 8px; }
+  .-ml-2 { margin-left: -8px; }
+  .ml-2 { margin-left: 8px; }
+  .px-1\.5 { padding-left: 6px; padding-right: 6px; }
+  .py-0\.5 { padding-top: 2px; padding-bottom: 2px; }
+  .text-\[10px\] { font-size: 10px; }
+  .text-ink\/80 { color: rgba(231,236,241,0.80); }
+  .text-muted\/60 { color: rgba(139,151,166,0.60); }
+  .text-red-400 { color: #F87171; }
+  .text-red-300 { color: #FCA5A5; }
+  .text-yellow-300 { color: #FDE047; }
+  .text-verify { color: #37D0A6; }
+  .text-verify\/80 { color: rgba(55,208,166,0.80); }
+  .bg-red-500\/15 { background-color: rgba(239,68,68,0.15); }
+  .bg-yellow-500\/15 { background-color: rgba(234,179,8,0.15); }
+  .bg-verify\/15 { background-color: rgba(55,208,166,0.15); }
+  .border-red-500\/40 { border-color: rgba(239,68,68,0.40); }
+  .border-red-500\/60 { border-color: rgba(239,68,68,0.60); }
+  .border-yellow-500\/40 { border-color: rgba(234,179,8,0.40); }
+  .border-yellow-500\/60 { border-color: rgba(234,179,8,0.60); }
+  .border-verify\/40 { border-color: rgba(55,208,166,0.40); }
+  .border-verify\/50 { border-color: rgba(55,208,166,0.50); }
+
+  :where(html[data-theme="light"]) .text-ink\/80 { color: rgba(15,20,26,0.80); }
+  :where(html[data-theme="light"]) .text-muted\/60 { color: rgba(91,102,117,0.75); }
+  :where(html[data-theme="light"]) .text-red-400,
+  :where(html[data-theme="light"]) .text-red-300 { color: #DC2626; }
+  :where(html[data-theme="light"]) .text-yellow-300 { color: #A16207; }
+  :where(html[data-theme="light"]) .text-verify,
+  :where(html[data-theme="light"]) .text-verify\/80 { color: #0F8A69; }
+
+  /* ---- Header: glass backdrop once the page scrolls, safe-area aware ---- */
+  .site-header {
+    padding-top: max(20px, env(safe-area-inset-top));
+    padding-left: max(24px, env(safe-area-inset-left));
+    padding-right: max(24px, env(safe-area-inset-right));
+  }
+  .site-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgba(10,14,19,0.72);
+    border-bottom: 1px solid #232B36;
+    backdrop-filter: saturate(160%) blur(16px);
+    -webkit-backdrop-filter: saturate(160%) blur(16px);
+    opacity: 0;
+    transition: opacity .2s ease;
+    pointer-events: none;
+  }
+  .site-header.is-scrolled::before { opacity: 1; }
+  :where(html[data-theme="light"]) .site-header::before {
+    background: rgba(244,246,249,0.80);
+    border-bottom-color: #D8DEE6;
+  }
+
+  button, a, textarea { touch-action: manipulation; }
+  body { -webkit-tap-highlight-color: transparent; }
+
+  @media (max-width: 639px), (pointer: coarse) {
+    .icon-btn, .guide-close { width: 44px; height: 44px; }
+  }
+  @media (hover: none) {
+    .card-glow:hover { transform: none; box-shadow: none; }
+  }
+
+  /* Saved language still downloading: hide only the text that will change. */
+  html.i18n-pending [data-i18n] { visibility: hidden; }
+
+  /* ---- Privacy / Terms views (:target driven, no JS required) ---- */
+  .legal-view { display: none; }
+  .legal-view:target { display: block; }
+  body:has(.legal-view:target) .home-view { display: none; }
+
+  .legal {
+    padding-top: calc(env(safe-area-inset-top) + 128px);
+    padding-bottom: 96px;
+  }
+  .legal-back {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-bottom: 20px;
+  }
+  .legal-meta { margin-top: 12px; }
+  /* Sections are numbered 1. 2. 3. … automatically (any language). */
+  .legal { counter-reset: legal-section; }
+  .legal h2 { counter-increment: legal-section; }
+  .legal h2::before { content: counter(legal-section) ". "; color: #FF9F1C; }
+  :where(html[data-theme="light"]) .legal h2::before { color: #D97706; }
+  /* Long single words (e.g. NUTZUNGSBEDINGUNGEN, КОНФИДЕНЦИАЛЬНОСТЬ) must
+     wrap inside the column instead of widening the page. */
+  .legal > p, .legal h1, .legal h2 { overflow-wrap: break-word; }
+  .legal h1 { hyphens: auto; -webkit-hyphens: auto; }
+  .legal-lead { margin-top: 28px; font-size: 18px; }
+  .legal h2 {
+    margin: 40px 0 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: 600;
+    color: #E7ECF1;
+  }
+  .legal h2 + p {
+    color: #8B97A6;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .legal strong { color: #E7ECF1; font-weight: 600; }
+  .legal code {
+    font-size: 0.88em;
+    color: #E7ECF1;
+    background: #161C25;
+    border: 1px solid #232B36;
+    border-radius: 4px;
+    padding: 1px 5px;
+    white-space: nowrap;
+  }
+  :where(html[data-theme="light"]) .legal h2,
+  :where(html[data-theme="light"]) .legal strong,
+  :where(html[data-theme="light"]) .legal code { color: #0F141A; }
+  :where(html[data-theme="light"]) .legal h2 + p { color: #5B6675; }
+  :where(html[data-theme="light"]) .legal code { background: #EEF1F5; border-color: #D8DEE6; }
+
+  /* ---- Footer bar + legal links ---- */
+  .footer-bar-inner {
+    padding-top: 16px;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+  .footer-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0 10px;
+  }
+  .guide-legal-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* ---- Phone layout (< 640px): own spacing, type, buttons ---- */
+  @media (max-width: 639px) {
+    .site-header {
+      padding: calc(env(safe-area-inset-top) + 10px)
+               max(16px, env(safe-area-inset-right))
+               10px
+               max(16px, env(safe-area-inset-left));
+    }
+
+    .hero-inner {
+      padding-top: calc(env(safe-area-inset-top) + 100px);
+      padding-bottom: 56px;
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
+    }
+    .hero-title { font-size: clamp(56px, 19vw, 76px); }
+    .hero-desc { margin-top: 20px; font-size: 17px; line-height: 1.6; }
+    .hero-actions,
+    .cta-actions {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .cta-actions { max-width: 420px; margin: 0 auto; }
+    .hero-actions > a,
+    .cta-actions > a {
+      width: 100%;
+      min-width: 0;
+      min-height: 52px;
+      padding: 14px 20px;
+      justify-content: center;
+    }
+
+    .ticker-wrap { height: 128px; }
+    .ticker-track {
+      padding: 12px 20px;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .section {
+      padding-top: 64px;
+      padding-bottom: 64px;
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
+    }
+    .section-title { font-size: 26px; line-height: 1.25; letter-spacing: -0.01em; }
+    #features > div:first-child { margin-bottom: 28px; }
+    #features .grid, #demo .grid { gap: 16px; }
+    .card-glow { padding: 20px; }
+
+    .demo-panel { padding: 16px; }
+    /* 16px stops iOS Safari from zooming the page when the field is focused;
+       long lines scroll inside the field (wrap="off"), never the page. */
+    #demo-input { font-size: 16px; line-height: 1.55; min-height: 240px; }
+    #demo-load-sample {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      margin: -12px 0;
+      padding-inline-start: 12px;
+    }
+    .demo-run { width: 100%; min-height: 52px; }
+    #demo-output { min-height: 220px; max-height: 60vh; }
+
+    .legal {
+      padding-top: calc(env(safe-area-inset-top) + 96px);
+      padding-bottom: 64px;
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
+    }
+    .legal-lead { font-size: 17px; }
+    /* Sized so the longest single-word titles (de, ru) fit at 320px. */
+    .legal h1 { font-size: clamp(24px, 7.5vw, 30px); line-height: 1.2; }
+    .legal > p.tracking-\[0\.25em\] { letter-spacing: 0.15em; }
+    .legal h2 { margin-top: 32px; }
+
+    .footer-bar-inner {
+      flex-direction: column;
+      justify-content: center;
+      gap: 0;
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
+      text-align: center;
+    }
+  }
+</style>
+<script>
+  /* Language: if a non-English language is saved, start downloading its
+     file now and keep translated text hidden until it arrives (max 2s). */
+  (function () {
+    try {
+      var code = window.localStorage.getItem("cids-lang");
+      if (!code || code === "en" || !/^[a-z]{2,3}$/.test(code)) return;
+      var root = document.documentElement;
+      root.classList.add("i18n-pending");
+      var s = document.createElement("script");
+      s.src = "i18n/" + code + ".js";
+      s.setAttribute("data-i18n-lang", code);
+      s.onerror = function () { root.classList.remove("i18n-pending"); };
+      document.head.appendChild(s);
+      window.setTimeout(function () { root.classList.remove("i18n-pending"); }, 2000);
+    } catch (err) { /* storage unavailable: English */ }
+  })();
+
+  /* Theme: apply before first paint (no flash).
+     A saved choice ("light" / "dark") wins; otherwise follow the system
+     preference. Dark is the main theme and needs no attribute. */
+  (function () {
+    var saved = null;
+    try { saved = window.localStorage.getItem("cids-theme"); }
+    catch (err) { /* storage unavailable: fall back to the system preference */ }
+    var light = saved === "light" ||
+      (saved !== "dark" && !!window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches);
+    if (light) {
+      document.documentElement.setAttribute("data-theme", "light");
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute("content", "#F4F6F9");
+    }
+  })();
+</script>
+</head>
+
+<body class="font-sans text-ink antialiased">
+
+  <!-- top bar: floats over the hero, gains a glass backdrop once the page scrolls -->
+  <div id="site-header" class="site-header fixed top-0 inset-x-0 z-30 px-6 py-5 flex items-center justify-between pointer-events-none">
+    <button type="button" id="menu-toggle"
+            class="icon-btn pointer-events-auto h-10 w-10 flex items-center justify-center rounded-full bg-panel/70 backdrop-blur border border-line text-ink/90 hover:border-signal/50 hover:text-signal transition-colors"
+            aria-label="Open user guide" aria-haspopup="dialog" aria-expanded="false">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+
+    <div class="header-actions pointer-events-auto flex items-center gap-2">
+      <!-- theme toggle (light / dark), sits next to the language selector -->
+      <button type="button" id="theme-toggle"
+              class="icon-btn h-10 w-10 flex items-center justify-center rounded-full bg-panel/70 backdrop-blur border border-line text-ink/90 hover:border-signal/50 hover:text-signal transition-colors"
+              aria-label="Light theme" title="Light / Dark" aria-pressed="false">
+        <svg width="20" height="20" viewBox="0 0 240 240" aria-hidden="true">
+          <circle cx="120" cy="120" r="116.25" fill="currentColor"/>
+          <path class="theme-icon-outer theme-icon-cut" d="M120 25.5A94.5 94.5 0 0 1 120 214.5V172.5A52.5 52.5 0 0 1 120 67.5Z"/>
+          <g class="theme-icon-inner">
+            <path fill="currentColor" d="M120 67.5A52.5 52.5 0 0 1 120 172.5Z"/>
+            <path class="theme-icon-cut" d="M120 67.5A52.5 52.5 0 0 0 120 172.5Z"/>
+          </g>
+        </svg>
+      </button>
+
+      <div class="relative">
+        <button type="button" id="lang-trigger"
+                class="icon-btn h-10 w-10 flex items-center justify-center rounded-full bg-panel/70 backdrop-blur border border-line text-ink/90 hover:border-signal/50 hover:text-signal transition-colors"
+                aria-haspopup="listbox" aria-expanded="false" aria-controls="lang-panel" aria-label="Language">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <ellipse cx="12" cy="12" rx="4" ry="9"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <path d="M4.6 7.5c1.9 1.1 4.6 1.8 7.4 1.8s5.5-.7 7.4-1.8" stroke-linecap="round"/>
+            <path d="M4.6 16.5c1.9-1.1 4.6-1.8 7.4-1.8s5.5.7 7.4 1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
+
+        <div id="lang-panel" class="lang-panel" role="listbox" aria-label="Language" aria-hidden="true">
+          <div class="lang-panel-header" data-i18n="lang_label">Language</div>
+          <ul id="lang-list" class="lang-panel-list"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Centered User Guide modal -->
+  <div id="guide-overlay" class="guide-overlay"></div>
+
+  <div id="guide-modal-wrap" class="guide-modal-wrap">
+    <div id="guide-modal" class="guide-modal" role="dialog" aria-modal="true" aria-labelledby="guide-title">
+      <div class="guide-modal-glow"></div>
+
+      <div class="guide-modal-header relative flex items-start justify-between gap-4 px-7 sm:px-8 pt-7 sm:pt-8 pb-5">
+        <div>
+          <h3 id="guide-title" class="guide-modal-title font-mono font-bold text-2xl tracking-tight" data-i18n="guide_h1">C‑IDS User Guide</h3>
+          <p class="text-signal font-medium text-sm mt-1.5" data-i18n="guide_sub">What C‑IDS is and how the pieces fit together.</p>
+        </div>
+        <button type="button" id="guide-close" class="guide-close" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="guide-content relative flex-1 overflow-y-auto px-7 sm:px-8 pb-8">
+
+        <p class="text-muted text-sm leading-relaxed mb-7" data-i18n="guide_p1">
+          C‑IDS is a modular, cross‑platform Intrusion Detection System core. The detection logic lives once, in C++, and every platform talks to it through a stable binary interface instead of keeping its own copy of the logic.
+        </p>
+
+        <p class="font-mono text-xs tracking-[0.2em] text-muted mb-4" data-i18n="guide_how_title">HOW IT'S STRUCTURED</p>
+        <ol class="space-y-6 text-sm mb-8">
+          <li class="flex gap-4">
+            <span class="guide-step-badge">01</span>
+            <span class="text-muted leading-relaxed pt-1.5" data-i18n="guide_li1"><span class="text-ink font-medium">Core (C++20)</span>: parses traffic and matches it against detection rules behind a stable <code class="text-ink">extern "C"</code> boundary.</span>
+          </li>
+          <li class="flex gap-4">
+            <span class="guide-step-badge">02</span>
+            <span class="text-muted leading-relaxed pt-1.5" data-i18n="guide_li2"><span class="text-ink font-medium">.NET bindings</span>: a type‑safe P/Invoke layer wraps the core for Windows desktop apps, using SafeHandle for lifetime management.</span>
+          </li>
+          <li class="flex gap-4">
+            <span class="guide-step-badge">03</span>
+            <span class="text-muted leading-relaxed pt-1.5" data-i18n="guide_li3"><span class="text-ink font-medium">Swift bindings</span>: a Swift Package connects iOS apps to the core through a C module map and ships as an .xcframework.</span>
+          </li>
+          <li class="flex gap-4">
+            <span class="guide-step-badge">04</span>
+            <span class="text-muted leading-relaxed pt-1.5" data-i18n="guide_li4">Full architecture notes, the ABI contract, and the security policy live in the <code class="text-ink">docs/</code> folder of the repository.</span>
+          </li>
+        </ol>
+
+        <p class="font-mono text-xs tracking-[0.2em] text-muted mb-4" data-i18n="guide_quickstart_title">QUICK START</p>
+        <pre class="bg-panel2 border border-line rounded-lg p-4 mb-3 overflow-x-auto font-mono text-[12px] leading-relaxed text-muted"><code><span class="text-ink">git clone</span> https://github.com/aligokdam/c-ids.github.io.git
+<span class="text-ink">cd</span> c-ids.github.io/C-IDS
+<span class="text-ink">cmake</span> -B build -S . -DCMAKE_BUILD_TYPE=Release \
+      -DCIDS_ENABLE_HARDENING=OFF -DCLANG_TIDY_EXE=
+<span class="text-ink">cmake</span> --build build
+<span class="text-ink">ctest</span> --test-dir build/Core</code></pre>
+        <p class="text-muted text-xs leading-relaxed mb-7" data-i18n="guide_quickstart_note">
+          This builds the C++ core on Linux/macOS. Windows, .NET, and Swift build steps are covered in full in the repository's README.
+        </p>
+
+        <div class="border-t border-line pt-6">
+          <a href="https://github.com/aligokdam/c-ids.github.io" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2.5 bg-signal text-sm font-semibold px-5 py-3 rounded-md hover:bg-orange-400 transition-colors">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.57.1.79-.25.79-.55 0-.27-.01-1.16-.02-2.11-3.2.7-3.87-1.36-3.87-1.36-.53-1.33-1.29-1.69-1.29-1.69-1.05-.72.08-.7.08-.7 1.17.08 1.78 1.2 1.78 1.2 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 2.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.42.36.78 1.07.78 2.15 0 1.56-.01 2.81-.01 3.19 0 .3.21.66.8.55A10.98 10.98 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
+            <span data-i18n="btn_view_repo">View Repository</span>
+          </a>
+        </div>
+
+        <p class="mt-7 text-xs text-muted/70 leading-relaxed" data-i18n="guide_privacy_note">
+          This page runs entirely in your browser. The live demo below never sends traffic data anywhere.
+        </p>
+        <nav class="guide-legal-links mt-4 flex flex-wrap gap-x-4 font-mono text-xs" aria-label="Legal">
+          <a href="#privacy" class="text-muted hover:text-signal transition-colors" data-i18n="nav_privacy">Privacy</a>
+          <a href="#terms" class="text-muted hover:text-signal transition-colors" data-i18n="nav_terms">Terms</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero home-view relative overflow-hidden border-b border-line">
+    <div class="scanline" style="top:20%"></div>
+
+    <div class="hero-inner max-w-5xl mx-auto px-6 pt-24 pb-20">
+      <p class="font-mono text-xs tracking-[0.25em] text-signal mb-5" data-i18n="hero_eyebrow">// INTRUSION DETECTION CORE</p>
+
+      <h1 class="hero-title font-mono font-bold text-6xl sm:text-8xl leading-[0.95] tracking-tight text-ink">
+        C‑IDS<span class="caret">&nbsp;</span>
+      </h1>
+
+      <p class="hero-desc mt-7 max-w-2xl text-lg sm:text-xl text-muted leading-relaxed" data-i18n="hero_desc">
+        A cross‑platform, modular <span class="text-ink font-medium">Intrusion Detection System</span> core.
+        Written in pure <span class="text-ink font-medium">C++</span>, portable to every platform through
+        <span class="text-ink font-medium">.NET</span> and <span class="text-ink font-medium">Swift</span> bindings.
+      </p>
+
+      <div class="hero-actions mt-8 flex flex-wrap gap-4">
+        <a href="https://github.com/aligokdam/c-ids.github.io" target="_blank" rel="noopener"
+           class="btn-primary group inline-flex items-center gap-2.5 bg-signal text-base font-semibold px-6 py-3.5 rounded-md hover:bg-orange-400 transition-colors">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.57.1.79-.25.79-.55 0-.27-.01-1.16-.02-2.11-3.2.7-3.87-1.36-3.87-1.36-.53-1.33-1.29-1.69-1.29-1.69-1.05-.72.08-.7.08-.7 1.17.08 1.78 1.2 1.78 1.2 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 2.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.42.36.78 1.07.78 2.15 0 1.56-.01 2.81-.01 3.19 0 .3.21.66.8.55A10.98 10.98 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
+          <span data-i18n="btn_view_repo">View Repository</span>
+        </a>
+        <a href="https://aligokdam.github.io/c-ids.github.io/" target="_blank" rel="noopener"
+           class="btn-secondary inline-flex items-center gap-2 border border-line text-ink/90 font-mono text-sm px-6 py-3.5 rounded-md hover:border-muted transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+          <span data-i18n="btn_view_live">View Live Site</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- ambient console ticker -->
+    <div class="ticker-wrap border-t border-line bg-black/40 h-40 overflow-hidden relative">
+      <div class="absolute inset-0 bg-gradient-to-b from-base via-transparent to-base pointer-events-none z-10"></div>
+      <div class="ticker-track font-mono text-[13px] leading-[1.9] px-6 py-4 text-muted/70">
+        <div>[04:12:01.884] TCP  10.0.0.14:51322 → 10.0.0.1:443   rule=TLS_HANDSHAKE_OK      sev=0</div>
+        <div>[04:12:02.011] UDP  192.168.1.9:5353 → 224.0.0.251   rule=MDNS_QUERY            sev=0</div>
+        <div>[04:12:02.398] TCP  10.0.0.22:44110 → 45.83.x.x:22   rule=SSH_BRUTEFORCE_SIG    sev=<span class="text-signal">78</span></div>
+        <div>[04:12:03.102] TCP  10.0.0.14:60210 → 10.0.0.1:80    rule=HTTP_OK               sev=0</div>
+        <div>[04:12:03.771] ICMP 10.0.0.31 → 10.0.0.1              rule=PING_SWEEP_PATTERN    sev=<span class="text-signal">41</span></div>
+        <div>[04:12:04.256] TCP  10.0.0.14:51322 → 10.0.0.1:443   rule=TLS_HANDSHAKE_OK      sev=0</div>
+        <div>[04:12:04.890] UDP  10.0.0.14:123   → time.ntp.org:123 rule=NTP_SYNC             sev=0</div>
+        <div>[04:12:05.442] TCP  10.0.0.22:44112 → 45.83.x.x:22   rule=SSH_BRUTEFORCE_SIG    sev=<span class="text-signal">81</span></div>
+        <!-- duplicated for seamless loop -->
+        <div>[04:12:01.884] TCP  10.0.0.14:51322 → 10.0.0.1:443   rule=TLS_HANDSHAKE_OK      sev=0</div>
+        <div>[04:12:02.011] UDP  192.168.1.9:5353 → 224.0.0.251   rule=MDNS_QUERY            sev=0</div>
+        <div>[04:12:02.398] TCP  10.0.0.22:44110 → 45.83.x.x:22   rule=SSH_BRUTEFORCE_SIG    sev=<span class="text-signal">78</span></div>
+        <div>[04:12:03.102] TCP  10.0.0.14:60210 → 10.0.0.1:80    rule=HTTP_OK               sev=0</div>
+        <div>[04:12:03.771] ICMP 10.0.0.31 → 10.0.0.1              rule=PING_SWEEP_PATTERN    sev=<span class="text-signal">41</span></div>
+        <div>[04:12:04.256] TCP  10.0.0.14:51322 → 10.0.0.1:443   rule=TLS_HANDSHAKE_OK      sev=0</div>
+        <div>[04:12:04.890] UDP  10.0.0.14:123   → time.ntp.org:123 rule=NTP_SYNC             sev=0</div>
+        <div>[04:12:05.442] TCP  10.0.0.22:44112 → 45.83.x.x:22   rule=SSH_BRUTEFORCE_SIG    sev=<span class="text-signal">81</span></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MODULE STATUS / FEATURES -->
+  <section id="features" class="section home-view max-w-5xl mx-auto px-6 py-24">
+    <div class="flex items-baseline justify-between mb-10">
+      <h2 class="font-mono text-sm tracking-[0.25em] text-muted" data-i18n="module_status">MODULE STATUS</h2>
+    </div>
+
+    <div class="grid sm:grid-cols-3 gap-5">
+
+      <!-- Core -->
+      <div class="card-glow bg-panel border border-line rounded-lg p-6">
+        <div class="flex items-center justify-between mb-5">
+          <span class="font-mono text-xs px-2 py-1 rounded bg-panel2 text-signal border border-signal/30">CORE</span>
+          <span class="h-2 w-2 rounded-full bg-verify"></span>
+        </div>
+        <h3 class="font-mono font-semibold text-lg mb-2" data-i18n="core_title">C++ Engine</h3>
+        <p class="text-sm text-muted leading-relaxed" data-i18n="core_desc">
+          A platform-independent detection engine, built on a zero-trust memory
+          policy, RAII discipline, and a stable C ABI boundary.
+        </p>
+        <ul class="mt-5 space-y-1.5 font-mono text-xs text-muted/80">
+          <li data-i18n="core_li1">› C++20 · header/impl separation</li>
+          <li data-i18n="core_li2">› no raw owning pointers</li>
+          <li data-i18n="core_li3">› ASan / UBSan verified</li>
+        </ul>
+      </div>
+
+      <!-- Desktop -->
+      <div class="card-glow bg-panel border border-line rounded-lg p-6">
+        <div class="flex items-center justify-between mb-5">
+          <span class="font-mono text-xs px-2 py-1 rounded bg-panel2 text-signal border border-signal/30">.NET</span>
+          <span class="h-2 w-2 rounded-full bg-verify"></span>
+        </div>
+        <h3 class="font-mono font-semibold text-lg mb-2" data-i18n="dotnet_title">Desktop Bindings</h3>
+        <p class="text-sm text-muted leading-relaxed" data-i18n="dotnet_desc">
+          A type-safe P/Invoke layer for Windows. Wraps the native engine
+          with SafeHandle discipline and never leaks a raw pointer.
+        </p>
+        <ul class="mt-5 space-y-1.5 font-mono text-xs text-muted/80">
+          <li data-i18n="dotnet_li1">› LibraryImport source-gen</li>
+          <li data-i18n="dotnet_li2">› SafeHandle lifetime</li>
+          <li data-i18n="dotnet_li3">› C# / .NET 8</li>
+        </ul>
+      </div>
+
+      <!-- Mobile -->
+      <div class="card-glow bg-panel border border-line rounded-lg p-6">
+        <div class="flex items-center justify-between mb-5">
+          <span class="font-mono text-xs px-2 py-1 rounded bg-panel2 text-signal border border-signal/30">SWIFT</span>
+          <span class="h-2 w-2 rounded-full bg-verify"></span>
+        </div>
+        <h3 class="font-mono font-semibold text-lg mb-2" data-i18n="swift_title">Mobile Bindings</h3>
+        <p class="text-sm text-muted leading-relaxed" data-i18n="swift_desc">
+          A Swift Package for iOS. Connects to the core through a C module
+          map, so application code never sees an unsafe pointer.
+        </p>
+        <ul class="mt-5 space-y-1.5 font-mono text-xs text-muted/80">
+          <li data-i18n="swift_li1">› Swift Package Manager</li>
+          <li data-i18n="swift_li2">› .xcframework distribution</li>
+          <li data-i18n="swift_li3">› iOS 15+</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- LIVE DEMO -->
+  <section id="demo" class="section home-view max-w-5xl mx-auto px-6 py-24 border-t border-line">
+    <p class="font-mono text-xs tracking-[0.25em] text-signal mb-4" data-i18n="demo_eyebrow">// TRY IT IN THE BROWSER</p>
+    <h2 class="section-title font-mono font-bold text-3xl sm:text-4xl mb-4" data-i18n="demo_title">Run the detector, no terminal required</h2>
+    <p class="text-muted max-w-2xl mb-10 leading-relaxed" data-i18n="demo_desc">
+      A simplified, client-side simulation of the rule-matching logic in the C++ core. Paste or generate a
+      traffic sample and see which lines a detection pass would flag, right here in the page.
+    </p>
+
+    <div class="grid lg:grid-cols-2 gap-5">
+
+      <!-- input panel -->
+      <div class="demo-panel bg-panel border border-line rounded-lg p-5 flex flex-col">
+        <div class="flex items-center justify-between mb-3">
+          <label for="demo-input" class="font-mono text-xs tracking-widest text-muted" data-i18n="demo_input_label">TRAFFIC INPUT</label>
+          <button type="button" id="demo-load-sample" class="font-mono text-xs text-signal hover:text-orange-400 transition-colors" data-i18n="demo_load_sample">Load sample traffic</button>
+        </div>
+        <textarea id="demo-input" rows="12" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" wrap="off"
+          class="w-full flex-1 bg-panel2 border border-line rounded-md p-3 font-mono text-[12px] text-ink/90 leading-relaxed resize-y"
+          data-i18n-placeholder="demo_input_placeholder"
+          placeholder="TCP 10.0.0.22:44110 45.83.12.9:22"></textarea>
+        <button type="button" id="demo-run"
+          class="demo-run mt-4 inline-flex items-center justify-center gap-2 bg-signal text-base font-semibold px-5 py-3 rounded-md hover:bg-orange-400 transition-colors"
+          data-i18n="demo_run_btn">Run detection</button>
+        <p class="mt-3 text-xs text-muted/70 font-mono leading-relaxed" data-i18n="demo_format_hint">
+          Format: PROTO SRC_IP:PORT DST_IP:PORT. One packet per line. ICMP lines omit ports.
+        </p>
+      </div>
+
+      <!-- output panel -->
+      <div class="demo-panel bg-panel border border-line rounded-lg p-5 flex flex-col">
+        <label class="font-mono text-xs tracking-widest text-muted mb-3" data-i18n="demo_output_label">DETECTION OUTPUT</label>
+        <div id="demo-output" role="log" aria-live="polite"
+             class="flex-1 bg-black/40 border border-line rounded-md p-3 font-mono text-[12px] leading-relaxed overflow-y-auto min-h-[260px] max-h-[360px] space-y-1">
+          <p class="text-muted/50" data-i18n="demo_output_empty">// waiting for input…</p>
+        </div>
+        <p id="demo-summary" class="mt-3 font-mono text-xs text-muted min-h-[1.5em]"></p>
+        <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 font-mono text-[11px] text-muted/70">
+          <span class="inline-flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-verify"></span><span data-i18n="demo_legend_low">sev 1-29 · low</span></span>
+          <span class="inline-flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-yellow-400"></span><span data-i18n="demo_legend_medium">sev 30-69 · medium</span></span>
+          <span class="inline-flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-red-400"></span><span data-i18n="demo_legend_high">sev 70+ · high</span></span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PRIVACY / TERMS
+       Shown via :target (#privacy / #terms), so they work without JavaScript;
+       the rest of the page is hidden while one of them is open. -->
+  <section id="privacy" class="legal-view" aria-labelledby="privacy-title">
+    <article class="legal max-w-2xl mx-auto px-6">
+      <a href="#" class="legal-back font-mono text-xs text-muted hover:text-signal transition-colors" data-i18n="legal_back">← Back to C‑IDS</a>
+      <p class="font-mono text-xs tracking-[0.25em] text-signal mb-4" data-i18n="privacy_eyebrow">// PRIVACY</p>
+      <h1 id="privacy-title" class="font-mono font-bold text-3xl sm:text-4xl tracking-tight text-ink" data-i18n="privacy_title">Privacy</h1>
+      <p class="legal-meta font-mono text-xs text-muted/70" data-i18n="legal_updated">Last updated: October 4, 2026</p>
+
+      <p class="legal-lead text-muted leading-relaxed" data-i18n="privacy_intro">This website is a static page. It has no accounts, no forms, no cookies, no analytics and no tracking scripts.</p>
+
+      <h2 data-i18n="privacy_demo_h">The browser demo runs on your device</h2>
+      <p data-i18n="privacy_demo_p">The live demo is plain JavaScript that runs entirely in your browser. Traffic you paste or generate is analyzed locally, in memory. It is <strong>never sent to a server</strong>, never uploaded and never saved. Reloading or closing the page discards it.</p>
+
+      <h2 data-i18n="privacy_storage_h">What is stored on your device</h2>
+      <p data-i18n="privacy_storage_p">Two preferences are kept in your browser's local storage so the page remembers them: your language (<code>cids-lang</code>) and your theme (<code>cids-theme</code>). They are not cookies and are not transmitted anywhere. You can remove them at any time by clearing this site's data in your browser.</p>
+
+      <h2 data-i18n="privacy_third_h">Third-party services</h2>
+      <p data-i18n="privacy_third_p">The site is hosted on GitHub Pages, and its fonts are loaded from Google Fonts. To deliver those files, GitHub and Google receive standard technical request data such as your IP address and browser type, under their own privacy policies. Links to the GitHub repository take you to GitHub.</p>
+
+      <h2 data-i18n="privacy_core_h">The C-IDS libraries</h2>
+      <p data-i18n="privacy_core_p">The C++ core and its .NET and Swift bindings are local libraries. The source code in the repository contains no telemetry and does not report data to the project. What an application built on C-IDS does with data is the responsibility of that application.</p>
+
+      <h2 data-i18n="privacy_changes_h">Changes and contact</h2>
+      <p data-i18n="privacy_changes_p">If this notice changes, the update will appear on this page and in the repository history. Questions can be raised through the GitHub repository.</p>
+    </article>
+  </section>
+
+  <section id="terms" class="legal-view" aria-labelledby="terms-title">
+    <article class="legal max-w-2xl mx-auto px-6">
+      <a href="#" class="legal-back font-mono text-xs text-muted hover:text-signal transition-colors" data-i18n="legal_back">← Back to C‑IDS</a>
+      <p class="font-mono text-xs tracking-[0.25em] text-signal mb-4" data-i18n="terms_eyebrow">// TERMS OF USE</p>
+      <h1 id="terms-title" class="font-mono font-bold text-3xl sm:text-4xl tracking-tight text-ink" data-i18n="terms_title">Terms of Use</h1>
+      <p class="legal-meta font-mono text-xs text-muted/70" data-i18n="legal_updated">Last updated: October 4, 2026</p>
+
+      <p class="legal-lead text-muted leading-relaxed" data-i18n="terms_intro">By using this website or the C-IDS source code, you agree to the terms below.</p>
+
+      <h2 data-i18n="terms_purpose_h">Purpose</h2>
+      <p data-i18n="terms_purpose_p">C-IDS is an open-source project intended for security research, education and software development. This website and its browser demo exist to explain and demonstrate the project.</p>
+
+      <h2 data-i18n="terms_demo_h">The demo is a simulation</h2>
+      <p data-i18n="terms_demo_p">The browser demo is a simplified, client-side simulation of the core's rule matching. It is not a production intrusion detection system, and its results are illustrative only. Do not rely on it to protect any network or system.</p>
+
+      <h2 data-i18n="terms_resp_h">Your responsibility</h2>
+      <p data-i18n="terms_resp_p">You are responsible for how you use C-IDS. Only analyze traffic and systems that you own or are authorized to examine, and follow the laws and policies that apply to you.</p>
+
+      <h2 data-i18n="terms_warranty_h">No warranty</h2>
+      <p data-i18n="terms_warranty_p">The software and this website are provided “as is”, without warranty of any kind. As stated in the MIT License, the authors and copyright holders are not liable for any claim, damages or other liability arising from their use.</p>
+
+      <h2 data-i18n="terms_license_h">License</h2>
+      <p data-i18n="terms_license_p">The source code is released under the MIT License. The <code>LICENSE</code> file in the repository governs use, copying, modification and distribution.</p>
+
+      <h2 data-i18n="terms_changes_h">Changes</h2>
+      <p data-i18n="terms_changes_p">These terms may be updated. The current version is always the one on this page.</p>
+    </article>
+  </section>
+
+  <!-- CTA / FOOTER -->
+  <footer id="repo" class="border-t border-line">
+    <div class="section cta home-view max-w-5xl mx-auto px-6 py-24 text-center">
+      <p class="font-mono text-xs tracking-[0.25em] text-signal mb-4" data-i18n="footer_eyebrow">// GET STARTED</p>
+      <h2 class="section-title font-mono font-bold text-3xl sm:text-4xl mb-6" data-i18n="footer_title">Browse the source</h2>
+      <p class="text-muted max-w-xl mx-auto mb-10" data-i18n="footer_desc">
+        Architecture decisions, the ABI contract, and the security policy.
+        All the details live in the <code class="text-ink">docs/</code> folder of the repo.
+      </p>
+
+      <div class="cta-actions flex flex-wrap items-center justify-center gap-4">
+        <a href="https://github.com/aligokdam/c-ids.github.io" target="_blank" rel="noopener"
+           class="btn-primary inline-flex items-center gap-2.5 bg-signal text-base font-semibold px-8 py-4 rounded-md hover:bg-orange-400 transition-colors">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.57.1.79-.25.79-.55 0-.27-.01-1.16-.02-2.11-3.2.7-3.87-1.36-3.87-1.36-.53-1.33-1.29-1.69-1.29-1.69-1.05-.72.08-.7.08-.7 1.17.08 1.78 1.2 1.78 1.2 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 2.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.42.36.78 1.07.78 2.15 0 1.56-.01 2.81-.01 3.19 0 .3.21.66.8.55A10.98 10.98 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
+          <span data-i18n="btn_open_github">Open on GitHub</span>
+        </a>
+        <a href="https://aligokdam.github.io/c-ids.github.io/" target="_blank" rel="noopener"
+           class="btn-secondary inline-flex items-center gap-2.5 border border-line text-ink/90 font-semibold px-8 py-4 rounded-md hover:border-muted transition-colors">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+          <span data-i18n="btn_view_live_2">View Live Site</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- footer bar: shown on every view -->
+    <div class="footer-bar border-t border-line">
+      <div class="footer-bar-inner max-w-5xl mx-auto px-6 flex items-center justify-center">
+        <nav class="footer-links flex flex-wrap items-center justify-center font-mono text-xs" aria-label="Legal">
+          <a href="#privacy" class="text-muted hover:text-signal transition-colors" data-i18n="nav_privacy">Privacy</a>
+          <a href="#terms" class="text-muted hover:text-signal transition-colors" data-i18n="nav_terms">Terms</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="i18n/i18n.js"></script>
+  <script>
+/* Language list, selector and loader: i18n/i18n.js.
+   Translations: i18n/<code>.js, loaded only for the language in use. */
+const translations = window.CIDS_I18N;
+
+function applyTranslations(lang) {
+  document.documentElement.lang = lang;
+  const dict = translations[lang] || {};
+  const fallback = translations.en || {};
+  // A missing key leaves the element's current (English) text in place.
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const value = dict[el.getAttribute("data-i18n")] || fallback[el.getAttribute("data-i18n")];
+    if (value) el.innerHTML = value;
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+    const value = dict[el.getAttribute("data-i18n-placeholder")] || fallback[el.getAttribute("data-i18n-placeholder")];
+    if (value) el.setAttribute("placeholder", value);
+  });
+  if (typeof rerenderDemoForLanguage === "function") rerenderDemoForLanguage();
+}
+
+// Load the language file (if needed), then apply it. The markup is
+// English, so English needs no download on first paint.
+function setLanguage(lang, { initial = false } = {}) {
+  const root = document.documentElement;
+  const finish = () => root.classList.remove("i18n-pending");
+  if (initial && lang === "en") { finish(); return; }
+  loadLanguage(lang)
+    .then(() => { if (languageSelector.getCurrent() === lang) applyTranslations(lang); })
+    .catch((err) => console.warn("C-IDS i18n:", err.message))
+    .finally(finish);
+}
+
+const languageSelector = new LanguageSelector({
+  languages: LANGUAGES,
+  translations: translations,
+  storageKey: LANG_STORAGE_KEY,
+  defaultCode: "en",
+  root: document,
+  onChange: (lang) => setLanguage(lang),
+});
+
+/* ---------------- Centered User Guide modal logic ---------------- */
+
+const menuToggle = document.getElementById("menu-toggle");
+const guideOverlay = document.getElementById("guide-overlay");
+const guideModalWrap = document.getElementById("guide-modal-wrap");
+const guideModal = document.getElementById("guide-modal");
+const guideClose = document.getElementById("guide-close");
+
+let previousBodyOverflow = "";
+let lastFocusedEl = null;
+
+function getFocusableEls() {
+  return Array.from(
+    guideModal.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])')
+  ).filter(el => el.offsetParent !== null);
+}
+
+function openGuide() {
+  lastFocusedEl = document.activeElement;
+  previousBodyOverflow = document.body.style.overflow;
+  document.body.style.overflow = "hidden";
+
+  guideOverlay.classList.add("is-open");
+  guideModalWrap.classList.add("is-open");
+  guideModal.classList.add("is-open");
+  menuToggle.setAttribute("aria-expanded", "true");
+
+  window.setTimeout(() => guideClose.focus(), 10);
+  document.addEventListener("keydown", onGuideKeydown);
+}
+
+function closeGuide() {
+  guideOverlay.classList.remove("is-open");
+  guideModalWrap.classList.remove("is-open");
+  guideModal.classList.remove("is-open");
+  menuToggle.setAttribute("aria-expanded", "false");
+
+  document.body.style.overflow = previousBodyOverflow;
+  document.removeEventListener("keydown", onGuideKeydown);
+
+  if (lastFocusedEl && typeof lastFocusedEl.focus === "function") lastFocusedEl.focus();
+  else menuToggle.focus();
+}
+
+function onGuideKeydown(e) {
+  if (e.key === "Escape") { e.preventDefault(); closeGuide(); return; }
+  if (e.key === "Tab") {
+    const focusable = getFocusableEls();
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+}
+
+menuToggle.addEventListener("click", openGuide);
+guideClose.addEventListener("click", closeGuide);
+guideModalWrap.addEventListener("click", (e) => { if (e.target === guideModalWrap) closeGuide(); });
+guideOverlay.addEventListener("click", closeGuide);
+
+/* ---------------- LIVE DEMO: client-side rule simulation ---------------- */
+/* Rule identifiers (SSH_BRUTEFORCE_SIG etc.) are technical log codes, kept
+   in English/Turkish as authored; other languages fall back to English,
+   matching how real IDS rule names are typically left untranslated. */
+
+const RULE_TEXT = {
+  ssh:      { en: "SSH_BRUTEFORCE_SIG", tr: "SSH_BRUTEFORCE_SIG" },
+  scan:     { en: "PORT_SCAN_PATTERN",  tr: "PORT_SCAN_PATTERN"  },
+  ping:     { en: "PING_SWEEP_PATTERN", tr: "PING_SWEEP_PATTERN" },
+  udp_flood:{ en: "UDP_FLOOD_PATTERN",  tr: "UDP_FLOOD_PATTERN"  },
+  ok_tcp:   { en: "TCP_OK",             tr: "TCP_OK"             },
+  ok_udp:   { en: "UDP_OK",             tr: "UDP_OK"             },
+  ok_icmp:  { en: "ICMP_OK",            tr: "ICMP_OK"            },
+  unparsed: { en: "UNPARSED_LINE",      tr: "SATIR_AYRIŞTIRILAMADI" }
+};
+
+const SAMPLE_TRAFFIC = [
+  "TCP 10.0.0.14:51322 10.0.0.1:443",
+  "UDP 192.168.1.9:5353 224.0.0.251:5353",
+  "TCP 10.0.0.22:44110 45.83.12.9:22",
+  "TCP 10.0.0.22:44111 45.83.12.9:22",
+  "TCP 10.0.0.22:44112 45.83.12.9:22",
+  "ICMP 10.0.0.31 10.0.0.2",
+  "ICMP 10.0.0.31 10.0.0.3",
+  "ICMP 10.0.0.31 10.0.0.4",
+  "TCP 10.0.0.40:33210 172.16.0.5:21",
+  "TCP 10.0.0.40:33211 172.16.0.5:23",
+  "TCP 10.0.0.40:33212 172.16.0.5:25",
+  "TCP 10.0.0.40:33213 172.16.0.5:3389",
+  "TCP 10.0.0.14:60210 10.0.0.1:80",
+  "UDP 203.0.113.7:51000 10.0.0.50:53",
+  "UDP 203.0.113.7:51001 10.0.0.50:53",
+  "UDP 203.0.113.7:51002 10.0.0.50:53",
+  "UDP 203.0.113.7:51003 10.0.0.50:53",
+  "UDP 203.0.113.7:51004 10.0.0.50:53"
+].join("\n");
+
+const SSH_THRESHOLD = 3;
+const SCAN_THRESHOLD = 4;
+const PING_THRESHOLD = 3;
+const UDP_FLOOD_THRESHOLD = 5;
+
+function parseLine(line) {
+  const tokens = line.split(/\s+/).filter(Boolean);
+  if (tokens.length < 3) return { line, ok: false };
+  const [protoRaw, src, dst] = tokens;
+  const proto = protoRaw.toUpperCase();
+  const srcIp = src.split(":")[0];
+  const dstParts = dst.split(":");
+  const dstIp = dstParts[0];
+  const dstPort = dstParts[1] ? parseInt(dstParts[1], 10) : null;
+  if (!srcIp || !dstIp || (proto !== "TCP" && proto !== "UDP" && proto !== "ICMP")) {
+    return { line, ok: false };
+  }
+  return { line, ok: true, proto, srcIp, dstIp, dstPort };
+}
+
+function analyzeTraffic(raw) {
+  const lines = raw.split("\n").map(l => l.trim()).filter(Boolean);
+  const parsed = lines.map(parseLine);
+
+  const sshCount = {};
+  const scanPorts = {};
+  const pingTargets = {};
+  const udpCount = {};
+
+  parsed.forEach(p => {
+    if (!p.ok) return;
+    if (p.proto === "TCP" && p.dstPort === 22) {
+      sshCount[p.srcIp] = (sshCount[p.srcIp] || 0) + 1;
+    } else if (p.proto === "TCP" && p.dstPort != null) {
+      (scanPorts[p.srcIp] = scanPorts[p.srcIp] || new Set()).add(p.dstPort);
+    } else if (p.proto === "ICMP") {
+      (pingTargets[p.srcIp] = pingTargets[p.srcIp] || new Set()).add(p.dstIp);
+    } else if (p.proto === "UDP") {
+      const key = p.srcIp + "->" + p.dstIp + ":" + p.dstPort;
+      udpCount[key] = (udpCount[key] || 0) + 1;
+    }
+  });
+
+  return parsed.map(p => {
+    if (!p.ok) {
+      return { line: p.line, rule: RULE_TEXT.unparsed, sev: 0, matched: false };
+    }
+
+    if (p.proto === "TCP" && p.dstPort === 22 && sshCount[p.srcIp] >= SSH_THRESHOLD) {
+      const sev = Math.min(95, 60 + sshCount[p.srcIp] * 6);
+      return { line: p.line, rule: RULE_TEXT.ssh, sev, matched: true };
+    }
+    if (p.proto === "TCP" && p.dstPort != null && p.dstPort !== 22 &&
+        scanPorts[p.srcIp] && scanPorts[p.srcIp].size >= SCAN_THRESHOLD) {
+      const sev = Math.min(90, 35 + scanPorts[p.srcIp].size * 5);
+      return { line: p.line, rule: RULE_TEXT.scan, sev, matched: true };
+    }
+    if (p.proto === "ICMP" && pingTargets[p.srcIp] && pingTargets[p.srcIp].size >= PING_THRESHOLD) {
+      const sev = Math.min(85, 30 + pingTargets[p.srcIp].size * 4);
+      return { line: p.line, rule: RULE_TEXT.ping, sev, matched: true };
+    }
+    if (p.proto === "UDP") {
+      const key = p.srcIp + "->" + p.dstIp + ":" + p.dstPort;
+      const count = udpCount[key] || 0;
+      if (count >= UDP_FLOOD_THRESHOLD) {
+        const sev = Math.min(90, 40 + count * 5);
+        return { line: p.line, rule: RULE_TEXT.udp_flood, sev, matched: true };
+      }
+    }
+    if (p.proto === "TCP")  return { line: p.line, rule: RULE_TEXT.ok_tcp,  sev: 0, matched: false };
+    if (p.proto === "UDP")  return { line: p.line, rule: RULE_TEXT.ok_udp,  sev: 0, matched: false };
+    return { line: p.line, rule: RULE_TEXT.ok_icmp, sev: 0, matched: false };
+  });
+}
+
+let lastDemoResults = null;
+
+const SEV_BAND_LABEL = {
+  high:   { en: "HIGH",   tr: "YÜKSEK" },
+  medium: { en: "MEDIUM", tr: "ORTA"   },
+  low:    { en: "LOW",    tr: "DÜŞÜK"  }
+};
+const SEV_BAND_STYLE = {
+  high:   { text: "text-red-400",    chip: "bg-red-500/15 border-red-500/40 text-red-300",       rowBorder: "border-red-500/60"    },
+  medium: { text: "text-yellow-400", chip: "bg-yellow-500/15 border-yellow-500/40 text-yellow-300", rowBorder: "border-yellow-500/60" },
+  low:    { text: "text-verify",     chip: "bg-verify/15 border-verify/40 text-verify",           rowBorder: "border-verify/50"     }
+};
+function severityBand(sev) {
+  if (sev >= 70) return "high";
+  if (sev >= 30) return "medium";
+  if (sev > 0) return "low";
+  return null;
+}
+
+// Rule names and severity-band labels are technical/short constants kept
+// in English or Turkish; every other UI language falls back to English
+// for just these two lookup tables (see RULE_TEXT / SEV_BAND_LABEL above).
+function localizedLookup(dict, lang) {
+  return dict[lang] || dict.en;
+}
+
+function renderDemoResults(results) {
+  const out = document.getElementById("demo-output");
+  const lang = languageSelector.getCurrent();
+  const lookupLang = (lang === "tr") ? "tr" : "en";
+  out.innerHTML = "";
+
+  let matchedCount = 0;
+  results.forEach(r => {
+    if (r.matched) matchedCount++;
+    const band = severityBand(r.sev);
+    const style = band ? SEV_BAND_STYLE[band] : null;
+
+    const row = document.createElement("div");
+    row.className = "whitespace-pre-wrap break-all border-l-2 pl-2 -ml-2 " + (style ? style.rowBorder : "border-transparent");
+
+    const lineSpan = document.createElement("span");
+    lineSpan.className = "text-ink/80";
+    lineSpan.textContent = r.line;
+
+    const ruleLabel = document.createElement("span");
+    ruleLabel.className = "text-muted/50";
+    ruleLabel.textContent = "  rule=";
+
+    const ruleSpan = document.createElement("span");
+    ruleSpan.className = (style ? style.text : "text-verify/80") + " font-semibold";
+    ruleSpan.textContent = localizedLookup(r.rule, lookupLang);
+
+    const sevLabel = document.createElement("span");
+    sevLabel.className = "text-muted/50";
+    sevLabel.textContent = "  sev=";
+
+    const sevSpan = document.createElement("span");
+    sevSpan.className = (style ? style.text : "text-muted/60") + " font-semibold";
+    sevSpan.textContent = String(r.sev);
+
+    row.append(lineSpan, ruleLabel, ruleSpan, sevLabel, sevSpan);
+
+    if (band) {
+      const chip = document.createElement("span");
+      chip.className = "ml-2 inline-block px-1.5 py-0.5 rounded border text-[10px] tracking-wide align-middle " + style.chip;
+      chip.textContent = localizedLookup(SEV_BAND_LABEL[band], lookupLang);
+      row.appendChild(chip);
+    }
+
+    out.appendChild(row);
+  });
+
+  const summaryEl = document.getElementById("demo-summary");
+  if (lang === "tr") {
+    summaryEl.textContent = matchedCount > 0
+      ? `${results.length} paket içinden ${matchedCount} şüpheli desen işaretlendi.`
+      : `${results.length} paket incelendi, şüpheli desen bulunamadı.`;
+  } else {
+    summaryEl.textContent = matchedCount > 0
+      ? `${matchedCount} suspicious pattern${matchedCount === 1 ? "" : "s"} flagged out of ${results.length} packets analyzed.`
+      : `${results.length} packets analyzed, no suspicious patterns detected.`;
+  }
+}
+
+function rerenderDemoForLanguage() {
+  if (lastDemoResults) renderDemoResults(lastDemoResults);
+}
+
+document.getElementById("demo-load-sample").addEventListener("click", () => {
+  document.getElementById("demo-input").value = SAMPLE_TRAFFIC;
+});
+
+document.getElementById("demo-run").addEventListener("click", () => {
+  const raw = document.getElementById("demo-input").value;
+  if (!raw.trim()) return;
+  lastDemoResults = analyzeTraffic(raw);
+  renderDemoResults(lastDemoResults);
+});
+
+// Render the UI once for the initially-resolved language (saved or default).
+// Deferred to the end of the script so every value it (and its callees,
+// like rerenderDemoForLanguage) can reference is already declared.
+setLanguage(languageSelector.getCurrent(), { initial: true });
+
+/* ---------------- Theme toggle: main (dark) theme <-> light theme ---------------- */
+(function () {
+  const THEME_STORAGE_KEY = "cids-theme";
+  const root = document.documentElement;
+  const themeToggle = document.getElementById("theme-toggle");
+  let switchTimer = null;
+
+  const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+
+  function isLight() { return root.getAttribute("data-theme") === "light"; }
+  function syncToggle() {
+    themeToggle.setAttribute("aria-pressed", String(isLight()));
+    if (themeColorMeta) themeColorMeta.setAttribute("content", isLight() ? "#F4F6F9" : "#0A0E13");
+  }
+
+  function applyTheme(toLight, animate) {
+    if (animate) {
+      root.classList.add("theme-switching");
+      window.clearTimeout(switchTimer);
+    }
+    if (toLight) root.setAttribute("data-theme", "light");
+    else root.removeAttribute("data-theme");
+    syncToggle();
+    if (animate) switchTimer = window.setTimeout(() => root.classList.remove("theme-switching"), 400);
+  }
+
+  function savedTheme() {
+    try { return window.localStorage.getItem(THEME_STORAGE_KEY); }
+    catch (err) { return null; }
+  }
+
+  themeToggle.addEventListener("click", () => {
+    const toLight = !isLight();
+    applyTheme(toLight, true);
+    try { window.localStorage.setItem(THEME_STORAGE_KEY, toLight ? "light" : "dark"); }
+    catch (err) { /* storage unavailable: theme still switches for this visit */ }
+  });
+
+  // No explicit choice yet: keep following the system setting live.
+  if (window.matchMedia) {
+    const mq = window.matchMedia("(prefers-color-scheme: light)");
+    const onSystemChange = (e) => {
+      const saved = savedTheme();
+      if (saved !== "light" && saved !== "dark") applyTheme(e.matches, true);
+    };
+    if (mq.addEventListener) mq.addEventListener("change", onSystemChange);
+    else if (mq.addListener) mq.addListener(onSystemChange);
+  }
+
+  syncToggle();
+})();
+
+/* ---------------- Header backdrop + Privacy / Terms navigation ---------------- */
+(function () {
+  const header = document.getElementById("site-header");
+  const onScroll = () => header.classList.toggle("is-scrolled", window.scrollY > 8);
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  // The views themselves are shown by CSS (:target). This only resets the
+  // scroll position when entering/leaving them and closes the guide if a
+  // link inside it was used.
+  const LEGAL = ["#privacy", "#terms"];
+  let wasLegal = LEGAL.includes(window.location.hash);
+
+  window.addEventListener("hashchange", () => {
+    const isLegal = LEGAL.includes(window.location.hash);
+    if (isLegal || (wasLegal && !document.getElementById(window.location.hash.slice(1)))) {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+    wasLegal = isLegal;
+    onScroll();
+  });
+
+  document.querySelectorAll(".guide-legal-links a").forEach((a) => {
+    a.addEventListener("click", () => closeGuide());
+  });
+})();
+
+  </script>
+
+</body>
+</html>
