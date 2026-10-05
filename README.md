@@ -351,4 +351,8 @@ c-ids.github.io/
 
 ## License
 
-Released under the [MIT License](LICENSE).
+MIT License
+
+---
+
+Created by **Ali Gökdam**
